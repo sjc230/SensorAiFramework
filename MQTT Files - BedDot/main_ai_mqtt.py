@@ -5,7 +5,7 @@ import json
 from collections import deque
 
 import paho.mqtt.client as mqtt
-#from paho.mqtt.client import CallbackAPIVersion
+from paho.mqtt.client import CallbackAPIVersion
 import threading
 # import struct
 import queue
