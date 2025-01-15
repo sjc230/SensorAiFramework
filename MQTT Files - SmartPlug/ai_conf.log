@@ -45,3 +45,9 @@
 2025-01-15 13:29:58,219 - WARNING - MQTT disconnected successfully
 2025-01-15 13:29:58,222 - WARNING - ALL processes terminated!
 2025-01-15 13:29:58,222 - WARNING - ========= ai_com exit ===========
+2025-01-15 13:33:29,750 - WARNING - ========= ai_com start ...===========
+2025-01-15 13:33:29,751 - WARNING - Got configuration from local
+2025-01-15 13:33:29,799 - WARNING - [32mConnected to MQTT broker sensordata.engr.uga.edu: Success[0m
+2025-01-15 13:33:29,800 - WARNING - subscribe topic: geophone
+2025-01-15 13:33:29,801 - WARNING - subscribe topic: /+/+/geophone
+2025-01-15 13:33:29,831 - WARNING - [32mThe dedicated publishing client has successfully connected to the MQTT broker sensordata.engr.uga.edu: Success[0m

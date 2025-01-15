@@ -5,7 +5,7 @@ license_file: /home/sensorwebus/licensing/mqtt_fwd_influx.bin.tpm
 
 local:
   mqtt: 
-    ip: sensorweb.us
+    ip: sensordata.engr.uga.edu #sensorweb.us
     port: 1883
     user: None
     password: None
