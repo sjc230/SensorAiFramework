@@ -35,3 +35,13 @@
 2025-01-15 13:06:47,440 - WARNING - MQTT disconnected successfully
 2025-01-15 13:06:47,442 - WARNING - ALL processes terminated!
 2025-01-15 13:06:47,442 - WARNING - ========= ai_com exit ===========
+2025-01-15 13:29:57,027 - WARNING - ========= ai_com start ...===========
+2025-01-15 13:29:57,029 - WARNING - Got configuration from local
+2025-01-15 13:29:57,200 - WARNING - [32mConnected to MQTT broker sensorweb.us: Success[0m
+2025-01-15 13:29:57,201 - WARNING - subscribe topic: geophone
+2025-01-15 13:29:57,203 - WARNING - subscribe topic: /+/+/geophone
+2025-01-15 13:29:57,276 - WARNING - [32mThe dedicated publishing client has successfully connected to the MQTT broker sensorweb.us: Success[0m
+2025-01-15 13:29:58,219 - WARNING - thread <Thread(Thread-3 (process_schedule), stopped daemon 22184)> terminated
+2025-01-15 13:29:58,219 - WARNING - MQTT disconnected successfully
+2025-01-15 13:29:58,222 - WARNING - ALL processes terminated!
+2025-01-15 13:29:58,222 - WARNING - ========= ai_com exit ===========

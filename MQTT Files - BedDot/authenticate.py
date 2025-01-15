@@ -8,7 +8,7 @@ current_dir=os.path.abspath(__file__)
 project_package_dir = os.path.dirname(os.path.dirname(current_dir))
 
 sys.path.append(project_package_dir)
-# from interface.local_api import HomeDots
+from interface.local_api import HomeDots
 
 cache_conf_file_key=b'eBZVJQySCzk1YbTmF2LdO5Oqdn272oXhyFhzxuSRnC0='
 # You can use the following function to generate a new key
