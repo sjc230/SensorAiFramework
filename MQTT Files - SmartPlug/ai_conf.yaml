@@ -21,7 +21,7 @@ local:
   
   # If device_conf_csv is defined, the "devices" and "alert" sections will be ignored
   devices_conf_csv: device_conf.csv
-
+# UPDATE HERE WITH SMARTPLUG DATA TYPES
   alert:
     b8:27:eb:96:cb:fc: 
       hr:

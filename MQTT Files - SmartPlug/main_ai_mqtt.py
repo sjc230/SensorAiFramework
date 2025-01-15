@@ -141,7 +141,7 @@ def get_config_info():
         config_dict = yaml.safe_load(stream)
     return config_dict
 
-mqtt_publishing_cnt=0
+mqtt_publishing_cnt=0  # UPDATE HERE WITH SMARTPLUG DATA TYPES
 def send_vital_result(group, mac,timestamp, hr, rr, bph, bpl, movement, occupancy, occ_timestamp, alert, alert_timestamp):
     topic="/" + group + "/" + mac + "/vital"
  
@@ -280,7 +280,7 @@ def publish_result(mqtt_msg_q):
             sys.exit()
         if None == msg:
             continue
-
+# UPDATE HERE WITH SMARTPLUG DATA TYPES
         mac_addr=msg.get("mac_addr")
         if (None == mac_addr):
             logger(f"Missing mac_addr in the message")
@@ -300,7 +300,7 @@ def publish_result(mqtt_msg_q):
         vt=(int(vital_timestamp * 10**9) // 10**7) * 10**7
         oct=(int(occupancy_timestamp * 10**9) // 10**7) * 10**7
         alt=(int(alert_timestamp * 10**9) // 10**7) * 10**7
-
+# UPDATE HERE WITH SMARTPLUG DATA TYPES
         group=mq_map.get_group(mac_addr)
         if group:
             send_vital_result(group,mac_addr,vt,hr,rr,bph,bpl, mv, oc, oct, alert, alt)

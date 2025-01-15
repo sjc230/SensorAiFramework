@@ -77,7 +77,7 @@ def dummy_load():
     return(k)
 
 #======================== setting up command line ====================================
-
+# UPDATE HERE WITH SMARTPLUG DATA TYPES
 def setup_args_for_ai():
     '''
     This function will be called by the framework during startup. 
@@ -115,7 +115,7 @@ def setup_args_for_ai():
 # Important Reminder:
 # All the functions below are accessed in a seperated process. 
 # Therefore, global variable is not available due to the memory isolation with multiprecessing
-
+# UPDATE HERE WITH SMARTPLUG DATA TYPES
 def predict(args, buffer, timestamp, mac_addr, alert_settings, ai_data_buf):
    
     # print(f"mac={mac_addr}, alert_settings={alert_settings}")
@@ -124,7 +124,7 @@ def predict(args, buffer, timestamp, mac_addr, alert_settings, ai_data_buf):
 
     # add algorithm details
     # dummy_load()
-    
+ # UPDATE HERE WITH SMARTPLUG DATA TYPES   
     hr=np.random.randint(60, 90, 1)
     rr=np.random.randint(10, 20, 1)
     bph=np.random.randint(120, 150, 1)
@@ -179,7 +179,7 @@ def ai_unit_process(mac_addr, seismic_data_queue, vital_queue, **kwargs):
 
         if buf_len < WINDOW_SIZE :
             continue
-
+# UPDATE HERE WITH SMARTPLUG DATA TYPES
         #prep work for AI, and call Ai algrithm
         data = raw_data_buf
         alert_settings=kwargs.get("alert_settings")
@@ -188,7 +188,7 @@ def ai_unit_process(mac_addr, seismic_data_queue, vital_queue, **kwargs):
         except Exception as e:
             logger(f"MAC={mac_addr}: AI predict function ERROR,Terminated: {e}")
             break
-        
+ # UPDATE HERE WITH SMARTPLUG DATA TYPES       
         result={
             "mac_addr": mac_addr,
             "hr":hr,
