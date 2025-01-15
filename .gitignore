@@ -1,0 +1,24 @@
+/anomaly_detection/__pycache__/
+/attack_detection/__pycache__/
+/MQTT File - BedDot/__pycache__/
+/MQTT File - SmartPlug/__pycache__/
+/DataConverter/smartplug_c1_new.npy
+/DataConverter/smartplug_c2_new.npy
+/DataConverter/smartplug_c3_new.npy
+/DataConverter/smartplug_feature_1k.npy
+/DataConverter/smartplug_feature_2k.npy
+/DataConverter/smartplug_feature_4k.npy
+/DataConverter/smartplug_feature_8k.npy
+/DataConverter/smartplug_feature_10k.npy
+/DataConverter/smartplug_pcc_c1.npy
+/DataConverter/smartplug_pcc_c2.npy
+/DataConverter/smartplug_pcc_c3.npy
+/DataConverter/test_shape.npy
+attack_detection/fastsst/util/__pycache__/linear_algebra.cpython-38.pyc
+attack_detection/fastsst/__pycache__/__init__.cpython-37.pyc
+attack_detection/fastsst/__pycache__/__init__.cpython-38.pyc
+attack_detection/fastsst/__pycache__/sst.cpython-37.pyc
+attack_detection/fastsst/__pycache__/sst.cpython-38.pyc
+attack_detection/fastsst/util/__pycache__/__init__.cpython-37.pyc
+attack_detection/fastsst/util/__pycache__/__init__.cpython-38.pyc
+attack_detection/fastsst/util/__pycache__/linear_algebra.cpython-37.pyc
