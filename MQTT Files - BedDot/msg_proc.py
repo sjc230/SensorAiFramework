@@ -91,6 +91,7 @@ def get_measurement_from_topic(topic):
 
 
 def parse_beddot_data(msg):
+    print("========================",msg.topic,)
     bytedata=msg.payload
     mac_addr = ":".join(f"{x:02x}" for x in struct.unpack("!BBBBBB", bytedata[0:6]))
     data_len =struct.unpack("H",bytedata[6:8])[0]

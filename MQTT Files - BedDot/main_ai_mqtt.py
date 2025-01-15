@@ -14,23 +14,23 @@ import yaml
 from influxdb import InfluxDBClient
 # import math
 from ai_predict import ai_unit_process, setup_args_for_ai
-from tls_psk_patch import set_tls_psk_patch
+# from tls_psk_patch import set_tls_psk_patch
 from msg_proc import *
 import uuid
 import logging
 from authenticate import start_authenticate_thread, config_mem_cache
 from colorama import Fore, Back, Style
 from common import get_config_info_from_file, setup_logger_for_multi_process, logger
-from dot_license import DotLicense
-from read_csv import read_csv_to_nested_dict
+# from dot_license import DotLicense
+# from read_csv import read_csv_to_nested_dict-
 
 DRY_RUN_MODE=True
 MULTI_THREAD=False
 
 dot_license=None
 
-broker_psk_id="beddot"
-broker_psk="70e14722dd92179cbb4f081bc68284eec83baad42b0654bf06ddd9d1ab29cd4c"
+broker_psk_id="smartplug"
+broker_psk="cccccccc"
 
 
 debug=False
@@ -389,7 +389,8 @@ def init_mqtt(mqtt_conf):
             logger(f"Certificate Error={e}")
             sys.exit()
     elif mqtt_port > 8880:
-            set_tls_psk_patch(mqtt_client, broker_psk_id, broker_psk)
+            # set_tls_psk_patch(mqtt_client, broker_psk_id, broker_psk)
+        pass
 
     if "user" in mqtt_conf:   # check if the broker requires username/password
         pwd = mqtt_conf.get("password", "")
@@ -545,27 +546,27 @@ if __name__ == '__main__':
     thread_list=[]
 
     local_config_info, log_file_name, master_server, instance_name, instance_token, license_file=parse_config_file(args.conf_file)
-    add_dev_info_from_csv(local_config_info)
+    # add_dev_info_from_csv(local_config_info)
 
     setup_logger_for_multi_process(log_file_name)
     logger("========= ai_com start ...===========")
 
     try:
-        dot_license=DotLicense(license_file)
+        # dot_license=DotLicense(license_file)
 
-        if not local_config_info:   # Remote Mode
-            # launch a thread to upate authentic MAC addresses
-            path_to_cache=os.path.dirname(log_file_name)
-            authenticate_thread=start_authenticate_thread(master_server, instance_name, instance_token, path_to_cache)
-            thread_list.append(authenticate_thread)
+        # if not local_config_info:   # Remote Mode
+        #     # launch a thread to upate authentic MAC addresses
+        #     # path_to_cache=os.path.dirname(log_file_name)
+        #     # authenticate_thread=start_authenticate_thread(master_server, instance_name, instance_token, path_to_cache)
+        #     # thread_list.append(authenticate_thread)
 
-            # Awaiting configuration has been obtained from remote server or cached encrypted file
-            while config_mem_cache.get_source() == "":
-                sleep(1)
-                if not is_all_threads_alive(thread_list): sys.exit("Threads Error")
-        else:
-            config_mem_cache.set_all_conf(local_config_info)
-            config_mem_cache.set_source("local")
+        #     # # Awaiting configuration has been obtained from remote server or cached encrypted file
+        #     # while config_mem_cache.get_source() == "":
+        #     #     sleep(1)
+        #     #     if not is_all_threads_alive(thread_list): sys.exit("Threads Error")
+        # else:
+        config_mem_cache.set_all_conf(local_config_info)
+        config_mem_cache.set_source("local")
 
         logger(f"Got configuration from {config_mem_cache.get_source()}")
 
@@ -595,14 +596,14 @@ if __name__ == '__main__':
             sleep(1)
             # check if "thread" is still avlive, if no quit the program
             if not is_all_threads_alive(thread_list): break
-            loop_cnt=loop_cnt+1
-            if loop_cnt % 100 == 1:
-                dev_str=f"{mq_map.get_number_of_queue()}/{dot_license.number_of_devices()}"
-                expire_str=f"{dot_license.get_expiration_date()}"
-                if not dot_license.runtime_verify():
-                    logger(f"license checking Failed! [ Devices={dev_str}, Expiration: {expire_str}]")
-                    break
-                print(f"Status: active, Devices={dev_str}, Expiration: {expire_str}")
+            # loop_cnt=loop_cnt+1
+            # if loop_cnt % 100 == 1:
+            #     dev_str=f"{mq_map.get_number_of_queue()}/{dot_license.number_of_devices()}"
+            #     expire_str=f"{dot_license.get_expiration_date()}"
+            #     if not dot_license.runtime_verify():
+            #         logger(f"license checking Failed! [ Devices={dev_str}, Expiration: {expire_str}]")
+            #         break
+            #     print(f"Status: active, Devices={dev_str}, Expiration: {expire_str}")
                 
     except KeyboardInterrupt:
         logger("Ctrl+C pressed! Cleaning up resources...")
