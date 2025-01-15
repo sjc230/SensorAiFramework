@@ -21,23 +21,23 @@ import logging
 from authenticate import start_authenticate_thread, config_mem_cache
 from colorama import Fore, Back, Style
 from common import get_config_info_from_file, setup_logger_for_multi_process, logger
-# from dot_license import DotLicense
-from dot_license_dummy import DotLicense
+from dot_license import DotLicense
 from read_csv import read_csv_to_nested_dict
 
-DRY_RUN_MODE=False
+DRY_RUN_MODE=True
 MULTI_THREAD=False
 
 dot_license=None
 
 broker_psk_id="beddot"
-broker_psk="xxx"
+broker_psk="70e14722dd92179cbb4f081bc68284eec83baad42b0654bf06ddd9d1ab29cd4c"
 
 
 debug=False
 
 mqtt_dedicated_receive=None
 mqtt_dedicated_pubish=None
+mqtt_thread_recv=None
 
 # Note: This is a multi-thread Queue
 mqtt_msg_queue=queue.Queue()
@@ -602,18 +602,19 @@ if __name__ == '__main__':
                 if not dot_license.runtime_verify():
                     logger(f"license checking Failed! [ Devices={dev_str}, Expiration: {expire_str}]")
                     break
-                logger(f"Status: active, Devices={dev_str}, Expiration: {expire_str}")
+                print(f"Status: active, Devices={dev_str}, Expiration: {expire_str}")
                 
     except KeyboardInterrupt:
         logger("Ctrl+C pressed! Cleaning up resources...")
     finally:
-        mqtt_dedicated_receive.disconnect()  # Disconnect the MQTT client
-        mqtt_dedicated_receive.loop_stop()   # Stop the loop
-        mqtt_dedicated_pubish.disconnect()
-        mqtt_dedicated_pubish.loop_stop()
-
-        mqtt_thread_recv.join()        # Wait for the thread to finish
-        mqtt_thread_pub.join()        # Wait for the thread to finish
+        if (mqtt_dedicated_receive):
+            mqtt_dedicated_receive.disconnect()  # Disconnect the MQTT client
+            mqtt_dedicated_receive.loop_stop()   # Stop the loop
+            mqtt_dedicated_pubish.disconnect()
+            mqtt_dedicated_pubish.loop_stop()
+        if mqtt_thread_recv:
+            mqtt_thread_recv.join()        # Wait for the thread to finish
+            mqtt_thread_pub.join()        # Wait for the thread to finish
 
         mq_map.terminate_all_process()
         logger("ALL processes terminated!")
