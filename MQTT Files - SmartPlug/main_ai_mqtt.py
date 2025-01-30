@@ -141,7 +141,7 @@ def get_config_info():
         config_dict = yaml.safe_load(stream)
     return config_dict
 
-mqtt_publishing_cnt=0  # UPDATE HERE WITH SMARTPLUG DATA TYPES
+mqtt_publishing_cnt=0  ### UPDATE HERE WITH SMARTPLUG DATA TYPES
 def send_vital_result(group, mac,timestamp, hr, rr, bph, bpl, movement, occupancy, occ_timestamp, alert, alert_timestamp):
     topic="/" + group + "/" + mac + "/vital"
  
@@ -179,7 +179,7 @@ def send_vital_result(group, mac,timestamp, hr, rr, bph, bpl, movement, occupanc
     return
 
 #============  MQTT message decode and precess schedule =============
-def process_schedule(mqtt_msg_q):
+def process_schedule(mqtt_msg_q):  ### update/modigy!!!!!!
     latest_chk_time=time.monotonic()
     while True:
         #get raw data message 
@@ -206,8 +206,9 @@ def process_schedule(mqtt_msg_q):
                 break
 
         # extact information from the message and put them into a buffer
-        mac_addr,timestamp, data_interval, data=parse_beddot_data(msg)
-        seismic_data={"timestamp":timestamp, "data_interval":data_interval, "data":data}
+        mac_addr,timestamp, data_interval, data=parse_beddot_data(msg) ### may need to add topic extraction
+          ### add db_measurement=get_measurement_from_topic(msg.topic) -> change from influx format to mqtt format
+        seismic_data={"timestamp":timestamp, "data_interval":data_interval, "data":data} ### add topic here
 
         mq_id=mq_map.get_ai_input_q(mac_addr)
         if (None == mq_id): 
@@ -222,6 +223,7 @@ def process_schedule(mqtt_msg_q):
                 # Prepare settings from database/yaml file/CSV file, which has been unified.
                 ai_kwargs["alert_settings"]=config_mem_cache.get_alert_setting_by_mac(mac_addr)
                 ai_kwargs["version"]=config_mem_cache.get_monitor_target_by_mac(mac_addr)
+                ### could put info here
                 
                 # Pass device configurations from CSV for AI developer's customized settings
                 configs=config_mem_cache.get_all_conf()
@@ -269,7 +271,7 @@ def process_schedule(mqtt_msg_q):
         except Exception as e:
             logger(f"Failed to put a raw data message into the queue for mac: {mac_addr}. error={e}")
 
-def publish_result(mqtt_msg_q):
+def publish_result(mqtt_msg_q):  ### modify/update here !!!!!!!!
 
     while True:
         #get result data message 
@@ -280,7 +282,7 @@ def publish_result(mqtt_msg_q):
             sys.exit()
         if None == msg:
             continue
-# UPDATE HERE WITH SMARTPLUG DATA TYPES
+### UPDATE HERE WITH SMARTPLUG DATA TYPES
         mac_addr=msg.get("mac_addr")
         if (None == mac_addr):
             logger(f"Missing mac_addr in the message")
@@ -300,7 +302,7 @@ def publish_result(mqtt_msg_q):
         vt=(int(vital_timestamp * 10**9) // 10**7) * 10**7
         oct=(int(occupancy_timestamp * 10**9) // 10**7) * 10**7
         alt=(int(alert_timestamp * 10**9) // 10**7) * 10**7
-# UPDATE HERE WITH SMARTPLUG DATA TYPES
+### UPDATE HERE WITH SMARTPLUG DATA TYPES
         group=mq_map.get_group(mac_addr)
         if group:
             send_vital_result(group,mac_addr,vt,hr,rr,bph,bpl, mv, oc, oct, alert, alt)
@@ -450,7 +452,7 @@ def resolve_path(path, reference_file):
 
     return resolved_path
 
-
+### if use unified yaml file, change here.  otherwise ignore
 def parse_config_file(yaml_file):
 
     config_yaml_file=os.path.abspath(os.path.expanduser(yaml_file))
@@ -470,9 +472,9 @@ def parse_config_file(yaml_file):
     instance_scret=""
     config_file_info = get_config_info_from_file(config_yaml_file)
     if "config_mode" in config_file_info:
-
+        
         if config_file_info["config_mode"] == "local" and "local" in config_file_info:
-            local_config_info=config_file_info["local"]
+            local_config_info=config_file_info["local"] ### get local yaml here
             # Resolve the path of certificates
             if "ca_cert_path" in local_config_info["mqtt"]:
                 local_config_info["mqtt"]["ca_cert_path"]=resolve_path(local_config_info["mqtt"]["ca_cert_path"], config_yaml_file)

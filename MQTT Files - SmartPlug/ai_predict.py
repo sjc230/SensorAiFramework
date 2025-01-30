@@ -78,7 +78,7 @@ def dummy_load():
 
 #======================== setting up command line ====================================
 # UPDATE HERE WITH SMARTPLUG DATA TYPES
-def setup_args_for_ai():
+def setup_args_for_ai(): ### update/modify !!!!!!
     '''
     This function will be called by the framework during startup. 
     All command-line parameters will pass to the ai_unit_process() via kwargs
@@ -107,10 +107,12 @@ def setup_args_for_ai():
     parser.add_argument('--list_file', type=str, default='', help='the live run list file')
     parser.add_argument('--oc_v', type=str, default='adult_dl', help='the occupancy version: adult_dl/adult_dsp/animal_dsp')
 
+    ### ADD my own argument for model specifications in a .yaml file
+
     args = parser.parse_args()
     return args
 
-
+### This is the simulation model # ignore
 #======================== Seperated Precess Zone ====================================
 # Important Reminder:
 # All the functions below are accessed in a seperated process. 
@@ -139,7 +141,7 @@ def predict(args, buffer, timestamp, mac_addr, alert_settings, ai_data_buf):
     return hr[0],rr[0],bph[0],bpl[0],mv,vital_timestamp, oc, occupancy_timestamp, alert, alert_timestamp
 
 
-
+### input is seismic, # send output is vital ### !!!
 def ai_unit_process(mac_addr, seismic_data_queue, vital_queue, **kwargs):
     
     args = argparse.Namespace(**kwargs)
@@ -157,7 +159,7 @@ def ai_unit_process(mac_addr, seismic_data_queue, vital_queue, **kwargs):
     while True:
         #get raw data message from queue
         try: 
-            msg=seismic_data_queue.get(timeout=300) # timeout 5 minutes
+            msg=seismic_data_queue.get(timeout=300) # timeout 5 minutes ### get message here
         except queue.Empty: #if timeout and does't receive a message, remove mapping dictionary and exit current thread
             logger(f"{mac_addr} have not received message for 5 minute, process terminated")
             break
@@ -168,6 +170,7 @@ def ai_unit_process(mac_addr, seismic_data_queue, vital_queue, **kwargs):
         timestamp=msg["timestamp"]
         data_interval=msg["data_interval"]
         data=msg["data"]
+        ### add topic
  
         raw_data_buf += data
         buf_len=len(raw_data_buf)
@@ -180,15 +183,16 @@ def ai_unit_process(mac_addr, seismic_data_queue, vital_queue, **kwargs):
         if buf_len < WINDOW_SIZE :
             continue
 # UPDATE HERE WITH SMARTPLUG DATA TYPES
-        #prep work for AI, and call Ai algrithm
+        ###prep work for AI, and call Ai algrithm
         data = raw_data_buf
         alert_settings=kwargs.get("alert_settings")
-        try:
+        try: # CALL THE AI MODEL HERE!!!!!!!
             hr,rr,bph,bpl,mv,vital_timestamp, oc,occupancy_timestamp, alert, alert_timestamp = predict(args, data, math.floor(timestamp/10**9), mac_addr, alert_settings, ai_data_buf)
         except Exception as e:
             logger(f"MAC={mac_addr}: AI predict function ERROR,Terminated: {e}")
             break
- # UPDATE HERE WITH SMARTPLUG DATA TYPES       
+ # UPDATE HERE WITH SMARTPLUG DATA TYPES  - Mod to call a yaml file with model specific info 
+        ### unified yaml file?    
         result={
             "mac_addr": mac_addr,
             "hr":hr,

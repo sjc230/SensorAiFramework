@@ -143,7 +143,7 @@ def parse_text_msg(msg, mac):
     # print(data_pionts)
     return data_pionts
 
-def unpack_msg(msg):
+def unpack_msg(msg):  ### 
 
     data_pionts=[]
 
@@ -154,8 +154,8 @@ def unpack_msg(msg):
         # Reserve a more standardized binary message format for future expansion. 
         if mac=="":
             mac=get_mac_from_payload_lagacy(msg.payload)
-        mac_addr, timestamp, data_interval, data=parse_beddot_data(msg)
-        db_measurement=get_measurement_from_topic(msg.topic)
+        mac_addr, timestamp, data_interval, data=parse_beddot_data(msg) ###
+        db_measurement=get_measurement_from_topic(msg.topic)  ### use this to get measurement from topic
         data_pionts=pack_device_data_for_influx(msg.topic, mac,timestamp, data_interval, data, db_measurement)
     else:
         # this is a text-based message, use {key:value} pairs as payload
