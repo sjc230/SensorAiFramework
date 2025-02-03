@@ -108,6 +108,8 @@ def setup_args_for_ai(): ### update/modify !!!!!!
     parser.add_argument('--oc_v', type=str, default='adult_dl', help='the occupancy version: adult_dl/adult_dsp/animal_dsp')
 
     ### ADD my own argument for model specifications in a .yaml file
+    parser.add_argument('--model_file', type=str,default='',help='the file name of the model')
+    parser.add_argument('--model_yaml', type=str,default='',help='the file name of the model .yaml file')
 
     args = parser.parse_args()
     return args
@@ -147,7 +149,7 @@ def ai_unit_process(mac_addr, seismic_data_queue, vital_queue, **kwargs):
     args = argparse.Namespace(**kwargs)
 
     # print(f"mac={mac_addr}, alert={args.alert_settings}, version={args.version}")
-    
+    ### make adustments here to adapt to 
     buffersize   = 60 # config.get('general', 'buffersize')
     samplingrate = 100 # int(config.get('general', 'samplingrate'))
     hrTimeWindow    = 30 # int(config.get('main', 'hrTimeWindow'))
