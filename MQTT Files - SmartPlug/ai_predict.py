@@ -128,7 +128,7 @@ def predict(args, buffer, timestamp, mac_addr, alert_settings, ai_data_buf):
 
     # add algorithm details
     # dummy_load()
- # UPDATE HERE WITH SMARTPLUG DATA TYPES   
+  
     hr=np.random.randint(60, 90, 1)
     rr=np.random.randint(10, 20, 1)
     bph=np.random.randint(120, 150, 1)
@@ -173,6 +173,7 @@ def ai_unit_process(mac_addr, seismic_data_queue, vital_queue, **kwargs):
         data_interval=msg["data_interval"]
         data=msg["data"]
         ### add topic
+        topic = msg["topic"]
  
         raw_data_buf += data
         buf_len=len(raw_data_buf)
@@ -189,6 +190,7 @@ def ai_unit_process(mac_addr, seismic_data_queue, vital_queue, **kwargs):
         data = raw_data_buf
         alert_settings=kwargs.get("alert_settings")
         try: # CALL THE AI MODEL HERE!!!!!!!
+            #hr,rr,bph,bpl,mv,vital_timestamp, oc,occupancy_timestamp, alert, alert_timestamp = predict(args, data, math.floor(timestamp/10**9), mac_addr, alert_settings, ai_data_buf)
             hr,rr,bph,bpl,mv,vital_timestamp, oc,occupancy_timestamp, alert, alert_timestamp = predict(args, data, math.floor(timestamp/10**9), mac_addr, alert_settings, ai_data_buf)
         except Exception as e:
             logger(f"MAC={mac_addr}: AI predict function ERROR,Terminated: {e}")
@@ -197,16 +199,16 @@ def ai_unit_process(mac_addr, seismic_data_queue, vital_queue, **kwargs):
         ### unified yaml file?    
         result={
             "mac_addr": mac_addr,
-            "hr":hr,
-            "rr":rr,
-            "bph":bph,
-            "bpl":bpl,
-            "mv":mv,
+            #"hr":hr,
+            #"rr":rr,
+            #"bph":bph,
+            #"bpl":bpl,
+            #"mv":mv,
             "vital_timestamp":vital_timestamp,
-            "oc":oc,
-            "occupancy_timestamp":occupancy_timestamp,
-            "alert":alert,
-            "alert_timestamp":alert_timestamp
+            #"oc":oc,
+            #"occupancy_timestamp":occupancy_timestamp,
+            #"alert":alert,
+            #"alert_timestamp":alert_timestamp
         }
         try:
             vital_queue.put(result)
