@@ -108,8 +108,8 @@ def setup_args_for_ai(): ### update/modify !!!!!!
     parser.add_argument('--oc_v', type=str, default='adult_dl', help='the occupancy version: adult_dl/adult_dsp/animal_dsp')
 
     ### ADD my own argument for model specifications in a .yaml file
-    parser.add_argument('--model_file', type=str,default='',help='the file name of the model')
-    parser.add_argument('--model_yaml', type=str,default='',help='the file name of the model .yaml file')
+    parser.add_argument('-m','--model_file', type=str,default='',help='the file name of the model')
+    parser.add_argument('-y','--model_yaml', type=str,default='',help='the file name of the model .yaml file')
 
     args = parser.parse_args()
     return args
@@ -191,7 +191,7 @@ def ai_unit_process(mac_addr, seismic_data_queue, vital_queue, **kwargs):
         alert_settings=kwargs.get("alert_settings")
         try: # CALL THE AI MODEL HERE!!!!!!!
             #hr,rr,bph,bpl,mv,vital_timestamp, oc,occupancy_timestamp, alert, alert_timestamp = predict(args, data, math.floor(timestamp/10**9), mac_addr, alert_settings, ai_data_buf)
-            hr,rr,bph,bpl,mv,vital_timestamp, oc,occupancy_timestamp, alert, alert_timestamp = predict(args, data, math.floor(timestamp/10**9), mac_addr, alert_settings, ai_data_buf)
+            Voltage,Current,Power,Apparent_Power,temperature,vital_timestamp, oc,occupancy_timestamp, alert, alert_timestamp = predict(args, data, math.floor(timestamp/10**9), mac_addr, alert_settings, ai_data_buf)
         except Exception as e:
             logger(f"MAC={mac_addr}: AI predict function ERROR,Terminated: {e}")
             break
@@ -199,6 +199,11 @@ def ai_unit_process(mac_addr, seismic_data_queue, vital_queue, **kwargs):
         ### unified yaml file?    
         result={
             "mac_addr": mac_addr,
+            "Voltage": Voltage,
+            "Current": Current,
+            "Power": Power,
+            "Apparent_Power": Apparent_Power,
+            "temperature": temperature,
             #"hr":hr,
             #"rr":rr,
             #"bph":bph,
