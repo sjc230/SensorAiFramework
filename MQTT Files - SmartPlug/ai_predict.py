@@ -128,7 +128,8 @@ def predict(args, buffer, timestamp, mac_addr, alert_settings, ai_data_buf):
 
     # add algorithm details
     # dummy_load()
-  
+
+    """
     hr=np.random.randint(60, 90, 1)
     rr=np.random.randint(10, 20, 1)
     bph=np.random.randint(120, 150, 1)
@@ -139,9 +140,26 @@ def predict(args, buffer, timestamp, mac_addr, alert_settings, ai_data_buf):
     occupancy_timestamp=timestamp
     alert=1
     alert_timestamp=timestamp
+    #"""
 
-    return hr[0],rr[0],bph[0],bpl[0],mv,vital_timestamp, oc, occupancy_timestamp, alert, alert_timestamp
-
+    Voltage=np.random.randint(60, 90, 1)
+    Current=np.random.randint(10, 20, 1)
+    Power=np.random.randint(120, 150, 1)
+    Reactive_Power=1
+    Apparent_Power=1
+    Power_Factor=1
+    Volt_THD=1
+    Curr_THD=1
+    Volt_Fund=1
+    Curr_Fund=1
+    Power_Energy_Acc=1
+    Reactive_Energy_Acc=1
+    temperature=1
+    SPP_status_report=1
+    vital_timestamp=timestamp
+    
+    #return hr[0],rr[0],bph[0],bpl[0],mv,vital_timestamp, oc, occupancy_timestamp, alert, alert_timestamp
+    return Voltage,Current,Power,Reactive_Power,Apparent_Power,Power_Factor,Volt_THD,Curr_THD,Volt_Fund,Curr_Fund,Power_Energy_Acc,Reactive_Energy_Acc,temperature,SPP_status_report,vital_timestamp
 
 ### input is seismic, # send output is vital ### !!!
 def ai_unit_process(mac_addr, seismic_data_queue, vital_queue, **kwargs):
@@ -191,7 +209,7 @@ def ai_unit_process(mac_addr, seismic_data_queue, vital_queue, **kwargs):
         alert_settings=kwargs.get("alert_settings")
         try: # CALL THE AI MODEL HERE!!!!!!!
             #hr,rr,bph,bpl,mv,vital_timestamp, oc,occupancy_timestamp, alert, alert_timestamp = predict(args, data, math.floor(timestamp/10**9), mac_addr, alert_settings, ai_data_buf)
-            Voltage,Current,Power,Apparent_Power,temperature,vital_timestamp, oc,occupancy_timestamp, alert, alert_timestamp = predict(args, data, math.floor(timestamp/10**9), mac_addr, alert_settings, ai_data_buf)
+            Voltage,Current,Power,Reactive_Power,Apparent_Power,Power_Factor,Volt_THD,Curr_THD,Volt_Fund,Curr_Fund,Power_Energy_Acc,Reactive_Energy_Acc,temperature,SPP_status_report,vital_timestamp = predict(args, data, math.floor(timestamp/10**9), mac_addr, alert_settings, ai_data_buf)
         except Exception as e:
             logger(f"MAC={mac_addr}: AI predict function ERROR,Terminated: {e}")
             break
@@ -202,8 +220,17 @@ def ai_unit_process(mac_addr, seismic_data_queue, vital_queue, **kwargs):
             "Voltage": Voltage,
             "Current": Current,
             "Power": Power,
+            "Reactive_Power": Reactive_Power,
             "Apparent_Power": Apparent_Power,
+            "Power_Factor": Power_Factor,
+            "Volt_THD": Volt_THD,
+            "Curr_THD": Curr_THD,
+            "Volt_Fund": Volt_Fund,
+            "Curr_Fund": Curr_Fund,
+            "Power_Energy_Acc": Power_Energy_Acc,
+            "Reactive_Energy_Acc": Reactive_Energy_Acc,
             "temperature": temperature,
+            "SPP_status_report": SPP_status_report,
             #"hr":hr,
             #"rr":rr,
             #"bph":bph,
