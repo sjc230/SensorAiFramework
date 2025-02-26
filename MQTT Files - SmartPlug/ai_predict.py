@@ -184,7 +184,7 @@ def ai_unit_process(mac_addr, seismic_data_queue, vital_queue, **kwargs):
             logger(f"{mac_addr} have not received message for 5 minute, process terminated")
             break
 
-        if (msg is None) or ("timestamp" not in msg) or ("data_interval" not in msg) or ("data" not in msg):  # If None is received, break the loop
+        if (msg is None) or ("timestamp" not in msg) or ("data_interval" not in msg) or ("data" not in msg) or ("topic" not in msg):  # If None is received, break the loop
             logger(f"Process {mac_addr}  Received wrong seismic data. exit")
             break
         timestamp=msg["timestamp"]

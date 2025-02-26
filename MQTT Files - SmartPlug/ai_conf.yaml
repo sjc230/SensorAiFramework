@@ -58,15 +58,15 @@ local:
         "off": 1
   devices: 
     # '*' can be used as a wildcard, matching all devices
-    # - - '*'
-    - - 30:30:f9:72:3a:64
-      - adult
-    - - 30:30:f9:72:3a:70
-      - adult
-    - - 30:30:f9:73:4b:e4
-      - adult
-    - - 30:30:f9:72:3b:d8
-      - adult
+    - - '*'
+    #- - 30:30:f9:72:3a:64
+    #  - adult
+    #- - 30:30:f9:72:3a:70
+    #  - adult
+    #- - 30:30:f9:73:4b:e4
+    #  - adult
+    #- - 30:30:f9:72:3b:d8
+    #  - adult
 
 remote:  
   # Master server's url
