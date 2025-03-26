@@ -1,11 +1,11 @@
-name: John Doe
+address:
+  city: Springfield
+  postal_code: 12347
+  street: 123 Elm St
 age: 30
 email: johndoe@example.com
 hobbies:
-  - Reading
-  - Hiking
-  - Coding
-address:
-  street: 123 Elm St
-  city: Springfield
-  postal_code: 12345
+- Reading
+- Hiking
+- Coding
+name: John Doe
