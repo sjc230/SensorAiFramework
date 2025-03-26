@@ -1,0 +1,24 @@
+# config.yaml
+sensors:
+  MAC: 80:65:99:a4:bd:cc
+  types:
+    - temperature
+    - Current
+    - Voltage
+
+mqtt:
+  broker: "smartplug.engr.uga.edu"
+  port: 8886
+  topic: "sensor/internal"
+
+influxdb:
+  waveform:
+    host: "smartplug.engr.uga.edu"
+    port: 8086
+    raw_database: "waveform"
+    processed_database: "waveform_processed"
+
+  pc_sensors:
+    host: "smartplug.engr.uga.edu"
+    port: 8086
+    processed_database: "pc_sensors_processed"
