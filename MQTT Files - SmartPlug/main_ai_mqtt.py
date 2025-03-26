@@ -206,7 +206,8 @@ def process_schedule(mqtt_msg_q):  ### update/modigy!!!!!!
                 break
 
         # extact information from the message and put them into a buffer
-        mac_addr,timestamp, data_interval, data=parse_beddot_data(msg) ### may need to add topic extraction
+        ###mac_addr,timestamp, data_interval, data=parse_beddot_data(msg) ### may need to add topic extraction
+        mac_addr,timestamp, data_interval, data, topic=parse_beddot_data(msg)
           ### add db_measurement=get_measurement_from_topic(msg.topic) -> change from influx format to mqtt format
         seismic_data={"timestamp":timestamp, "data_interval":data_interval, "data":data, "topic":topic} ### add topic here
 

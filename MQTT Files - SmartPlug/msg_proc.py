@@ -89,7 +89,7 @@ def get_measurement_from_topic(topic):
     if db_measurement == "usb_volt": db_measurement="usbvol"
     return db_measurement
 
-
+### add topic extraction?
 def parse_beddot_data(msg):
     print("========================",msg.topic,)
     bytedata=msg.payload
@@ -97,6 +97,7 @@ def parse_beddot_data(msg):
     data_len =struct.unpack("H",bytedata[6:8])[0]
     timestamp=struct.unpack("L",bytedata[8:16])[0]  # in micro second
     data_interval=struct.unpack("I",bytedata[16:20])[0]  # in micro second
+    #topic=struct.unpack("I",bytedata[16:20])[0]  # in micro second
 
     timestamp -=data_interval
     # data=[0]*int((len(bytedata)-20)/4)
