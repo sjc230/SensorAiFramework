@@ -7,7 +7,8 @@ import numpy as np
 from collections import defaultdict
 from scipy.signal import find_peaks
 from ai_processor import moving_average, detect_anomalies_isolation_forest
-def load_config(config_file="config.yaml"):
+
+def load_config(config_file="mqtt/config.yaml"):
     """Loads the configuration from a YAML file."""
     with open(config_file, "r") as file:
         return yaml.safe_load(file)
@@ -19,7 +20,7 @@ if __name__ == "__main__":
     default_end_time = datetime.now()
     default_start_time = default_end_time - timedelta(hours=1)
     parser = argparse.ArgumentParser(description='Process some data.')
-    parser.add_argument('config_file', type=str, nargs='?',  help='Path to the YAML config file', default='config.yaml')
+    parser.add_argument('config_file', type=str, nargs='?',  help='Path to the YAML config file', default='mqtt/config.yaml')
     parser.add_argument(
         "--start_time", 
         default=default_start_time.strftime("%Y-%m-%dT%H:%M:%SZ"), 

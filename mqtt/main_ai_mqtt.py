@@ -5,11 +5,11 @@ import json
 import ssl
 import argparse
 from collections import deque  # Buffer for real-time data
-import yaml
+
 # import ai_processor
 from influxdb import InfluxDBClient
 import numpy as np
-def load_config(config_file="config.yaml"):
+def load_config(config_file="mqtt/config.yaml"):
     """Loads the configuration from a YAML file."""
     with open(config_file, "r") as file:
         return yaml.safe_load(file)
@@ -17,7 +17,7 @@ def load_config(config_file="config.yaml"):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Process some data.')
-    parser.add_argument('config_file', type=str, nargs='?',  help='Path to the YAML config file', default='config.yaml')
+    parser.add_argument('config_file', type=str, nargs='?',  help='Path to the YAML config file', default='mqtt/config.yaml')
     args = parser.parse_args()
     # Lo30ad configuration
     config = load_config(args.config_file)
@@ -29,9 +29,9 @@ if __name__ == "__main__":
 
 
     # Path to your certificates
-    CA_CERT = "mqtt_certs8886/ca8886/ca8886.crt"          # Change this to your CA certificate path
-    CLIENT_CERT = "mqtt_certs8886/client8886/client8886.crt"  # Change this to your client certificate path
-    CLIENT_KEY = "mqtt_certs8886/client8886/client8886.key"    # Change this to your client key path
+    CA_CERT = "mqtt/ca8886.crt"          # Change this to your CA certificate path
+    CLIENT_CERT = "mqtt/client8886.crt"  # Change this to your client certificate path
+    CLIENT_KEY = "mqtt/client8886.key"    # Change this to your client key path
 
     # InfluxDB Configuration
     INFLUXDB_HOST = config['influxdb']['pc_sensors']['host']
@@ -59,7 +59,7 @@ if __name__ == "__main__":
             mean.append(input_data[:,i].mean())
         return mean  # Modify based on your model output
 
-    def on_message(client, userdata, msg):
+    def on_message(client, userdata, msg): # mod here for Smart Plug
         try:
             data = json.loads(msg.payload.decode())
             print(f"Received Data: {data}")
