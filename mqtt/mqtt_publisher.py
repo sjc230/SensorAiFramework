@@ -2,6 +2,7 @@ import paho.mqtt.client as mqtt
 import psutil
 import json
 import time
+from influxdb import InfluxDBClient
 
 # MQTT Configuration
 BROKER = "smartplug.engr.uga.edu"  # Replace with your MQTT broker IP
