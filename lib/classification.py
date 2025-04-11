@@ -37,7 +37,7 @@ from tslearn.svm import TimeSeriesSVC
 
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import ConfusionMatrixDisplay, classification_report, RocCurveDisplay, auc, roc_curve, roc_auc_score
-from utils import plot_confusion_matrix
+from lib.utils import plot_confusion_matrix
 
 #import load_data as ld
 
