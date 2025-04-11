@@ -3673,7 +3673,7 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
         print(grid_search.best_params_)
         y_pred = grid_search.predict(X_test)
         print(classification_report(y_test, y_pred))
-        ConfusionMatrixDisplay.from_estimator(grid_search, X_test, y_test, xticks_rotation="vertical")
+        #ConfusionMatrixDisplay.from_estimator(grid_search, X_test, y_test, xticks_rotation="vertical")
         plot_confusion_matrix(y_test,y_pred,classes,f"{names[j]} Confusion Matrix")
                    
         n_classes = int(np.amax(y_test)+1) 
