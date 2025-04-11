@@ -3675,6 +3675,7 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
         #Check for -1 in predictions and change -1 to new value
         noise = np.isin(y_pred, -1)
         if np.any(noise)==True:
+            print("-1's present ", np.amax(y_pred)+1)
             new_noise_label = int(np.amax(y_pred)+1) # find the max label value
             y_pred = np.where(y_pred == -1, new_noise_label, y_pred)
         print(classification_report(y_test, y_pred))
