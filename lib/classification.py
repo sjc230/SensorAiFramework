@@ -3673,11 +3673,10 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
         print(grid_search.best_params_)        
         y_pred = grid_search.predict(X_test)
         #Check for -1 in predictions and change -1 to new value
-        noise = np.isin(y_pred, -1)
+        noise = np.isin(y_pred, -1) # changes anomaly scores 1 -> 0 and -1 -> 1
         if np.any(noise)==True:
-            print("-1's present ", np.amax(y_pred)+1)
-            new_noise_label = int(np.amax(y_pred)+1) # find the max label value
-            y_pred = np.where(y_pred == -1, new_noise_label, y_pred)
+            y_pred = np.where(y_pred == 1, 0, y_pred)
+            y_pred = np.where(y_pred == -1, 1, y_pred)
         print(classification_report(y_test, y_pred))
         #ConfusionMatrixDisplay.from_estimator(grid_search, X_test, y_test, xticks_rotation="vertical")
         plot_confusion_matrix(y_test,y_pred,classes,f"{names[j]} Confusion Matrix")
