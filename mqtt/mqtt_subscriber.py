@@ -4,6 +4,7 @@ import socket
 import yaml
 from msg_proc import parse_beddot_data
 
+"""
 HOST = '127.0.0.1'
 SOCKET_PORT = 65432
 
@@ -54,6 +55,7 @@ class SocketClient:
             print("Disconnected from server.")
 
 s = SocketClient(HOST, SOCKET_PORT)
+#"""
 
 # Load the YAML file
 with open("yaml/smartplug_default.yaml", "r") as file:
@@ -112,8 +114,10 @@ def combine_and_process_data():
         #with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             #s.connect((HOST, SOCKET_PORT))
             #s.sendall(b'Hello, server')
-        s.send_message(json.dumps(combined_data))
+        #s.send_message(json.dumps(combined_data))
         #received = s.recv(1024)
+
+        #Write code to preprocess and send data to AI model
 
         #print(received.decode())
         # Reset data for next cycle if required
