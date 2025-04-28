@@ -3691,7 +3691,7 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
           best_model = grid_search.best_estimator_
           model_name = names[j]
           model_name = model_name.replace(' ','-')
-          best_name = './' + str(directory_path) + '/' + model_name + '.pkl'
+          best_name = './' + str(directory_path) + '/Best-' + model_name + '.pkl'
           save_model(model=best_model,filename=best_name)
                   
         n_classes = int(np.amax(y_test)+1) 
