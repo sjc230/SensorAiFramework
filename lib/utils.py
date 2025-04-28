@@ -197,6 +197,7 @@ def create_model_yaml(yaml_name,model_name,model_path,model_type,n_inputs,n_outp
     # Data to write to the YAML file (Python dictionary)
     data = {
         'name': model_name,
+        'model_path': model_path, 
         'model_type': model_type,
         'inputs': n_inputs,
         'outputs': n_outputs
