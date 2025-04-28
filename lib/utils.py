@@ -193,12 +193,11 @@ def create_directory(directory_name):
 
     return directory_path
 
-def create_model_yaml(yaml_name,model_path,model_type,input_type,n_inputs,n_outputs):
+def create_model_yaml(yaml_name,model_name,model_path,model_type,n_inputs,n_outputs):
     # Data to write to the YAML file (Python dictionary)
     data = {
-        'name': yaml_name,
+        'name': model_name,
         'model_type': model_type,
-        'input_type': input_type,
         'inputs': n_inputs,
         'outputs': n_outputs
         }
@@ -206,7 +205,7 @@ def create_model_yaml(yaml_name,model_path,model_type,input_type,n_inputs,n_outp
     file = model_path + '/' + yaml_name
 
     # Open the YAML file in write mode
-    with open("yaml/example.yaml", "w") as file:
+    with open(model_path + '/' + yaml_name, "w") as file:
         # Write the data to the YAML file
         yaml.dump(data, file, default_flow_style=False)
     return

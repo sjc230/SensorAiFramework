@@ -3698,9 +3698,9 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
           yaml_name = 'Best_' + model_name + '.yaml'
           save_model(model=best_model,filename=best_name)
           create_model_yaml(yaml_name=yaml_name,
+                            model_name='/Best_' + model_name + '.pkl'
                             model_path=str(directory_path),
                             model_type='classification',
-                            input_type='multivariate',
                             n_inputs=n_inputs,
                             n_outputs=n_classes)
                   
