@@ -1,0 +1,5 @@
+inputs: 3
+model_path: 20250428190324_models
+model_type: classification
+name: Best_Extra-Trees.pkl
+outputs: 3

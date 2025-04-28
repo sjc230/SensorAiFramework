@@ -57,19 +57,26 @@ class SocketClient:
 s = SocketClient(HOST, SOCKET_PORT)
 #"""
 
-# Load the YAML file
-with open("yaml/smartplug_default.yaml", "r") as file:
-    smartplug = yaml.safe_load(file)
-print(smartplug)
 
-# Extract smartplug yaml data
-org = smartplug["organization"]
-mac = smartplug["mac"]
-topics = smartplug["topics"]
+# Load the Model YAML file
+with open("yaml/smartplug_default.yaml", "r") as file:
+    device = yaml.safe_load(file)
+print(device)
+
+# Load the Device YAML file
+with open("yaml/smartplug_default.yaml", "r") as file:
+    device = yaml.safe_load(file)
+print(device)
+
+if device["type"] == "smartplug":
+    # Extract smartplug yaml data
+    org = device["organization"]
+    mac = device["mac"]
+    topics = device["topics"]
  
 # MQTT Configuration
-BROKER = smartplug["broker"] #"sensorserver2.engr.uga.edu"
-PORT = smartplug["port"] #1883
+BROKER = device["broker"] #"sensorserver2.engr.uga.edu"
+PORT = device["port"] #1883
 
 # Set up the Topics dictionary
 combined_data = {"time": None}
@@ -80,10 +87,12 @@ print(combined_data)
 # Define what happens when connecting to the smart device
 def on_connect(client, userdata, flags, rc):
     print(f"Connected with result code {rc}")
-    # Once connected, subscribe to the topic
-    for top in topics:
-        TOPIC = "/" + org + "/" + mac + "/" + top
-        client.subscribe(TOPIC)
+
+    if device['type'] == 'smartplug':
+        # Once connected, subscribe to the topics
+        for top in topics:
+            TOPIC = "/" + org + "/" + mac + "/" + top
+            client.subscribe(TOPIC)
 
 
 

@@ -1,3 +1,4 @@
+type: smartplug
 organization: smartPP_org_name
 mac: dcda0c3c6d40
 port: 1883
