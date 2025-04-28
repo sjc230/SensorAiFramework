@@ -37,7 +37,7 @@ from tslearn.svm import TimeSeriesSVC
 
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import ConfusionMatrixDisplay, classification_report, RocCurveDisplay, auc, roc_curve, roc_auc_score
-from lib.utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model
+from lib.utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model, create_model_yaml
 
 #import load_data as ld
 
@@ -3663,6 +3663,9 @@ def pipeBuild_TimeSeriesSVC(C=[1.0],kernel=['gak'],degree=[3],gamma=['auto'],coe
 # CLASSIFICATON GRID BUILDER
 def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_mean_squared_error',plot_number=10,save_best=False):
     
+    n_classes = int(np.amax(y_train)+1)
+    n_inputs = X_train.shape[1]
+
     if save_best == True:
       time_string = get_timestamp_string()
       path_name = time_string + "_models"
@@ -3691,8 +3694,15 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
           best_model = grid_search.best_estimator_
           model_name = names[j]
           model_name = model_name.replace(' ','-')
-          best_name = './' + str(directory_path) + '/Best-' + model_name + '.pkl'
+          best_name = './' + str(directory_path) + '/Best_' + model_name + '.pkl'
+          yaml_name = 'Best_' + model_name + '.yaml'
           save_model(model=best_model,filename=best_name)
+          create_model_yaml(yaml_name=yaml_name,
+                            model_path=str(directory_path),
+                            model_type='classification',
+                            input_type='multivariate',
+                            n_inputs=n_inputs,
+                            n_outputs=n_classes)
                   
         n_classes = int(np.amax(y_test)+1) 
         x_axis = np.arange(len(X_test[0]))

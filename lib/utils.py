@@ -7,6 +7,7 @@ import seaborn as sns
 import pickle
 from pathlib import Path
 from datetime import datetime
+import yaml
 
 # 此代码需要大改，但暂时可以用
 def calc_mae(gt, pred):
@@ -191,3 +192,21 @@ def create_directory(directory_name):
         print(f"An error occurred: {e}")
 
     return directory_path
+
+def create_model_yaml(yaml_name,model_path,model_type,input_type,n_inputs,n_outputs):
+    # Data to write to the YAML file (Python dictionary)
+    data = {
+        'name': yaml_name,
+        'model_type': model_type,
+        'input_type': input_type,
+        'inputs': n_inputs,
+        'outputs': n_outputs
+        }
+
+    file = model_path + '/' + yaml_name
+
+    # Open the YAML file in write mode
+    with open("yaml/example.yaml", "w") as file:
+        # Write the data to the YAML file
+        yaml.dump(data, file, default_flow_style=False)
+    return
