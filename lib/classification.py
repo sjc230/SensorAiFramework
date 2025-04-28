@@ -37,7 +37,7 @@ from tslearn.svm import TimeSeriesSVC
 
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import ConfusionMatrixDisplay, classification_report, RocCurveDisplay, auc, roc_curve, roc_auc_score
-from lib.utils import plot_confusion_matrix
+from lib.utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model
 
 #import load_data as ld
 
@@ -3661,7 +3661,13 @@ def pipeBuild_TimeSeriesSVC(C=[1.0],kernel=['gak'],degree=[3],gamma=['auto'],coe
   return pipeline, params
 
 # CLASSIFICATON GRID BUILDER
-def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_mean_squared_error',plot_number=10):
+def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_mean_squared_error',plot_number=10,save_best=False):
+    
+    if save_best == True:
+      time_string = get_timestamp_string()
+      path_name = time_string + "_models"
+      directory_path = create_directory(path_name)
+      
     # iterate over classifiers
     classes=np.unique(y_train)
     for j in range(len(names)):
@@ -3724,6 +3730,12 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
             print("Incorrect plot number value entered")
         fig.update_layout(showlegend=False)
         fig.show()
+
+        if save_best == True:
+          best_model = grid_search.best_estimator_
+          best_name = '/' + directory_path + '/' + names[j] + '.pkl'
+          save_model(model=best_model,filename=best_name)
+
     return
 
 # MAIN

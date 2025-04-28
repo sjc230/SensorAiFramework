@@ -4,6 +4,9 @@ import pickle
 import pandas as pd
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
+import pickle
+from pathlib import Path
+from datetime import datetime
 
 # 此代码需要大改，但暂时可以用
 def calc_mae(gt, pred):
@@ -152,3 +155,39 @@ def plot_confusion_matrix(y_true, y_pred, classes, title='Confusion Matrix', cma
     plt.xlabel('Predicted Label')
     plt.ylabel('True Label')
     plt.show()
+
+
+# Load the model from a pickle file
+def load_model(filename):
+    with open(filename, 'rb') as file:
+        model = pickle.load(file)
+    return model
+
+# Save model to a pickle file
+def save_model(model,filename):
+    with open(filename, 'wb') as file:
+        pickle.dump(model, file)
+    return
+
+# returns current time stamp string in yyyymmddhhmmss format
+def get_timestamp_string():
+    now = datetime.now()
+    timestamp_string = now.strftime("%Y%m%d%H%M%S")
+    return timestamp_string
+
+
+# create a new directory based on name string and return the path
+def create_directory(directory_name):
+    directory_path = Path(directory_name)
+    try:
+        # Create the directory
+        directory_path.mkdir()
+        print(f"Directory '{directory_path}' created successfully.")
+    except FileExistsError:
+        print(f"Directory '{directory_path}' already exists.")
+    except PermissionError:
+        print(f"Permission denied: Unable to create '{directory_path}'.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+    return directory_path
