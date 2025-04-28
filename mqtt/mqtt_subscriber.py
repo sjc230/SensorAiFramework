@@ -1,8 +1,31 @@
 import paho.mqtt.client as mqtt
+import numpy as np
 import json
 import socket
 import yaml
 from msg_proc import parse_beddot_data
+from pathlib import Path
+import sys
+from influxdb import InfluxDBClient
+import json
+import argparse
+
+# Get the path of the current file (file1.py)
+current_file_path = Path(__file__).resolve()
+
+# Get the parent directory (folder1)
+parent_dir = current_file_path.parent
+
+# Get the path to the other folder (folder2)
+other_folder_path = parent_dir.parent / "lib"
+
+# Add the other folder to sys.path so Python can find the module
+sys.path.append(str(other_folder_path))
+
+# Now you can import from file2.py
+import utils
+
+#from ..lib import utils
 
 """
 HOST = '127.0.0.1'
@@ -59,9 +82,9 @@ s = SocketClient(HOST, SOCKET_PORT)
 
 
 # Load the Model YAML file
-with open("yaml/smartplug_default.yaml", "r") as file:
-    device = yaml.safe_load(file)
-print(device)
+with open("20250428190324_models/Best_Extra-Trees.yaml", "r") as file:
+    best_model = yaml.safe_load(file)
+print(best_model)
 
 # Load the Device YAML file
 with open("yaml/smartplug_default.yaml", "r") as file:
@@ -87,12 +110,16 @@ print(combined_data)
 # Define what happens when connecting to the smart device
 def on_connect(client, userdata, flags, rc):
     print(f"Connected with result code {rc}")
+    global model
 
     if device['type'] == 'smartplug':
         # Once connected, subscribe to the topics
         for top in topics:
             TOPIC = "/" + org + "/" + mac + "/" + top
             client.subscribe(TOPIC)
+    file_name = best_model['model_path'] + '/' + best_model['name']
+    model = utils.load_model(file_name)
+    print(best_model['name']," was loaded successfully")
 
 
 
@@ -129,6 +156,17 @@ def combine_and_process_data():
         #Write code to preprocess and send data to AI model
 
         #print(received.decode())
+        var1 = combined_data['Power_Factor'][0]
+        var2 = combined_data['Volt_THD'][0]
+        var3 = combined_data['Curr_THD'][0]
+        data_list = [var1,var2,var3]
+        data = np.array(data_list)
+        data = data.reshape(1, -1) #(-1, 1)
+
+        prediction = model.predict(data)
+        print("Predition Type is: ",type(prediction))
+        print("Model Prediction: ",prediction)
+
         # Reset data for next cycle if required
         reset_combined_data()
 
