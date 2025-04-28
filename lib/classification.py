@@ -3686,6 +3686,13 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
         print(classification_report(y_test, y_pred))
         #ConfusionMatrixDisplay.from_estimator(grid_search, X_test, y_test, xticks_rotation="vertical")
         plot_confusion_matrix(y_test,y_pred,classes,f"{names[j]} Confusion Matrix")
+
+        if save_best == True:
+          best_model = grid_search.best_estimator_
+          model_name = names[j]
+          model_name = model_name.replace(' ','-')
+          best_name = './' + str(directory_path) + '/' + model_name + '.pkl'
+          save_model(model=best_model,filename=best_name)
                   
         n_classes = int(np.amax(y_test)+1) 
         x_axis = np.arange(len(X_test[0]))
@@ -3729,14 +3736,7 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
         else:
             print("Incorrect plot number value entered")
         fig.update_layout(showlegend=False)
-        fig.show()
-
-        if save_best == True:
-          best_model = grid_search.best_estimator_
-          model_name = names[j]
-          model_name = model_name.replace(' ','-')
-          best_name = './' + str(directory_path) + '/' + model_name + '.pkl'
-          save_model(model=best_model,filename=best_name)
+        fig.show()        
 
     return
 
