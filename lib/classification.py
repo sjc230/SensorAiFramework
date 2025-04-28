@@ -3733,7 +3733,9 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
 
         if save_best == True:
           best_model = grid_search.best_estimator_
-          best_name = '/' + str(directory_path) + '/' + names[j] + '.pkl'
+          model_name = names[j]
+          model_name = model_name.replace(' ','-')
+          best_name = './' + str(directory_path) + '/' + model_name + '.pkl'
           save_model(model=best_model,filename=best_name)
 
     return
