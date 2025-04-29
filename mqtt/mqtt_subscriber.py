@@ -1,86 +1,27 @@
 import paho.mqtt.client as mqtt
 import numpy as np
 import json
-import socket
 import yaml
 from msg_proc import parse_beddot_data
 from pathlib import Path
 import sys
 from influxdb import InfluxDBClient
 import json
+import time
 import argparse
 
 # Get the path of the current file (file1.py)
 current_file_path = Path(__file__).resolve()
-
 # Get the parent directory (folder1)
 parent_dir = current_file_path.parent
-
 # Get the path to the other folder (folder2)
 other_folder_path = parent_dir.parent / "lib"
-
 # Add the other folder to sys.path so Python can find the module
 sys.path.append(str(other_folder_path))
-
 # Now you can import from file2.py
 import utils
 
-#from ..lib import utils
-
-"""
-HOST = '127.0.0.1'
-SOCKET_PORT = 65432
-
-class SocketClient:
-    def __init__(self, host, port):
-        self.host = host
-        self.port = port
-        self.socket = None
-
-    def connect(self):
-        try:
-            self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.socket.connect((self.host, self.port))
-            print(f"Connected to {self.host}:{self.port}")
-            return True
-        except socket.error as e:
-            print(f"Connection error: {e}")
-            return False
-
-    def send_message(self, message):
-         if self.socket:
-            try:
-                self.socket.sendall(message.encode('utf-8'))
-                return True
-            except socket.error as e:
-                print(f"Error sending message: {e}")
-                return False
-         else:
-            print("Not connected to a server.")
-            return False
-
-    def receive_message(self):
-        if self.socket:
-            try:
-                data = self.socket.recv(1024)
-                return data.decode('utf-8')
-            except socket.error as e:
-                print(f"Error receiving message: {e}")
-                return None
-        else:
-            print("Not connected to a server.")
-            return None
-
-    def disconnect(self):
-        if self.socket:
-            self.socket.close()
-            self.socket = None
-            print("Disconnected from server.")
-
-s = SocketClient(HOST, SOCKET_PORT)
-#"""
-
-
+# dc:da:0c:3c:6d:40
 # Load the Model YAML file
 with open("20250428190324_models/Best_Extra-Trees.yaml", "r") as file:
     best_model = yaml.safe_load(file)
@@ -109,13 +50,17 @@ print(combined_data)
 
 # InfluxDB Configuration
 INFLUXDB_HOST = "sensorserver2.engr.uga.edu"
-INFLUXDB_PORT = 8886
-INFLUXDB_DATABASE = "sjc"
+INFLUXDB_PORT = 8086
+INFLUXDB_DATABASE = "waveform"
+INFLUXDB_USER = "plug"
+INFLUXDB_PASS = "smartai@122"
+isSSL = True
 
 # Connect to InfluxDB
-influx_client = InfluxDBClient(INFLUXDB_HOST, INFLUXDB_PORT)
-influx_client.create_database(INFLUXDB_DATABASE)
+influx_client = InfluxDBClient(host=INFLUXDB_HOST, port=INFLUXDB_PORT,username=INFLUXDB_USER,password=INFLUXDB_PASS,database=INFLUXDB_DATABASE,ssl=isSSL)
+#influx_client.create_database(INFLUXDB_DATABASE)
 influx_client.switch_database(INFLUXDB_DATABASE)
+#write_api = influx_client.write_api(write_options=WriteOptions(batch_size=1))
 
 # Define what happens when connecting to the smart device
 def on_connect(client, userdata, flags, rc):
@@ -177,6 +122,14 @@ def combine_and_process_data():
         print("Predition Type is: ",type(prediction))
         print("Model Prediction: ",prediction)
 
+        timestamp = int(time.time() * 1e9)  # current time in nanoseconds
+        line_data = f"prediction,location=test1 value={prediction[0]} {timestamp}"
+
+        # write to influxdb
+        #influx_client.switch_database(INFLUXDB_DATABASE)
+        #influx_client.write_points(line_data,database=INFLUXDB_DATABASE,batch_size=1,protocol='line')
+        influx_client.write([line_data],params={'db':INFLUXDB_DATABASE},protocol='line')
+        #influx_client.close()
         # Reset data for next cycle if required
         reset_combined_data()
 
