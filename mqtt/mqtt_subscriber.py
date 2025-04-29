@@ -107,6 +107,16 @@ for top in topics:
     combined_data[f"{top}"] = None
 print(combined_data)
 
+# InfluxDB Configuration
+INFLUXDB_HOST = "sensorserver2.engr.uga.edu"
+INFLUXDB_PORT = 8886
+INFLUXDB_DATABASE = "sjc"
+
+# Connect to InfluxDB
+influx_client = InfluxDBClient(INFLUXDB_HOST, INFLUXDB_PORT)
+influx_client.create_database(INFLUXDB_DATABASE)
+influx_client.switch_database(INFLUXDB_DATABASE)
+
 # Define what happens when connecting to the smart device
 def on_connect(client, userdata, flags, rc):
     print(f"Connected with result code {rc}")
