@@ -122,8 +122,8 @@ def combine_and_process_data():
         print("Predition Type is: ",type(prediction))
         print("Model Prediction: ",prediction)
 
-        timestamp = int(time.time() * 1e9)  # current time in nanoseconds
-        line_data = f"prediction,location=test1 value={prediction[0]} {timestamp}"
+        #timestamp = int(time.time() * 1e9)  # current time in nanoseconds
+        line_data = f"prediction,location=test1 value={prediction[0]} {combined_data['time']}"
 
         # write to influxdb
         #influx_client.switch_database(INFLUXDB_DATABASE)
