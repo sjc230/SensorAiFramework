@@ -174,7 +174,13 @@ def gridsearch_outlier_old(names,pipes,X,y,scoring='neg_mean_squared_error',plot
         print("Best parameter (CV score=%0.3f):" % grid_search.best_score_)
         print(grid_search.best_params_)
         #ConfusionMatrixDisplay.from_estimator(grid_search, X, y, xticks_rotation="vertical")
-        plot_confusion_matrix(y,y_pred,classes,f"{names[j]} Confusion Matrix")
+        labels = grid_search.best_estimator_.predict(X)
+        #print("Best Model Labels: ",labels)
+        noise = np.isin(labels, -1)
+        if np.any(noise)==True:
+            labels = np.where(labels == 1, 0, labels)
+            labels = np.where(labels == -1, 1, labels)
+        plot_confusion_matrix(y,labels,classes,f"{names[j]} Confusion Matrix")
 
         if save_best == True:
           best_model = grid_search.best_estimator_
