@@ -31,6 +31,7 @@ from sklearn.metrics import classification_report, auc, roc_curve, roc_auc_score
 from sklearn.metrics import PredictionErrorDisplay 
 
 import lib.utils as utils
+from lib.utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model, create_model_yaml
 
 #import load_data as ld
 
@@ -668,7 +669,15 @@ def pipeBuild_OrthogonalMatchingPursuitCV(copy=[True], fit_intercept=[True],
   return pipeline, params
 
 # REGRESSOR GRID BUILDER
-def gridsearch_regressor(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_mean_squared_error'):
+def gridsearch_regressor(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_mean_squared_error',save_best=False):
+    n_classes = int(np.amax(y_train)+1)
+    n_inputs = X_train.shape[1]
+
+    if save_best == True:
+      time_string = get_timestamp_string()
+      path_name = time_string + "_models"
+      directory_path = create_directory(path_name)
+
     # iterate over regressors
     for j in range(len(names)):
 
@@ -678,6 +687,20 @@ def gridsearch_regressor(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_
         print("Best parameter (CV score=%0.3f):" % grid_search.best_score_)
         print(grid_search.best_params_)
         y_pred = grid_search.predict(X_test)
+
+        if save_best == True:
+          best_model = grid_search.best_estimator_
+          model_name = names[j]
+          model_name = model_name.replace(' ','-')
+          best_name = './' + str(directory_path) + '/Best_' + model_name + '.pkl'
+          yaml_name = 'Best_' + model_name + '.yaml'
+          save_model(model=best_model,filename=best_name)
+          create_model_yaml(yaml_name=yaml_name,
+                            model_name='Best_' + model_name + '.pkl',
+                            model_path=str(directory_path),
+                            model_type='regression',
+                            n_inputs=n_inputs,
+                            n_outputs=n_classes)
         
         plt = utils.plot_2vectors(label=y_test, pred=y_pred, name=names[j], size=10)
         #PredictionErrorDisplay.from_estimator(grid_search, X_test, y_test)

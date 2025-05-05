@@ -27,6 +27,7 @@ from sklearn.metrics import confusion_matrix, classification_report
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import plotly.express as px
+from lib.utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model, create_model_yaml
 
 #from anomaly_detection import sst_class as sst
 
@@ -154,8 +155,17 @@ def pipeBuild_IsolationForest(n_estimators=[100],max_samples=['auto'], contamina
   return pipeline, params
 
 # OUTLIE DETECTION GRID BUILDER
-def gridsearch_outlier_old(names,pipes,X,y,scoring='neg_mean_squared_error',plot_number=10):
+def gridsearch_outlier_old(names,pipes,X,y,scoring='neg_mean_squared_error',plot_number=10,save_best=False):
+    n_classes = int(np.amax(y)+1)
+    n_inputs = X.shape[1]
+
+    if save_best == True:
+      time_string = get_timestamp_string()
+      path_name = time_string + "_models"
+      directory_path = create_directory(path_name)
+
     # iterate over classifiers
+    classes=np.unique(y)
     for j in range(len(names)):
 
         grid_search = GridSearchCV(estimator=pipes[j][0], param_grid=pipes[j][1], scoring=scoring,cv=5, verbose=1, n_jobs=-1)
@@ -164,8 +174,23 @@ def gridsearch_outlier_old(names,pipes,X,y,scoring='neg_mean_squared_error',plot
         print("Best parameter (CV score=%0.3f):" % grid_search.best_score_)
         print(grid_search.best_params_)
         #ConfusionMatrixDisplay.from_estimator(grid_search, X, y, xticks_rotation="vertical")
+        plot_confusion_matrix(y_test,y_pred,classes,f"{names[j]} Confusion Matrix")
+
+        if save_best == True:
+          best_model = grid_search.best_estimator_
+          model_name = names[j]
+          model_name = model_name.replace(' ','-')
+          best_name = './' + str(directory_path) + '/Best_' + model_name + '.pkl'
+          yaml_name = 'Best_' + model_name + '.yaml'
+          save_model(model=best_model,filename=best_name)
+          create_model_yaml(yaml_name=yaml_name,
+                            model_name='Best_' + model_name + '.pkl',
+                            model_path=str(directory_path),
+                            model_type='detection',
+                            n_inputs=n_inputs,
+                            n_outputs=n_classes)
                    
-        n_classes = int(np.amax(y)+1) 
+        #n_classes = int(np.amax(y)+1) 
         x_axis = np.arange(len(X[0]))
         j = 0
         titles = []
@@ -199,8 +224,17 @@ def gridsearch_outlier_old(names,pipes,X,y,scoring='neg_mean_squared_error',plot
     return
 
 # OUTLIER CLUSTER
-def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_number='all'): #scoring='rand_score'
+def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_number='all',save_best=False): #scoring='rand_score'
+    n_classes = int(np.amax(y)+1)
+    n_inputs = X.shape[1]
+
+    if save_best == True:
+      time_string = get_timestamp_string()
+      path_name = time_string + "_models"
+      directory_path = create_directory(path_name)
+
     # iterate over cluterers
+    classes=np.unique(y)
     for j in range(len(names)):
 
         grid_search = GridSearchCV(estimator=pipes[j][0], param_grid=pipes[j][1], scoring=scoring,cv=5, verbose=1, n_jobs=-1)
@@ -216,6 +250,21 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
         if np.any(noise)==True:
             new_noise_label = int(np.amax(labels)+1) # find the max label value
             labels = np.where(labels == -1, new_noise_label, labels)
+        plot_confusion_matrix(y_test,y_pred,classes,f"{names[j]} Confusion Matrix")
+
+        if save_best == True:
+          best_model = grid_search.best_estimator_
+          model_name = names[j]
+          model_name = model_name.replace(' ','-')
+          best_name = './' + str(directory_path) + '/Best_' + model_name + '.pkl'
+          yaml_name = 'Best_' + model_name + '.yaml'
+          save_model(model=best_model,filename=best_name)
+          create_model_yaml(yaml_name=yaml_name,
+                            model_name='Best_' + model_name + '.pkl',
+                            model_path=str(directory_path),
+                            model_type='detection',
+                            n_inputs=n_inputs,
+                            n_outputs=n_classes)
 
         print("Accuracy: ",accuracy_score(y_true, labels))
         print("Precision: ")
@@ -224,8 +273,8 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
 
         x_classes = int(np.amax(labels)+1)
         y_classes = int(np.amax(y)+1)
-        print("# of X's clusters is: ",x_classes)
-        print("# of y's clusters is: ",y_classes)
+        #print("# of X's clusters is: ",x_classes)
+        #print("# of y's clusters is: ",y_classes)
         if x_classes > y_classes:
             n_classes = x_classes
         else:
@@ -235,7 +284,7 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
         j = 0
         titles = []
         while j < n_classes:
-            name = "Cluster " + str(j)
+            name = "Class " + str(j)
             titles.append(name)
             j = j+1
         fig = make_subplots(
@@ -373,9 +422,10 @@ if __name__ == '__main__':
       y_pred = grid_search.predict(X_test)
       print(classification_report(y_test, y_pred))
       #ConfusionMatrixDisplay.from_estimator(grid_search, X_test, y_test, xticks_rotation="vertical")
-      plt.title(names[j]+" Heat Map")
+      #plt.title(names[j]+" Heat Map")
       #fig0 = py.plot_mpl(temp.gcf())
       #fig0.show()
+      #plot_confusion_matrix(y_test,y_pred,classes,f"{names[j]} Confusion Matrix")
       
       count = 0
       while count < len(y_pred):

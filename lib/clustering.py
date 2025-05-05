@@ -24,6 +24,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import ConfusionMatrixDisplay, classification_report, RocCurveDisplay, auc, roc_curve, roc_auc_score
 
 from tslearn.clustering import KernelKMeans, KShape, TimeSeriesKMeans
+from lib.utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model, create_model_yaml
 
 #import load_data as ld
 
@@ -1675,7 +1676,16 @@ def pipeBuild_HDBSCAN(min_cluster_size=[5], min_samples=[None], cluster_selectio
 #"""
 
 # CLUSTERING GIRD BUILDER
-def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all'):
+def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all',save_best=False):
+
+    n_classes = int(np.amax(y+1))
+    n_inputs = X.shape[1]
+
+    if save_best == True:
+      time_string = get_timestamp_string()
+      path_name = time_string + "_models"
+      directory_path = create_directory(path_name)
+
     # iterate over cluterers
     for j in range(len(names)):
 
@@ -1691,6 +1701,20 @@ def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all'
         if np.any(noise)==True:
             new_noise_label = int(np.amax(labels)+1) # find the max label value
             labels = np.where(labels == -1, new_noise_label, labels)
+
+        if save_best == True:
+          best_model = grid_search.best_estimator_
+          model_name = names[j]
+          model_name = model_name.replace(' ','-')
+          best_name = './' + str(directory_path) + '/Best_' + model_name + '.pkl'
+          yaml_name = 'Best_' + model_name + '.yaml'
+          save_model(model=best_model,filename=best_name)
+          create_model_yaml(yaml_name=yaml_name,
+                            model_name='Best_' + model_name + '.pkl',
+                            model_path=str(directory_path),
+                            model_type='clustering',
+                            n_inputs=n_inputs,
+                            n_outputs=n_classes)
             
 
         x_classes = int(np.amax(labels)+1)
