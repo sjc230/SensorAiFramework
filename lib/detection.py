@@ -174,7 +174,7 @@ def gridsearch_outlier_old(names,pipes,X,y,scoring='neg_mean_squared_error',plot
         print("Best parameter (CV score=%0.3f):" % grid_search.best_score_)
         print(grid_search.best_params_)
         #ConfusionMatrixDisplay.from_estimator(grid_search, X, y, xticks_rotation="vertical")
-        plot_confusion_matrix(y_test,y_pred,classes,f"{names[j]} Confusion Matrix")
+        plot_confusion_matrix(y,y_pred,classes,f"{names[j]} Confusion Matrix")
 
         if save_best == True:
           best_model = grid_search.best_estimator_
@@ -250,7 +250,7 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
         if np.any(noise)==True:
             new_noise_label = int(np.amax(labels)+1) # find the max label value
             labels = np.where(labels == -1, new_noise_label, labels)
-        plot_confusion_matrix(y_test,y_pred,classes,f"{names[j]} Confusion Matrix")
+        plot_confusion_matrix(y,y_pred,classes,f"{names[j]} Confusion Matrix")
 
         if save_best == True:
           best_model = grid_search.best_estimator_
@@ -420,7 +420,7 @@ if __name__ == '__main__':
       print("Best parameter (CV score=%0.3f):" % grid_search.best_score_)
       print(grid_search.best_params_)
       y_pred = grid_search.predict(X_test)
-      print(classification_report(y_test, y_pred))
+      print(classification_report(y_train, y_pred))
       #ConfusionMatrixDisplay.from_estimator(grid_search, X_test, y_test, xticks_rotation="vertical")
       #plt.title(names[j]+" Heat Map")
       #fig0 = py.plot_mpl(temp.gcf())
