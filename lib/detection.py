@@ -244,7 +244,7 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
         print(grid_search.best_params_)
         print("Best "+scoring+"score: ",grid_search.best_score_)
         #labels = y
-        labels = grid_search.best_estimator_.steps[0][1].labels_
+        labels = grid_search.best_estimator_.predict(X)
         #print("Best Model Labels: ",labels)
         noise = np.isin(labels, -1)
         if np.any(noise)==True:
