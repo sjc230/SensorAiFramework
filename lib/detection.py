@@ -243,14 +243,14 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
         print("Best parameter (CV score=%0.3f):" % grid_search.best_score_)
         print(grid_search.best_params_)
         print("Best "+scoring+"score: ",grid_search.best_score_)
-        labels = y
-        #####labels = grid_search.best_estimator_.steps[0][1].labels_
+        #labels = y
+        labels = grid_search.best_estimator_.steps[0][1].labels_
         #print("Best Model Labels: ",labels)
         noise = np.isin(labels, -1)
         if np.any(noise)==True:
             new_noise_label = int(np.amax(labels)+1) # find the max label value
             labels = np.where(labels == -1, new_noise_label, labels)
-        #plot_confusion_matrix(labels,y_pred,classes,f"{names[j]} Confusion Matrix")
+        plot_confusion_matrix(y,labels,classes,f"{names[j]} Confusion Matrix")
 
         if save_best == True:
           best_model = grid_search.best_estimator_
@@ -266,10 +266,10 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
                             n_inputs=n_inputs,
                             n_outputs=n_classes)
 
-        print("Accuracy: ",accuracy_score(y_true, labels))
-        print("Precision: ")
-        print("F1 Score: ") 
-        print("Recall: ") 
+        #print("Accuracy: ",accuracy_score(y_true, labels))
+        #print("Precision: ")
+        #print("F1 Score: ") 
+        #print("Recall: ") 
 
         x_classes = int(np.amax(labels)+1)
         y_classes = int(np.amax(y)+1)
