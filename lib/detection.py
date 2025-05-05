@@ -248,8 +248,8 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
         #print("Best Model Labels: ",labels)
         noise = np.isin(labels, -1)
         if np.any(noise)==True:
-            new_noise_label = int(np.amax(labels)+1) # find the max label value
-            labels = np.where(labels == -1, new_noise_label, labels)
+            labels = np.where(labels == 1, 0, y_pred)
+            labels = np.where(labels == -1, 1, y_pred)
         plot_confusion_matrix(y,labels,classes,f"{names[j]} Confusion Matrix")
 
         if save_best == True:
