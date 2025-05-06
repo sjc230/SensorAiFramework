@@ -1,0 +1,27 @@
+device:
+  type: smartplug
+  organization: smartPP_org_name
+  mac: dcda0c3c6d40
+  port: 1883
+  broker: sensorserver2.engr.uga.edu
+  topics:
+    - Voltage
+    - Current
+    - Power
+    - Reactive_Power
+    - Apparent_Power
+    - Power_Factor
+    - Volt_THD
+    - Curr_THD
+    - Volt_Fund
+    - Curr_Fund
+    - Power_Energy_Acc
+    - Reactive_Energy_Acc
+    - temperature
+db_server:
+  host: sensorserver2.engr.uga.edu
+  port: 8086
+  database: waveform
+  user: plug
+  password: smartai@122
+  ssl: True

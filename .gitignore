@@ -16,3 +16,4 @@
 /DataConverter/test_shape.npy
 /attack_detection/fastsst/util/__pycache__/
 /attack_detection/fastsst/__pycache__/
+test.py

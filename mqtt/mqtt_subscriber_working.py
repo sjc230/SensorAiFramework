@@ -7,7 +7,6 @@ from pathlib import Path
 import sys
 from influxdb import InfluxDBClient
 import json
-from tkinter import filedialog as fd
 import time
 import argparse
 
@@ -22,80 +21,61 @@ sys.path.append(str(other_folder_path))
 # Now you can import from file2.py
 import utils
 
+# dc:da:0c:3c:6d:40
+# Load the Model YAML file
+with open("20250428190324_models/Best_Extra-Trees.yaml", "r") as file:
+    best_model = yaml.safe_load(file)
+print(best_model)
 
-# Define open file
-def open_yaml_file():
-    filetypes = (
-        ('yaml files', '*.yaml'),
-        ('pickle files', '*.pkl')
-                )
-    file = fd.askopenfilename(filetypes=filetypes)    
-    return file
+# Load the Device YAML file
+with open("20250428190324_models/smartplug_default.yaml", "r") as file:
+    device = yaml.safe_load(file)
+print(device)
 
+if device["device"]["type"] == "smartplug":
+    # Extract smartplug yaml data
+    org = device["device"]["organization"]
+    mac = device["device"]["mac"]
+    topics = device["device"]["topics"]
+ 
+# MQTT Configuration
+BROKER = device["device"]["broker"] #"sensorserver2.engr.uga.edu"
+PORT = device["device"]["port"] #1883
 
-# Define Device Setup
-def device_setup():
-    dev_file =  open_yaml_file()
-    # dc:da:0c:3c:6d:40
-    # Load the Model YAML file
-    with open(dev_file, "r") as file:
-        device = yaml.safe_load(file)
-    
-    if device["device"]["type"] == "smartplug":
-        # Extract smartplug yaml data
-        org = device["device"]["organization"]
-        mac = device["device"]["mac"]
-        topics = device["device"]["topics"]
-    
-    # Set up the Topics dictionary
-    combined_data = {"time": None}
-    for top in topics:
-        combined_data[f"{top}"] = None
-    print(combined_data)
-    
-    # MQTT Configuration
-    MQTT_BROKER = device["device"]["broker"] #"sensorserver2.engr.uga.edu"
-    MQTT_PORT = device["device"]["port"] #1883
+# Set up the Topics dictionary
+combined_data = {"time": None}
+for top in topics:
+    combined_data[f"{top}"] = None
+print(combined_data)
 
-        # InfluxDB Configuration
-    INFLUXDB_HOST = device["db_server"]["host"]
-    INFLUXDB_PORT = device["db_server"]["port"]
-    INFLUXDB_DATABASE = device["db_server"]["database"]
-    INFLUXDB_USER = device["db_server"]["user"]
-    INFLUXDB_PASS = device["db_server"]["password"]
-    isSSL = device["db_server"]["ssl"]
+# InfluxDB Configuration
+INFLUXDB_HOST = "sensorserver2.engr.uga.edu"
+INFLUXDB_PORT = 8086
+INFLUXDB_DATABASE = "waveform"
+INFLUXDB_USER = "plug"
+INFLUXDB_PASS = "smartai@122"
+isSSL = True
 
-    # Connect to InfluxDB
-    influx_client = InfluxDBClient(host=INFLUXDB_HOST, port=INFLUXDB_PORT,username=INFLUXDB_USER,password=INFLUXDB_PASS,database=INFLUXDB_DATABASE,ssl=isSSL)
-    #influx_client.create_database(INFLUXDB_DATABASE)
-    influx_client.switch_database(INFLUXDB_DATABASE)
-    #write_api = influx_client.write_api(write_options=WriteOptions(batch_size=1))
-
-    model_file =  open_yaml_file()
-
-    with open(model_file, "r") as file:
-        best_model = yaml.safe_load(file)
-
-    # Create a new MQTT client instance
-    #client = mqtt.Client()
-
-    #topic_subscriber(org, mac, topics, best_model, client)
-
-    return MQTT_BROKER, MQTT_PORT, org, mac, topics, best_model
-
-def topic_subscriber(org,mac,topics,best_model,client):
-    global model
-    for top in topics:
-        TOPIC = "/" + org + "/" + mac + "/" + top
-        client.subscribe(TOPIC)
-    file_name = best_model['model_path'] + '/' + best_model['name']
-    model = utils.load_model(file_name)
-    print(best_model['name']," was loaded successfully")
-    return
+# Connect to InfluxDB
+influx_client = InfluxDBClient(host=INFLUXDB_HOST, port=INFLUXDB_PORT,username=INFLUXDB_USER,password=INFLUXDB_PASS,database=INFLUXDB_DATABASE,ssl=isSSL)
+#influx_client.create_database(INFLUXDB_DATABASE)
+influx_client.switch_database(INFLUXDB_DATABASE)
+#write_api = influx_client.write_api(write_options=WriteOptions(batch_size=1))
 
 # Define what happens when connecting to the smart device
 def on_connect(client, userdata, flags, rc):
-    print(f"Connected with result code {rc}")    
+    print(f"Connected with result code {rc}")
+    global model
+
+    if device["device"]['type'] == 'smartplug':
+        # Once connected, subscribe to the topics
+        for top in topics:
+            TOPIC = "/" + org + "/" + mac + "/" + top
+            client.subscribe(TOPIC)
+    file_name = best_model['model_path'] + '/' + best_model['name']
+    model = utils.load_model(file_name)
+    print(best_model['name']," was loaded successfully")
+
 
 
 # Define what happens when a message is received
@@ -118,7 +98,7 @@ def on_message(client, userdata, msg):
 
 # Function to combine and process the data from all topics
 def combine_and_process_data():
-    #global s
+    global s
     # Check if all data is available (you can also do other checks here)
     if all(combined_data.values()):
         print("Combined Data:", combined_data)
@@ -168,28 +148,23 @@ def shorten_topic (topic):
         print("topic error")
     return short_topic
 
-if __name__ == '__main__':
+# Create a new MQTT client instance
+client = mqtt.Client()
 
-    MQTT_BROKER, MQTT_PORT, org, mac, topics, best_model = device_setup()
+# Attach the callback functions
+client.on_connect = on_connect
+client.on_message = on_message
 
-    # Create a new MQTT client instance
-    client = mqtt.Client()
+# Connect to the broker
+client.connect(BROKER, PORT, 60)
 
-    # Attach the callback functions
-    client.on_connect = on_connect
-    topic_subscriber(org,mac,topics,best_model,client)
-    client.on_message = on_message    
+# Loop to process network traffic, dispatch callbacks, etc.
+client.loop_forever()
 
-    # Connect to the broker
-    client.connect(MQTT_BROKER, MQTT_PORT, 60)
-
-    # Loop to process network traffic, dispatch callbacks, etc.
-    client.loop_forever()
-
-    # Keep the script running
-    try:
-        while True:
-            pass
-    except KeyboardInterrupt:
-        print("Disconnected")
-        client.loop_stop()  # Stop the loop when exiting
+# Keep the script running
+try:
+    while True:
+        pass
+except KeyboardInterrupt:
+    print("Disconnected")
+    client.loop_stop()  # Stop the loop when exiting
