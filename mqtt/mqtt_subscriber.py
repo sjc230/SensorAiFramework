@@ -57,14 +57,16 @@ def device_setup():
     MQTT_BROKER = device["device"]["broker"] #"sensorserver2.engr.uga.edu"
     MQTT_PORT = device["device"]["port"] #1883
 
-        # InfluxDB Configuration
+    # InfluxDB Configuration
+    global INFLUXDB_DATABASE
     INFLUXDB_HOST = device["db_server"]["host"]
     INFLUXDB_PORT = device["db_server"]["port"]
     INFLUXDB_DATABASE = device["db_server"]["database"]
     INFLUXDB_USER = device["db_server"]["user"]
     INFLUXDB_PASS = device["db_server"]["password"]
     isSSL = device["db_server"]["ssl"]
-
+    
+    global influx_client
     # Connect to InfluxDB
     influx_client = InfluxDBClient(host=INFLUXDB_HOST, port=INFLUXDB_PORT,username=INFLUXDB_USER,password=INFLUXDB_PASS,database=INFLUXDB_DATABASE,ssl=isSSL)
     #influx_client.create_database(INFLUXDB_DATABASE)
@@ -118,19 +120,10 @@ def on_message(client, userdata, msg):
 
 # Function to combine and process the data from all topics
 def combine_and_process_data():
-    #global s
     # Check if all data is available (you can also do other checks here)
     if all(combined_data.values()):
         print("Combined Data:", combined_data)
-        #with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            #s.connect((HOST, SOCKET_PORT))
-            #s.sendall(b'Hello, server')
-        #s.send_message(json.dumps(combined_data))
-        #received = s.recv(1024)
-
-        #Write code to preprocess and send data to AI model
-
-        #print(received.decode())
+        # Write code to preprocess and send data to AI model        
         var1 = combined_data['Power_Factor'][0]
         var2 = combined_data['Volt_THD'][0]
         var3 = combined_data['Curr_THD'][0]
@@ -146,10 +139,8 @@ def combine_and_process_data():
         line_data = f"prediction,location=test1 value={prediction[0]} {combined_data['time']}"
 
         # write to influxdb
-        #influx_client.switch_database(INFLUXDB_DATABASE)
-        #influx_client.write_points(line_data,database=INFLUXDB_DATABASE,batch_size=1,protocol='line')
         influx_client.write([line_data],params={'db':INFLUXDB_DATABASE},protocol='line')
-        #influx_client.close()
+        
         # Reset data for next cycle if required
         reset_combined_data()
 
