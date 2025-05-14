@@ -45,6 +45,7 @@ def device_setup():
         # Extract smartplug yaml data
         org = device["device"]["organization"]
         mac = device["device"]["mac"]
+        global topics
         topics = device["device"]["topics"]
     
     # Set up the Topics dictionary
@@ -151,7 +152,7 @@ def reset_combined_data():
 
 # Function to shorten the smart device topic name.  Drops org name and mac address.
 def shorten_topic (topic):
-    global topics
+    #global topics
     for top in topics:
         if top in topic:
             short_topic = top
