@@ -42,13 +42,16 @@ def device_setup():
         device = yaml.safe_load(file)
     
     if device["device"]["type"] == "smartplug":
+        global org
+        global mac
+        global topics
         # Extract smartplug yaml data
         org = device["device"]["organization"]
         mac = device["device"]["mac"]
-        global topics
         topics = device["device"]["topics"]
     
     # Set up the Topics dictionary
+    global combined_data
     combined_data = {"time": None}
     for top in topics:
         combined_data[f"{top}"] = None
@@ -84,7 +87,7 @@ def device_setup():
 
     #topic_subscriber(org, mac, topics, best_model, client)
 
-    return MQTT_BROKER, MQTT_PORT, org, mac, topics, best_model
+    return MQTT_BROKER, MQTT_PORT
 
 def topic_subscriber(org,mac,topics,best_model,client):
     global model
@@ -94,16 +97,22 @@ def topic_subscriber(org,mac,topics,best_model,client):
     file_name = best_model['model_path'] + '/' + best_model['name']
     model = utils.load_model(file_name)
     print(best_model['name']," was loaded successfully")
-    return
+    return model
 
 # Define what happens when connecting to the smart device
 def on_connect(client, userdata, flags, rc):
-    print(f"Connected with result code {rc}")    
+    global model
+    for top in topics:
+        TOPIC = "/" + org + "/" + mac + "/" + top
+        client.subscribe(TOPIC)
+    file_name = best_model['model_path'] + '/' + best_model['name']
+    model = utils.load_model(file_name)
+    print(best_model['name']," was loaded successfully")
+    #print(f"Connected with result code {rc}")    
 
 
 # Define what happens when a message is received
 def on_message(client, userdata, msg):
-    global combined_data
     top = shorten_topic(msg.topic)
     try:   
         mac_addr, timestamp, data_interval, data =  parse_beddot_data(msg)
@@ -162,14 +171,15 @@ def shorten_topic (topic):
 
 if __name__ == '__main__':
 
-    MQTT_BROKER, MQTT_PORT, org, mac, topics, best_model = device_setup()
+    MQTT_BROKER, MQTT_PORT = device_setup()
+    
 
     # Create a new MQTT client instance
     client = mqtt.Client()
 
     # Attach the callback functions
     client.on_connect = on_connect
-    topic_subscriber(org,mac,topics,best_model,client)
+    #topic_subscriber(org,mac,topics,best_model,client)
     client.on_message = on_message    
 
     # Connect to the broker
