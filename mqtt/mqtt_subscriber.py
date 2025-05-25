@@ -87,7 +87,7 @@ def device_setup():
 
     #topic_subscriber(org, mac, topics, best_model, client)
 
-    return MQTT_BROKER, MQTT_PORT
+    return MQTT_BROKER, MQTT_PORT, org, mac, best_model
 
 def topic_subscriber(org,mac,topics,best_model,client):
     global model
@@ -171,7 +171,7 @@ def shorten_topic (topic):
 
 if __name__ == '__main__':
 
-    MQTT_BROKER, MQTT_PORT = device_setup()
+    MQTT_BROKER, MQTT_PORT, org, mac, best_model = device_setup()
     
 
     # Create a new MQTT client instance
