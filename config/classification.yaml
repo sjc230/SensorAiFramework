@@ -1,0 +1,41 @@
+# Decision Tree
+decision_tree:
+  citerion:
+    - gini
+    - string
+    - list
+  splitter:
+    - best
+    - string
+    - list
+  max_depth:
+    - None
+    - integer
+    - list
+  random_state:
+    - None
+    - integer
+    - single
+
+# Random Forest
+random_forest:
+  n_estimators:
+    - 100
+    - integer
+    - list
+  citerion:
+    - gini
+    - string
+    - list
+  max_depth:
+    - None
+    - integer
+    - list
+  max_features:
+    - sqrt
+    - string
+    - list
+  random_state:
+    - None
+    - integer
+    - single
