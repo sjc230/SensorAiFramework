@@ -8,8 +8,12 @@ import sys
 from influxdb import InfluxDBClient
 import json
 from tkinter import filedialog as fd
+import warnings
 import time
 import argparse
+
+# Ignore warnings
+warnings.filterwarnings("ignore")
 
 # Get the path of the current file (file1.py)
 current_file_path = Path(__file__).resolve()
@@ -34,8 +38,8 @@ def open_yaml_file():
 
 
 # Define Device Setup
-def device_setup():
-    dev_file =  open_yaml_file()
+def device_setup(device_path,model_path):
+    dev_file =  device_path #open_yaml_file()
     # dc:da:0c:3c:6d:40
     # Load the Model YAML file
     with open(dev_file, "r") as file:
@@ -77,7 +81,7 @@ def device_setup():
     influx_client.switch_database(INFLUXDB_DATABASE)
     #write_api = influx_client.write_api(write_options=WriteOptions(batch_size=1))
 
-    model_file =  open_yaml_file()
+    model_file =  model_path #open_yaml_file()
 
     with open(model_file, "r") as file:
         best_model = yaml.safe_load(file)
@@ -171,7 +175,20 @@ def shorten_topic (topic):
 
 if __name__ == '__main__':
 
-    MQTT_BROKER, MQTT_PORT, org, mac, best_model = device_setup()
+    if len(sys.argv) == 1:
+        print("NO ARGUMENTS GIVEN")
+        sys.exit()
+    elif len(sys.argv) > 1:
+        arguments = sys.argv[1:]
+        print("Command-line arguments:", arguments)
+        if len(arguments) != 2:
+            print("INCORRECT ARGUMENTS")
+            sys.exit()
+
+    device_arg = arguments[0]
+    model_arg = arguments[1]
+
+    MQTT_BROKER, MQTT_PORT, org, mac, best_model = device_setup(device_path=device_arg,model_path=model_arg)
     
 
     # Create a new MQTT client instance

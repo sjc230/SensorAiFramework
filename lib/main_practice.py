@@ -47,7 +47,7 @@ class ScriptRunner:
         while not self.stop_flag.is_set():
             if self.process.poll() is not None:
                 break
-            time.sleep(0.1)
+            time.sleep(0.01)
         if self.process.poll() is None:
             self.process.terminate()
             self.process.wait()
@@ -81,12 +81,6 @@ def select_yaml_file(button_name = None):
     elif button_name == "select_model":
         select_model.configure(text = filename)
         model = filename
-    elif button_name == "reset":
-        select_device.configure(text = "select device yaml")
-        select_model.configure(text = "select model yaml")
-        device = None
-        model = None
-        start_connection.configure(state="disabled")
     
     if (device != None) and (model != None) and (".yaml" in device) and (".yaml" in model):
         start_connection.configure(state="normal")
@@ -112,8 +106,14 @@ def connect_model_to_device(device_name,model_name):
 # Method to disconnect devices
 def disconnect_model_from_device(device_name,model_name):
     global conn_script
+    global device
+    global model
     conn_script.stop()
-    select_yaml_file(button_name="reset")
+    select_device.configure(text = "select device yaml")
+    select_model.configure(text = "select model yaml")
+    device = None
+    model = None
+    start_connection.configure(state="disabled")
     stop_connection.configure(state = "disabled")
 
 
