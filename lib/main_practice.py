@@ -33,40 +33,26 @@ ftype_yaml = [("yaml files","*.yaml")]
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
 
-# Class to handle running scripts with arguments via threads
-class ScriptRunner:
-    def __init__(self, script_path, arguments=None):
-        self.script_path = script_path
-        self.arguments = arguments if arguments else []
-        self.process = None
-        self.stop_flag = threading.Event()
+        
+def run_script(script_path, args, stop_flag):
+    """
+    Runs a python script in a new console window with given arguments.
 
-    def run_script(self):
-        command = ["python", self.script_path] + self.arguments
-        self.process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        while not self.stop_flag.is_set():
-            if self.process.poll() is not None:
-                break
-            time.sleep(0.01)
-        if self.process.poll() is None:
-            self.process.terminate()
-            self.process.wait()
-        stdout, stderr = self.process.communicate()
-        if stdout:
-            print("stdout:\n", stdout.decode())
-        if stderr:
-            print("stderr:\n", stderr.decode())
-        print("Script finished")
-            
-    def start(self):
-        self.thread = threading.Thread(target=self.run_script)
-        self.thread.start()
+    Args:
+        script_path (str): Path to the python script to execute.
+        args (list): List of arguments to pass to the script.
+        stop_flag (threading.Event): Event to signal the thread to stop.
+    """
+    command = ["start", "cmd", "/k", "python", script_path] + args
+    process = subprocess.Popen(command, shell=True)
+    while not stop_flag.is_set():
+        if process.poll() is not None:
+            break
+        time.sleep(0.1)
+    if not stop_flag.is_set():
+       process.terminate()
+       process.wait()
 
-    def stop(self):
-        self.stop_flag.set()
-        self.thread.join()
-
-  
 
 device =None
 model = None
@@ -89,13 +75,14 @@ def select_yaml_file(button_name = None):
 
 def connect_model_to_device(device_name,model_name):
     global conn_script
+    global stop_event
     print("Connecting - model: ",model_name,"To device: ",device_name)
 
-    #stop_flag = threading.Event()
+    stop_event = threading.Event()
     script_path = current_dir / "mqtt/mqtt_subscriber.py"
-    arguments = [device_name, model_name] #, stop_flag]
+    arguments = [device_name, model_name]
 
-    conn_script = ScriptRunner(script_path, arguments)
+    conn_script = threading.Thread(target=run_script, args=(script_path, arguments, stop_event))
     conn_script.start()
 
     start_connection.configure(state="disabled")
@@ -108,7 +95,11 @@ def disconnect_model_from_device(device_name,model_name):
     global conn_script
     global device
     global model
-    conn_script.stop()
+    global stop_event
+    #conn_script.stop()
+    stop_event.set()
+    conn_script.join()
+    print("Thread terminated.")
     select_device.configure(text = "select device yaml")
     select_model.configure(text = "select model yaml")
     device = None

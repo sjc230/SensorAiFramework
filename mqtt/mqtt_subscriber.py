@@ -103,6 +103,13 @@ def topic_subscriber(org,mac,topics,best_model,client):
     print(best_model['name']," was loaded successfully")
     return model
 
+def topic_unsubscriber(org,mac,topics,client):
+    for top in topics:
+        TOPIC = "/" + org + "/" + mac + "/" + top
+        client.unsubscribe(TOPIC)
+        print("Unsubscribed from: ",TOPIC)
+    return
+
 # Define what happens when connecting to the smart device
 def on_connect(client, userdata, flags, rc):
     global model
@@ -113,6 +120,7 @@ def on_connect(client, userdata, flags, rc):
     model = utils.load_model(file_name)
     print(best_model['name']," was loaded successfully")
     #print(f"Connected with result code {rc}")    
+
 
 
 # Define what happens when a message is received
@@ -138,10 +146,12 @@ def combine_and_process_data():
     if all(combined_data.values()):
         print("Combined Data:", combined_data)
         # Write code to preprocess and send data to AI model        
-        var1 = combined_data['Power_Factor'][0]
-        var2 = combined_data['Volt_THD'][0]
-        var3 = combined_data['Curr_THD'][0]
-        data_list = [var1,var2,var3]
+        #var1 = combined_data['Power_Factor'][0]
+        #var2 = combined_data['Volt_THD'][0]
+        #var3 = combined_data['Curr_THD'][0]
+        #data_list = [var1,var2,var3]
+        data_list = list(combined_data.values())
+        del data_list[0]
         data = np.array(data_list)
         data = data.reshape(1, -1) #(-1, 1)
 
@@ -210,5 +220,6 @@ if __name__ == '__main__':
         while True:
             pass
     except KeyboardInterrupt:
-        print("Disconnected")
+        topic_unsubscriber(org,mac,topics,client)
+        print("Disconnected")        
         client.loop_stop()  # Stop the loop when exiting

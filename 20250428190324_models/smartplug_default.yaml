@@ -4,20 +4,10 @@ device:
   mac: 806599a4be1c #dcda0c3c5fe8 #dcda0c3c6d40
   port: 1883
   broker: sensorserver2.engr.uga.edu
-  topics:
-    - Voltage
-    - Current
-    - Power
-    - Reactive_Power
-    - Apparent_Power
+  topics: # Only put the topics you wish to use with your model.  List topics in same order that your model uses them.
     - Power_Factor
     - Volt_THD
     - Curr_THD
-    - Volt_Fund
-    - Curr_Fund
-    - Power_Energy_Acc
-    - Reactive_Energy_Acc
-    - temperature
 db_server:
   host: sensorserver2.engr.uga.edu
   port: 8086
