@@ -67,12 +67,14 @@ def device_setup(device_path,model_path):
 
     # InfluxDB Configuration
     global INFLUXDB_DATABASE
+    global location
     INFLUXDB_HOST = device["db_server"]["host"]
     INFLUXDB_PORT = device["db_server"]["port"]
     INFLUXDB_DATABASE = device["db_server"]["database"]
     INFLUXDB_USER = device["db_server"]["user"]
     INFLUXDB_PASS = device["db_server"]["password"]
     isSSL = device["db_server"]["ssl"]
+    location = device["db_server"]["prediction-location"]
     
     global influx_client
     # Connect to InfluxDB
@@ -142,14 +144,11 @@ def on_message(client, userdata, msg):
 
 # Function to combine and process the data from all topics
 def combine_and_process_data():
+    global location
     # Check if all data is available (you can also do other checks here)
     if all(combined_data.values()):
         print("Combined Data:", combined_data)
         # Write code to preprocess and send data to AI model        
-        #var1 = combined_data['Power_Factor'][0]
-        #var2 = combined_data['Volt_THD'][0]
-        #var3 = combined_data['Curr_THD'][0]
-        #data_list = [var1,var2,var3]
         data_list = list(combined_data.values())
         del data_list[0]
         data = np.array(data_list)
@@ -159,8 +158,7 @@ def combine_and_process_data():
         print("Predition Type is: ",type(prediction))
         print("Model Prediction: ",prediction)
 
-        #timestamp = int(time.time() * 1e9)  # current time in nanoseconds
-        line_data = f"prediction,location=test1 value={prediction[0]} {combined_data['time']}"
+        line_data = f"prediction,location={location} value={prediction[0]} {combined_data['time']}"
 
         # write to influxdb
         influx_client.write([line_data],params={'db':INFLUXDB_DATABASE},protocol='line')

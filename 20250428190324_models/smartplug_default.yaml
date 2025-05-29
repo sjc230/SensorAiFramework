@@ -15,3 +15,4 @@ db_server:
   user: plug
   password: smartai@122
   ssl: True
+  prediction-location: test1

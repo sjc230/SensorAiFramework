@@ -1,7 +1,0 @@
-host: sensorserver2.engr.uga.edu
-port: 8086
-database: waveform
-user: plug
-password: smartai@122
-ssl: True
-

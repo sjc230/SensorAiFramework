@@ -1,0 +1,15 @@
+db_server:
+  host: sensorserver2.engr.uga.edu
+  port: 8086
+  database: waveform
+  user: plug
+  password: smartai@122
+  ssl: True
+  smartplub-location: 80:65:99:a4:be:1c
+  prediction-location: test2
+  start_time: May 29, 2025 16:00:00
+  end_time: May 29, 2025 16:02:00
+  topics: # Only put the topics you wish to use with your model.  List topics in same order that your model uses them.
+    - Power_Factor
+    - Volt_THD
+    - Curr_THD
