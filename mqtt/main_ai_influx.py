@@ -1,112 +1,172 @@
-import argparse
-import yaml
-# import ai_processor
-from influxdb import InfluxDBClient
-from datetime import datetime, timedelta
+import paho.mqtt.client as mqtt
 import numpy as np
-from collections import defaultdict
-from scipy.signal import find_peaks
-from ai_processor import moving_average, detect_anomalies_isolation_forest
+import yaml
+from msg_proc import parse_beddot_data
+from pathlib import Path
+import sys
+from influxdb import InfluxDBClient
+from tkinter import filedialog as fd
+import warnings
+#import datetime
+from datetime import datetime, timezone
+import pandas as pd
+import re
 
-def load_config(config_file="mqtt/config.yaml"):
-    """Loads the configuration from a YAML file."""
-    with open(config_file, "r") as file:
-        return yaml.safe_load(file)
+# Get the path of the current file (file1.py)
+current_file_path = Path(__file__).resolve()
+# Get the parent directory (folder1)
+parent_dir = current_file_path.parent
+# Get the path to the other folder (folder2)
+other_folder_path = parent_dir.parent / "lib"
+# Add the other folder to sys.path so Python can find the module
+sys.path.append(str(other_folder_path))
+# Now you can import from file2.py
+import utils
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+# Ignore warnings
+warnings.filterwarnings("ignore")
+
+
+def nanosecond_to_datetime(nanosecond_timestamp):
+    """Converts a nanosecond integer timestamp to a datetime object.
+
+    Args:
+        nanosecond_timestamp: An integer representing nanoseconds since the epoch.
+
+    Returns:
+        A tuple containing:
+            - A datetime object representing the time.
+            - An integer representing the remaining nanoseconds (beyond microseconds).
+    """
+    seconds = nanosecond_timestamp / 1e9
+    remaining_nanoseconds = int(nanosecond_timestamp % 1e9)
+    dt_object = datetime.fromtimestamp(seconds)
+
+    return dt_object, remaining_nanoseconds
+
+# Convert date string to timestamp
+def date_to_timestamp(date_string):
+    date_format = "%Y-%m-%dT%H:%M:%SZ"
+    datetime_object = datetime.strptime(date_string, date_format)
+    timestamp = datetime_object.timestamp()
+    nanoseconds = int(timestamp * 1000000000)
+    return nanoseconds
+
+
+# Define Device Setup
+def device_setup(device_path,model_path):
+    dev_file =  device_path #open_yaml_file()
+    # dc:da:0c:3c:6d:40
+    # Load the Model YAML file
+    with open(dev_file, "r") as file:
+        device = yaml.safe_load(file)
     
-    # Set default values: last 24 hours
-    default_end_time = datetime.now()
-    default_start_time = default_end_time - timedelta(hours=1)
-    parser = argparse.ArgumentParser(description='Process some data.')
-    parser.add_argument('config_file', type=str, nargs='?',  help='Path to the YAML config file', default='mqtt/config.yaml')
-    parser.add_argument(
-        "--start_time", 
-        default=default_start_time.strftime("%Y-%m-%dT%H:%M:%SZ"), 
-        help="Start time for data query (default: 1 hours ago)"
-    )
-    parser.add_argument(
-        "--end_time", 
-        default=default_end_time.strftime("%Y-%m-%dT%H:%M:%SZ"), 
-        help="End time for data query (default: current time)"
-    )
-    args = parser.parse_args()
-    # Load configuration
-    config = load_config(args.config_file)
-    client = InfluxDBClient(host=config['influxdb']['waveform']['host'],
-                            port=config['influxdb']['waveform']['port'],
-                            database=config['influxdb']['waveform']['raw_database'])
-    # query = f"SELECT * FROM {', '.join(config['sensors']['types'])} WHERE location=~ /{config['sensors']['MAC']}/ AND time >= '{args.start_time}' AND time <= '{args.end_time}'"
-    # query = f"SELECT * FROM temperature WHERE location = '80:65:99:a4:bd:cc' AND time >= '{args.start_time}' AND time <= '{args.end_time}'"
-    query = f"SELECT * FROM {', '.join(config['sensors']['types'])} WHERE time >= '{args.start_time}' AND time <= '{args.end_time}'"
-
-    result = client.query(query)
+    if device["device"]["type"] == "smartplug":
+        global start_time
+        global end_time 
+        global topics
+        # Extract smartplug yaml data
+        start_time = device["device"]["start_time"]
+        print("START TIME TYPE IS: ",type(start_time))
+        end_time = device["device"]["end_time"]
+        topics = device["device"]["topics"]
     
-    # Dictionary to hold merged data, using location as the unique key
-    merged_data = defaultdict(lambda: {'time': []})
-    for measurement, points in result.items():
-        for point in points:
-            # Check if the location exists in merged_data, if not, create it
-            if point['location'] not in merged_data:
-                merged_data[point['location']] = {}
+    # Set up the Topics dictionary
+    global combined_data
+    combined_data = {"time": None}
+    for top in topics:
+        combined_data[f"{top}"] = None
+    print(combined_data)
 
-            # Check if 'time' exists for the location; if not, initialize it as an empty list
-            if 'time' not in merged_data[point['location']]:
-                merged_data[point['location']]['time'] = []
-
-            if point['time'] not in merged_data[point['location']]['time']:    
-                # Append the new time to the list
-                merged_data[point['location']]['time'].append(point['time'])
-
-            # Check if the measurement key exists; if not, initialize it as an empty list
-            if measurement[0] not in merged_data[point['location']]:
-                merged_data[point['location']][measurement[0]] = []
-
-            # Append the new value to the measurement list
-            merged_data[point['location']][measurement[0]].append(point['value'])
+    # InfluxDB Configuration
+    global INFLUXDB_DATABASE
+    global prediction_location
+    global device_location
+    INFLUXDB_HOST = device["db_server"]["host"]
+    INFLUXDB_PORT = device["db_server"]["port"]
+    INFLUXDB_DATABASE = device["db_server"]["database"]
+    INFLUXDB_USER = device["db_server"]["user"]
+    INFLUXDB_PASS = device["db_server"]["password"]
+    isSSL = device["db_server"]["ssl"]
+    prediction_location = device["db_server"]["prediction-location"]
+    device_location = device["device"]["location"]
     
-    processed_data = defaultdict(lambda: {'time': []})
-    for location in merged_data:
-        for param in merged_data[location]:
-            if param != 'time':
-                if location not in processed_data.keys():
-                    processed_data[location] = {}
+    global influx_client
+    # Connect to InfluxDB
+    influx_client = InfluxDBClient(host=INFLUXDB_HOST, port=INFLUXDB_PORT,username=INFLUXDB_USER,password=INFLUXDB_PASS,database=INFLUXDB_DATABASE,ssl=isSSL)
 
-                # Check if 'time' exists for the location; if not, initialize it as an empty list
-                if 'time' not in processed_data[location]:
-                    processed_data[location]['time'] = []
-                if param not in processed_data[location]:
-                    processed_data[location][param] = []
-                    processed_data[location][f'{param}_peaks'] = []
-                smoothed_data , time_window = moving_average(merged_data[location][param], window_size = 7, time = merged_data[location]['time'])
-                anomalies, _ = find_peaks(smoothed_data)
-                peak_array = np.zeros_like(smoothed_data)
-                for i in anomalies: peak_array[i] = 1 
-                processed_data[location][param] = smoothed_data
-                processed_data[location][f'{param}_peaks'] = peak_array
-                processed_data[location]['time'] = time_window
+    influx_client.switch_database(INFLUXDB_DATABASE)
 
- 
-    # Initialize client and write API
-    client = InfluxDBClient(host=config['influxdb']['waveform']['host'],port=config['influxdb']['waveform']['port'], database=config['influxdb']['waveform']['processed_database'])
+    model_file =  model_path
 
-    # Ensure database exists
-    client.create_database(config['influxdb']['waveform']['processed_database'])
-    # write_api = client.write_api(write_options=SYNCHRONOUS)
-    json_body = []
-    for mac in processed_data:
-        for i in range(len(processed_data[mac]['time'])):
-            point = {
-                "measurement": mac,  # MAC address as measurement
-                "time": int(datetime.strptime(processed_data[mac]['time'][i], "%Y-%m-%dT%H:%M:%SZ").timestamp() * 1e9),  # Time in ISO format
-                "fields": {}
-            }
-            for param in processed_data[mac]:
-                if param != 'time':
-                    point['fields'][param] = processed_data[mac][param][i]
-            json_body.append(point)
-    client.write_points(json_body)
+    with open(model_file, "r") as file:
+        best_model = yaml.safe_load(file)
 
-    print("Data written successfully!")
-    client.close()
+    return best_model
+
+if __name__ == '__main__':
+
+    if len(sys.argv) == 1:
+        print("NO ARGUMENTS GIVEN")
+        sys.exit()
+    elif len(sys.argv) > 1:
+        arguments = sys.argv[1:]
+        print("Command-line arguments:", arguments)
+        if len(arguments) != 2:
+            print("INCORRECT ARGUMENTS")
+            sys.exit()
+
+    device_arg = arguments[0]
+    model_arg = arguments[1]
+
+    print("Device: ", arguments[0])
+    print("Model: ", arguments[1])
+
+    best_model = device_setup(device_path=device_arg,model_path=model_arg)
+    file_name = best_model['model_path'] + '/' + best_model['name']
+    model = utils.load_model(file_name)
+
+    #query = f"SELECT * FROM {', '.join(topics)} WHERE time >= '{start_time}' AND time <= '{end_time}'"
+    query = f"SELECT * FROM {', '.join(topics)} WHERE location = '{device_location}' AND time >= '{start_time}' AND time <= '{end_time}'"
+
+    
+    results = influx_client.query(query)
+
+    results_list = []
+    time_list = []
+    t=0
+    for top in topics:        
+        top_data = list(results.get_points(measurement=top))        
+        top_frame = pd.DataFrame(top_data)
+        if t == 0:
+            time_list = top_frame['time'].tolist()
+            print("TIME LIST: ",time_list)
+            print(type(time_list[0]))
+            for l in range(len(time_list)):
+                time_list[l] = date_to_timestamp(time_list[l])
+        top_list = top_frame['value'].tolist()
+        results_list.append(top_list)
+        t += 1
+    results_array = np.array(results_list)
+    results_array = results_array.transpose()
+    #print("RESULTS TYPE IS: ",type(results_array[0][0]))
+
+    print("TIME LIST: ",time_list)
+    print("results array: ",results_array)
+
+    for i in range(len(time_list)):
+        data = results_array[i].reshape(1, -1) #(-1, 1)
+        prediction = model.predict(data)
+        #print("Predition Type is: ",type(prediction))
+        print("Model Prediction: ",prediction[0])
+
+        #print("TIME LIST OBJECT IS: ", type(time_list[i]))
+        line_data = f"prediction,location={prediction_location} value={prediction[0]} {time_list[i]}"
+        print(line_data)
+
+        temp_time = nanosecond_to_datetime(time_list[i])
+        print("Converted Time Stamp: ", temp_time[0])
+
+        # write to influxdb
+        influx_client.write([line_data],params={'db':INFLUXDB_DATABASE},protocol='line')
+    

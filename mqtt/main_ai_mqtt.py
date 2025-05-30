@@ -1,108 +1,224 @@
-
-import yaml
 import paho.mqtt.client as mqtt
-import json
-import ssl
-import argparse
-from collections import deque  # Buffer for real-time data
-
-# import ai_processor
-from influxdb import InfluxDBClient
 import numpy as np
-def load_config(config_file="mqtt/config.yaml"):
-    """Loads the configuration from a YAML file."""
-    with open(config_file, "r") as file:
-        return yaml.safe_load(file)
+import json
+import yaml
+from msg_proc import parse_beddot_data
+from pathlib import Path
+import sys
+from influxdb import InfluxDBClient
+import json
+from tkinter import filedialog as fd
+import warnings
+
+
+# Ignore warnings
+warnings.filterwarnings("ignore")
+
+# Get the path of the current file (file1.py)
+current_file_path = Path(__file__).resolve()
+# Get the parent directory (folder1)
+parent_dir = current_file_path.parent
+# Get the path to the other folder (folder2)
+other_folder_path = parent_dir.parent / "lib"
+# Add the other folder to sys.path so Python can find the module
+sys.path.append(str(other_folder_path))
+# Now you can import from file2.py
+import utils
+
+
+# Define open file
+def open_yaml_file():
+    filetypes = (
+        ('yaml files', '*.yaml'),
+        ('pickle files', '*.pkl')
+                )
+    file = fd.askopenfilename(filetypes=filetypes)    
+    return file
+
+
+# Define Device Setup
+def device_setup(device_path,model_path):
+    dev_file =  device_path #open_yaml_file()
+    # dc:da:0c:3c:6d:40
+    # Load the Model YAML file
+    with open(dev_file, "r") as file:
+        device = yaml.safe_load(file)
     
-if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser(description='Process some data.')
-    parser.add_argument('config_file', type=str, nargs='?',  help='Path to the YAML config file', default='mqtt/config.yaml')
-    args = parser.parse_args()
-    # Lo30ad configuration
-    config = load_config(args.config_file)
-
+    if device["device"]["type"] == "smartplug":
+        global org
+        global mac
+        global topics
+        # Extract smartplug yaml data
+        org = device["device"]["organization"]
+        mac = device["device"]["mac"]
+        topics = device["device"]["topics"]
+    
+    # Set up the Topics dictionary
+    global combined_data
+    combined_data = {"time": None}
+    for top in topics:
+        combined_data[f"{top}"] = None
+    print(combined_data)
+    
     # MQTT Configuration
-    MQTT_BROKER = config['mqtt']['broker']
-    MQTT_PORT = config['mqtt']['port']
-    MQTT_TOPIC = config['mqtt']['topic']
-
-
-    # Path to your certificates
-    CA_CERT = "mqtt/ca8886.crt"          # Change this to your CA certificate path
-    CLIENT_CERT = "mqtt/client8886.crt"  # Change this to your client certificate path
-    CLIENT_KEY = "mqtt/client8886.key"    # Change this to your client key path
+    MQTT_BROKER = device["device"]["broker"] #"sensorserver2.engr.uga.edu"
+    MQTT_PORT = device["device"]["port"] #1883
 
     # InfluxDB Configuration
-    INFLUXDB_HOST = config['influxdb']['pc_sensors']['host']
-    INFLUXDB_PORT = config['influxdb']['pc_sensors']['port']
-    INFLUXDB_DATABASE = config['influxdb']['pc_sensors']['processed_database']
-
-    # Connect to InfluxDB
-    influx_client = InfluxDBClient(INFLUXDB_HOST, INFLUXDB_PORT)
-    influx_client.create_database(INFLUXDB_DATABASE)
-    influx_client.switch_database(INFLUXDB_DATABASE)
-
-    # ==== Data Buffer ====
-    BUFFER_SIZE = 10  # Store last 10 readings
-    data_buffer = deque(maxlen=BUFFER_SIZE)  # Automatically removes oldest when full
-
-    def preprocess(buffer):
-        """ Convert buffered sensor data into AI model input format """
-        return np.array(buffer)  # Assuming 3 features per sample
-
-    def smoothing():
-        """ Run AI model on buffered data if buffer is full """
-        input_data = preprocess(list(data_buffer))
-        mean = []
-        for i in range(input_data.shape[1]):
-            mean.append(input_data[:,i].mean())
-        return mean  # Modify based on your model output
-
-    def on_message(client, userdata, msg): # mod here for Smart Plug
-        try:
-            data = json.loads(msg.payload.decode())
-            print(f"Received Data: {data}")
-            # Append new data to buffer
-            data_point = [data["cpu_usage"], data["memory_usage"], data["disk_usage"]]
-            data_buffer.append(data_point)
-
-            # AI processing on buffered data
-            smoothed_data = smoothing()
-            if smoothed_data != None:
-                json_body = [{
-                    "measurement": "pc_internal_sensors",
-                    "fields": {}
-                    }]
-                i = 0 
-                for param in data:
-                    json_body[0]['fields'][param] = data[param]
-                    json_body[0]['fields'][f'{param}_smoothed'] = smoothed_data[i] 
-                    i += 1
+    global INFLUXDB_DATABASE
+    global location
+    INFLUXDB_HOST = device["db_server"]["host"]
+    INFLUXDB_PORT = device["db_server"]["port"]
+    INFLUXDB_DATABASE = device["db_server"]["database"]
+    INFLUXDB_USER = device["db_server"]["user"]
+    INFLUXDB_PASS = device["db_server"]["password"]
+    isSSL = device["db_server"]["ssl"]
+    location = device["db_server"]["prediction-location"]
     
-                    
-                # print(f"Received Data: {json_body}")  # Debugging output
+    global influx_client
+    # Connect to InfluxDB
+    influx_client = InfluxDBClient(host=INFLUXDB_HOST, port=INFLUXDB_PORT,username=INFLUXDB_USER,password=INFLUXDB_PASS,database=INFLUXDB_DATABASE,ssl=isSSL)
+    #influx_client.create_database(INFLUXDB_DATABASE)
+    influx_client.switch_database(INFLUXDB_DATABASE)
+    #write_api = influx_client.write_api(write_options=WriteOptions(batch_size=1))
 
-            # Store in InfluxDB
-            influx_client.write_points(json_body)
-            print("Stored in InfluxDB:", json_body)
+    model_file =  model_path #open_yaml_file()
 
-        except Exception as e:
-            print("Error processing message:", e)
+    with open(model_file, "r") as file:
+        best_model = yaml.safe_load(file)
 
-    # Create MQTT client and set TLS options
-    mqtt_client = mqtt.Client()
-    mqtt_client.tls_set(ca_certs=CA_CERT,
-                        certfile=CLIENT_CERT,
-                        keyfile=CLIENT_KEY,
-                        cert_reqs=ssl.CERT_REQUIRED,
-                        tls_version=ssl.PROTOCOL_TLSv1_2,
-                        ciphers=None)
+    # Create a new MQTT client instance
+    #client = mqtt.Client()
 
-    mqtt_client.on_message = on_message
-    mqtt_client.connect(MQTT_BROKER, MQTT_PORT)
-    mqtt_client.subscribe(MQTT_TOPIC)
+    #topic_subscriber(org, mac, topics, best_model, client)
 
-    print("Listening for MQTT messages...")
-    mqtt_client.loop_forever()
+    return MQTT_BROKER, MQTT_PORT, org, mac, best_model
 
+def topic_subscriber(org,mac,topics,best_model,client):
+    global model
+    for top in topics:
+        TOPIC = "/" + org + "/" + mac + "/" + top
+        client.subscribe(TOPIC)
+    file_name = best_model['model_path'] + '/' + best_model['name']
+    model = utils.load_model(file_name)
+    print(best_model['name']," was loaded successfully")
+    return model
+
+def topic_unsubscriber(org,mac,topics,client):
+    for top in topics:
+        TOPIC = "/" + org + "/" + mac + "/" + top
+        client.unsubscribe(TOPIC)
+        print("Unsubscribed from: ",TOPIC)
+    return
+
+# Define what happens when connecting to the smart device
+def on_connect(client, userdata, flags, rc):
+    global model
+    for top in topics:
+        TOPIC = "/" + org + "/" + mac + "/" + top
+        client.subscribe(TOPIC)
+    file_name = best_model['model_path'] + '/' + best_model['name']
+    model = utils.load_model(file_name)
+    print(best_model['name']," was loaded successfully")
+    #print(f"Connected with result code {rc}")    
+
+
+
+# Define what happens when a message is received
+def on_message(client, userdata, msg):
+    top = shorten_topic(msg.topic)
+    try:   
+        mac_addr, timestamp, data_interval, data =  parse_beddot_data(msg)
+        if combined_data["time"] == None:
+            combined_data["time"] = timestamp
+            combined_data[f"{top}"] = data
+        elif combined_data["time"] != None and combined_data["time"] == timestamp and combined_data[f"{top}"] == None:
+            combined_data[f"{top}"] = data
+        
+        # Combine or process the data (here we print it as an example)
+        combine_and_process_data()
+    
+    except json.JSONDecodeError:
+        print(f"Failed to decode message on {msg.topic}")
+
+# Function to combine and process the data from all topics
+def combine_and_process_data():
+    global location
+    # Check if all data is available (you can also do other checks here)
+    if all(combined_data.values()):
+        print("Combined Data:", combined_data)
+        # Write code to preprocess and send data to AI model        
+        data_list = list(combined_data.values())
+        del data_list[0]
+        data = np.array(data_list)
+        data = data.reshape(1, -1) #(-1, 1)
+
+        prediction = model.predict(data)
+        #print("Predition Type is: ",type(prediction))
+        print("Model Prediction: ",prediction)
+
+        line_data = f"prediction,location={location} value={prediction[0]} {combined_data['time']}"
+        print("TIME IS: ", combined_data["time"])
+        print(line_data)
+
+        # write to influxdb
+        influx_client.write([line_data],params={'db':INFLUXDB_DATABASE},protocol='line')
+        
+        # Reset data for next cycle if required
+        reset_combined_data()
+
+# Function to reset combined data after processing (if necessary)
+def reset_combined_data():
+    global combined_data
+    combined_data = {key: None for key in combined_data}
+
+# Function to shorten the smart device topic name.  Drops org name and mac address.
+def shorten_topic (topic):
+    #global topics
+    for top in topics:
+        if top in topic:
+            short_topic = top
+    if short_topic == None:
+        print("topic error")
+    return short_topic
+
+if __name__ == '__main__':
+
+    if len(sys.argv) == 1:
+        print("NO ARGUMENTS GIVEN")
+        sys.exit()
+    elif len(sys.argv) > 1:
+        arguments = sys.argv[1:]
+        print("Command-line arguments:", arguments)
+        if len(arguments) != 2:
+            print("INCORRECT ARGUMENTS")
+            sys.exit()
+
+    device_arg = arguments[0]
+    model_arg = arguments[1]
+
+    MQTT_BROKER, MQTT_PORT, org, mac, best_model = device_setup(device_path=device_arg,model_path=model_arg)
+    
+
+    # Create a new MQTT client instance
+    client = mqtt.Client()
+
+    # Attach the callback functions
+    client.on_connect = on_connect
+    #topic_subscriber(org,mac,topics,best_model,client)
+    client.on_message = on_message    
+
+    # Connect to the broker
+    client.connect(MQTT_BROKER, MQTT_PORT, 60)
+
+    # Loop to process network traffic, dispatch callbacks, etc.
+    client.loop_forever()
+
+    # Keep the script running
+    try:
+        while True:
+            pass
+    except KeyboardInterrupt:
+        topic_unsubscriber(org,mac,topics,client)
+        print("Disconnected")        
+        client.loop_stop()  # Stop the loop when exiting

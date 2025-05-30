@@ -79,7 +79,7 @@ def connect_model_to_device(device_name,model_name):
     print("Connecting - model: ",model_name,"To device: ",device_name)
 
     stop_event = threading.Event()
-    script_path = current_dir / "mqtt/mqtt_subscriber.py"
+    script_path = current_dir / "mqtt/main_ai_mqtt.py"
     arguments = [device_name, model_name]
 
     conn_script = threading.Thread(target=run_script, args=(script_path, arguments, stop_event))
@@ -136,7 +136,8 @@ tab_2 = my_tab.add("Classification")
 tab_3 = my_tab.add("Clustering")
 tab_4 = my_tab.add("Detection")
 tab_5 = my_tab.add("Regression")
-tab_6 = my_tab.add("Smart Device Connection")
+tab_6 = my_tab.add("Device Connector")
+tab_7 = my_tab.add("Historical Download")
 
 # Put stuff in tab 6
 select_device = customtkinter.CTkButton(tab_6,text="select device yaml",fg_color="black",command=lambda: select_yaml_file("select_device"))
@@ -150,6 +151,19 @@ start_connection.pack(pady=10)
 
 stop_connection = customtkinter.CTkButton(tab_6,text="stop the connection",fg_color="black",state="disabled" ,command=lambda: disconnect_model_from_device(device_name=device,model_name=model))
 stop_connection.pack(pady=10)
+
+# Put stuff in tab 7
+select_historical = customtkinter.CTkButton(tab_7,text="select device yaml",fg_color="black",command=lambda: select_yaml_file("select_device"))
+select_historical.pack(pady=10)
+
+select_model7 = customtkinter.CTkButton(tab_7,text="select model yaml",fg_color="black",command=lambda: select_yaml_file("select_model"))
+select_model7.pack(pady=10)
+
+start_historical = customtkinter.CTkButton(tab_7,text="start db download",fg_color="black",state="disabled" ,command=lambda: connect_model_to_device(device_name=device,model_name=model))
+start_historical.pack(pady=10)
+
+stop_historical = customtkinter.CTkButton(tab_7,text="end db connection",fg_color="black",state="disabled" ,command=lambda: disconnect_model_from_device(device_name=device,model_name=model))
+stop_historical.pack(pady=10)
 
 # Run app
 root.mainloop()
