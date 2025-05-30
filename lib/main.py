@@ -57,22 +57,35 @@ def run_script(script_path, args, stop_flag):
 device =None
 model = None
 # Open File Dialog
-def select_yaml_file(button_name = None):
+def select_yaml_file(button_name = None, tab = None):
     global device
     global model
+    global active_tab
     filename = customtkinter.filedialog.askopenfilename(filetypes=ftype_yaml)
     if button_name == "select_device":
-        select_device.configure(text = filename)
+        if tab == 'tab_6':
+            select_device.configure(text = filename)                       
+        elif tab == 'tab_7':
+            select_historical.configure(text = filename)
         device = filename
+        active_tab = tab 
     elif button_name == "select_model":
-        select_model.configure(text = filename)
+        if tab == 'tab_6':
+            select_model.configure(text = filename)
+        elif tab == 'tab_7':
+            select_model7.configure(text = filename)
         model = filename
+        active_tab = tab 
     
     if (device != None) and (model != None) and (".yaml" in device) and (".yaml" in model):
-        start_connection.configure(state="normal")
+        if active_tab == 'tab_6':
+            start_connection.configure(state="normal")
+        elif active_tab == "tab_7":
+            start_historical.configure(state="normal")
 
     return filename
 
+# Method to connect model to smart device
 def connect_model_to_device(device_name,model_name):
     global conn_script
     global stop_event
@@ -86,16 +99,16 @@ def connect_model_to_device(device_name,model_name):
     conn_script.start()
 
     start_connection.configure(state="disabled")
-
     stop_connection.configure(state="normal")
 
 
-# Method to disconnect devices
+# Method to disconnect model from device
 def disconnect_model_from_device(device_name,model_name):
     global conn_script
     global device
     global model
     global stop_event
+    global active_tab
     #conn_script.stop()
     stop_event.set()
     conn_script.join()
@@ -106,8 +119,43 @@ def disconnect_model_from_device(device_name,model_name):
     model = None
     start_connection.configure(state="disabled")
     stop_connection.configure(state = "disabled")
+    active_tab = None
 
+# Method to connect to db
+def connect_model_to_db(device_name,model_name):
+    global conn_script
+    global stop_event
+    print("Connecting - model: ",model_name,"To device: ",device_name)
 
+    stop_event = threading.Event()
+    script_path = current_dir / "mqtt/main_ai_influx.py"
+    arguments = [device_name, model_name]
+
+    conn_script = threading.Thread(target=run_script, args=(script_path, arguments, stop_event))
+    conn_script.start()
+
+    start_historical.configure(state="disabled")
+
+    stop_historical.configure(state="normal")
+
+# Method to disconnect from db
+def disconnect_model_from_db(device_name,model_name):
+    global conn_script
+    global device
+    global model
+    global stop_event
+    global active_tab
+    #conn_script.stop()
+    stop_event.set()
+    conn_script.join()
+    print("Thread terminated.")
+    select_historical.configure(text = "select device yaml")
+    select_model7.configure(text = "select model yaml")
+    device = None
+    model = None
+    start_historical.configure(state="disabled")
+    stop_historical.configure(state = "disabled")
+    active_tab=None
 
 #root = Tk()
 root = customtkinter.CTk()
@@ -140,10 +188,10 @@ tab_6 = my_tab.add("Device Connector")
 tab_7 = my_tab.add("Historical Download")
 
 # Put stuff in tab 6
-select_device = customtkinter.CTkButton(tab_6,text="select device yaml",fg_color="black",command=lambda: select_yaml_file("select_device"))
+select_device = customtkinter.CTkButton(tab_6,text="select device yaml",fg_color="black",command=lambda: select_yaml_file("select_device","tab_6"))
 select_device.pack(pady=10)
 
-select_model = customtkinter.CTkButton(tab_6,text="select model yaml",fg_color="black",command=lambda: select_yaml_file("select_model"))
+select_model = customtkinter.CTkButton(tab_6,text="select model yaml",fg_color="black",command=lambda: select_yaml_file("select_model","tab_6"))
 select_model.pack(pady=10)
 
 start_connection = customtkinter.CTkButton(tab_6,text="start the connection",fg_color="black",state="disabled" ,command=lambda: connect_model_to_device(device_name=device,model_name=model))
@@ -153,16 +201,16 @@ stop_connection = customtkinter.CTkButton(tab_6,text="stop the connection",fg_co
 stop_connection.pack(pady=10)
 
 # Put stuff in tab 7
-select_historical = customtkinter.CTkButton(tab_7,text="select device yaml",fg_color="black",command=lambda: select_yaml_file("select_device"))
+select_historical = customtkinter.CTkButton(tab_7,text="select device yaml",fg_color="black",command=lambda: select_yaml_file("select_device","tab_7"))
 select_historical.pack(pady=10)
 
-select_model7 = customtkinter.CTkButton(tab_7,text="select model yaml",fg_color="black",command=lambda: select_yaml_file("select_model"))
+select_model7 = customtkinter.CTkButton(tab_7,text="select model yaml",fg_color="black",command=lambda: select_yaml_file("select_model","tab_7"))
 select_model7.pack(pady=10)
 
-start_historical = customtkinter.CTkButton(tab_7,text="start db download",fg_color="black",state="disabled" ,command=lambda: connect_model_to_device(device_name=device,model_name=model))
+start_historical = customtkinter.CTkButton(tab_7,text="start db download",fg_color="black",state="disabled" ,command=lambda: connect_model_to_db(device_name=device,model_name=model))
 start_historical.pack(pady=10)
 
-stop_historical = customtkinter.CTkButton(tab_7,text="end db connection",fg_color="black",state="disabled" ,command=lambda: disconnect_model_from_device(device_name=device,model_name=model))
+stop_historical = customtkinter.CTkButton(tab_7,text="end db connection",fg_color="black",state="disabled" ,command=lambda: disconnect_model_from_db(device_name=device,model_name=model))
 stop_historical.pack(pady=10)
 
 # Run app

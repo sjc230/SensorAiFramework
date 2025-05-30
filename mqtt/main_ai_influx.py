@@ -67,7 +67,6 @@ def device_setup(device_path,model_path):
         global topics
         # Extract smartplug yaml data
         start_time = device["device"]["start_time"]
-        print("START TIME TYPE IS: ",type(start_time))
         end_time = device["device"]["end_time"]
         topics = device["device"]["topics"]
     
@@ -76,7 +75,7 @@ def device_setup(device_path,model_path):
     combined_data = {"time": None}
     for top in topics:
         combined_data[f"{top}"] = None
-    print(combined_data)
+    #print(combined_data)
 
     # InfluxDB Configuration
     global INFLUXDB_DATABASE
@@ -140,8 +139,8 @@ if __name__ == '__main__':
         top_frame = pd.DataFrame(top_data)
         if t == 0:
             time_list = top_frame['time'].tolist()
-            print("TIME LIST: ",time_list)
-            print(type(time_list[0]))
+            #("TIME LIST: ",time_list)
+            #print(type(time_list[0]))
             for l in range(len(time_list)):
                 time_list[l] = date_to_timestamp(time_list[l])
         top_list = top_frame['value'].tolist()
@@ -151,8 +150,8 @@ if __name__ == '__main__':
     results_array = results_array.transpose()
     #print("RESULTS TYPE IS: ",type(results_array[0][0]))
 
-    print("TIME LIST: ",time_list)
-    print("results array: ",results_array)
+    #print("TIME LIST: ",time_list)
+    #print("results array: ",results_array)
 
     for i in range(len(time_list)):
         data = results_array[i].reshape(1, -1) #(-1, 1)
