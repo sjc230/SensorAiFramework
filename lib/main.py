@@ -4,7 +4,16 @@ import yaml
 import threading
 from pathlib import Path
 from utils import run_script
-from classification_gui import open_decision_tree_window
+from data_gui import *
+from classification_gui import *
+
+global current_dataset
+global current_labels
+global current_model_queue
+
+current_dataset = None
+current_labels = None
+current_model_queue = []
 
 current_dir = Path.cwd() # assumes your working directory is in "SensorwebAiFramework"
 
@@ -128,14 +137,7 @@ root.geometry("700x300")
 my_tab = customtkinter.CTkTabview(root,
                                   width=600,
                                   height=250,
-                                  corner_radius=10,
-                                  fg_color="silver",
-                                  segmented_button_fg_color="black",
-                                  segmented_button_selected_color="red",
-                                  segmented_button_selected_hover_color="pink",
-                                  segmented_button_unselected_color="grey",
-                                  segmented_button_unselected_hover_color="blue",
-                                  text_color="black") #command=used to inserta a command)
+                                  corner_radius=10)
 my_tab.pack(pady=10)
 
 # Create tabs
@@ -148,10 +150,20 @@ tab_5 = my_tab.add("Regression")
 tab_6 = my_tab.add("Device Connector")
 tab_7 = my_tab.add("Historical Download")
 
+# Put stuff in tab 0 - Data
+load_datafile_button = customtkinter.CTkButton(tab_0, text="load data from .npy file", command=open_data_loader_window)
+load_datafile_button.pack(padx=20, pady=20)
+
+generate_wavedata_button = customtkinter.CTkButton(tab_0, text="generate waveform dataset", command=generate_wavedata_window_opener)
+generate_wavedata_button.pack(padx=20, pady=20)
+
+generate_scgdata_button = customtkinter.CTkButton(tab_0, text="generate scg dataset", command=generate_scg_window_opener)
+generate_scgdata_button.pack(padx=20, pady=20)
+
 # Put stuff in tab 1 - DSP
 
 # Put stuff in tab 2 - Classification
-decision_tree_button = customtkinter.CTkButton(tab_2, text="Open Decision Tree", command=open_decision_tree_window)
+decision_tree_button = customtkinter.CTkButton(tab_2, text="decision tree", command=open_decision_tree_window)
 decision_tree_button.pack(padx=20, pady=20)
 
 # Put stuff in tab 3 - Clustering
@@ -161,29 +173,29 @@ decision_tree_button.pack(padx=20, pady=20)
 # Put stuff in tab 5 - Regression
 
 # Put stuff in tab 6 - Device Connector
-select_device = customtkinter.CTkButton(tab_6,text="select device yaml",fg_color="black",command=lambda: select_yaml_file("select_device","tab_6"))
+select_device = customtkinter.CTkButton(tab_6,text="select device yaml",command=lambda: select_yaml_file("select_device","tab_6"))
 select_device.pack(pady=10)
 
-select_model = customtkinter.CTkButton(tab_6,text="select model yaml",fg_color="black",command=lambda: select_yaml_file("select_model","tab_6"))
+select_model = customtkinter.CTkButton(tab_6,text="select model yaml",command=lambda: select_yaml_file("select_model","tab_6"))
 select_model.pack(pady=10)
 
-start_connection = customtkinter.CTkButton(tab_6,text="start the connection",fg_color="black",state="disabled" ,command=lambda: connect_model_to_device(device_name=device,model_name=model))
+start_connection = customtkinter.CTkButton(tab_6,text="start the connection",state="disabled" ,command=lambda: connect_model_to_device(device_name=device,model_name=model))
 start_connection.pack(pady=10)
 
-stop_connection = customtkinter.CTkButton(tab_6,text="stop the connection",fg_color="black",state="disabled" ,command=lambda: disconnect_model_from_device(device_name=device,model_name=model))
+stop_connection = customtkinter.CTkButton(tab_6,text="stop the connection",state="disabled" ,command=lambda: disconnect_model_from_device(device_name=device,model_name=model))
 stop_connection.pack(pady=10)
 
 # Put stuff in tab 7 - Historical Data
-select_historical = customtkinter.CTkButton(tab_7,text="select device yaml",fg_color="black",command=lambda: select_yaml_file("select_device","tab_7"))
+select_historical = customtkinter.CTkButton(tab_7,text="select device yaml",command=lambda: select_yaml_file("select_device","tab_7"))
 select_historical.pack(pady=10)
 
-select_model7 = customtkinter.CTkButton(tab_7,text="select model yaml",fg_color="black",command=lambda: select_yaml_file("select_model","tab_7"))
+select_model7 = customtkinter.CTkButton(tab_7,text="select model yaml",command=lambda: select_yaml_file("select_model","tab_7"))
 select_model7.pack(pady=10)
 
-start_historical = customtkinter.CTkButton(tab_7,text="start db download",fg_color="black",state="disabled" ,command=lambda: connect_model_to_db(device_name=device,model_name=model))
+start_historical = customtkinter.CTkButton(tab_7,text="start db download",state="disabled" ,command=lambda: connect_model_to_db(device_name=device,model_name=model))
 start_historical.pack(pady=10)
 
-stop_historical = customtkinter.CTkButton(tab_7,text="end db connection",fg_color="black",state="disabled" ,command=lambda: disconnect_model_from_db(device_name=device,model_name=model))
+stop_historical = customtkinter.CTkButton(tab_7,text="end db connection",state="disabled" ,command=lambda: disconnect_model_from_db(device_name=device,model_name=model))
 stop_historical.pack(pady=10)
 
 # Run app

@@ -28,25 +28,30 @@ def open_decision_tree_window():
 
     decision_tree_window = customtkinter.CTkToplevel()
     decision_tree_window.title("Decision Tree Pipe Builder")
+    decision_tree_window.geometry("400x200")
 
     criterion_entry = customtkinter.CTkEntry(decision_tree_window)
     criterion_entry.pack(pady=10)
     criterion_entry.insert(0, criterion)
+    criterion_entry.pack(pady=10)
 
     splitter_entry = customtkinter.CTkEntry(decision_tree_window)
     splitter_entry.pack(pady=10)
     splitter_entry.insert(0, splitter)
+    splitter_entry.pack(pady=10)
 
     max_depth_entry = customtkinter.CTkEntry(decision_tree_window)
     max_depth_entry.pack(pady=10)
     max_depth_entry.insert(0, max_depth)
+    max_depth_entry.pack(pady=10)
 
     random_state_entry = customtkinter.CTkEntry(decision_tree_window)
     random_state_entry.pack(pady=10)
     random_state_entry.insert(0, random_state)
+    random_state_entry.pack(pady=10)
 
-    add_to_queue_button = customtkinter.CTkButton(decision_tree_window, text="Get Text", command=retrieve_data)
-    add_to_queue_button.pack(pady=10)
+    add_to_queue_button = customtkinter.CTkButton(decision_tree_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=20)
     
 
 def open_random_forest_window():
