@@ -1,10 +1,9 @@
 import tkinter
 import customtkinter
 import yaml
-import subprocess
 import threading
-import time
 from pathlib import Path
+from utils import run_script
 
 current_dir = Path.cwd() # assumes your working directory is in "SensorwebAiFramework"
 
@@ -33,16 +32,10 @@ ftype_yaml = [("yaml files","*.yaml")]
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
 
-        
-def run_script(script_path, args, stop_flag):
-    """
-    Runs a python script in a new console window with given arguments.
 
-    Args:
-        script_path (str): Path to the python script to execute.
-        args (list): List of arguments to pass to the script.
-        stop_flag (threading.Event): Event to signal the thread to stop.
-    """
+"""        
+def run_script(script_path, args, stop_flag):   
+      
     command = ["start", "cmd", "/k", "python", script_path] + args
     process = subprocess.Popen(command, shell=True)
     while not stop_flag.is_set():
@@ -52,7 +45,7 @@ def run_script(script_path, args, stop_flag):
     if not stop_flag.is_set():
        process.terminate()
        process.wait()
-
+#"""
 
 device =None
 model = None
@@ -187,7 +180,17 @@ tab_5 = my_tab.add("Regression")
 tab_6 = my_tab.add("Device Connector")
 tab_7 = my_tab.add("Historical Download")
 
-# Put stuff in tab 6
+# Put stuff in tab 1 - DSP
+
+# Put stuff in tab 2 - Classification
+
+# Put stuff in tab 3 - Clustering
+
+# Put stuff in tab 4 - Detection
+
+# Put stuff in tab 5 - Regression
+
+# Put stuff in tab 6 - Device Connector
 select_device = customtkinter.CTkButton(tab_6,text="select device yaml",fg_color="black",command=lambda: select_yaml_file("select_device","tab_6"))
 select_device.pack(pady=10)
 
@@ -200,7 +203,7 @@ start_connection.pack(pady=10)
 stop_connection = customtkinter.CTkButton(tab_6,text="stop the connection",fg_color="black",state="disabled" ,command=lambda: disconnect_model_from_device(device_name=device,model_name=model))
 stop_connection.pack(pady=10)
 
-# Put stuff in tab 7
+# Put stuff in tab 7 - Historical Data
 select_historical = customtkinter.CTkButton(tab_7,text="select device yaml",fg_color="black",command=lambda: select_yaml_file("select_device","tab_7"))
 select_historical.pack(pady=10)
 

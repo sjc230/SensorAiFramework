@@ -1,13 +1,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle
-import pandas as pd
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
 import pickle
 from pathlib import Path
 from datetime import datetime
 import yaml
+import re
+import subprocess
+import time
 
 # 此代码需要大改，但暂时可以用
 def calc_mae(gt, pred):
@@ -210,3 +212,68 @@ def create_model_yaml(yaml_name,model_name,model_path,model_type,n_inputs,n_outp
         # Write the data to the YAML file
         yaml.dump(data, file, default_flow_style=False)
     return
+
+# GUI RELATED METHODS
+
+def run_script(script_path, args, stop_flag):
+    """
+    Runs a python script in a new console window with given arguments.
+
+    Args:
+        script_path (str): Path to the python script to execute.
+        args (list): List of arguments to pass to the script.
+        stop_flag (threading.Event): Event to signal the thread to stop.
+    """
+    command = ["start", "cmd", "/k", "python", script_path] + args
+    process = subprocess.Popen(command, shell=True)
+    while not stop_flag.is_set():
+        if process.poll() is not None:
+            break
+        time.sleep(0.1)
+    if not stop_flag.is_set():
+       process.terminate()
+       process.wait()
+
+# Change tkinter entry strings to appropriate list formats
+def clean_list(input_list,type='string'):
+    new_list = []
+    for item in input_list:
+        if item == 'None':
+            new_list.append(None)
+        else:
+            if type == 'string':
+                new_list.append(item)
+            elif type == 'int':
+                new_item = int(item)
+                new_list.append(new_item)
+            elif type == 'float':
+                new_item = float(item)
+                new_list.append(new_item)
+            elif type == 'bool':
+                new_item = item.lower()
+                if new_item == 'true' or new_item == 't' or new_item == '1':
+                    truth_item = True
+                    new_list.append(truth_item)
+                else:
+                    truth_item = False
+                    new_list.append(truth_item)            
+    return new_list
+
+def parse_text_entry(entry,text_type='string'):
+    parsed_entry = re.split(r'[,;]+', entry)    
+    if text_type == 'string':
+        cleaned_entry = clean_list(parsed_entry,type='string')
+        text_list = cleaned_entry
+    elif text_type =='int':
+        cleaned_entry = clean_list(parsed_entry,type='int')
+        text_list = cleaned_entry
+    elif text_type == 'float':
+        cleaned_entry = clean_list(parsed_entry,type='float')
+        text_list = cleaned_entry
+    elif text_type == 'bool':
+        cleaned_entry = clean_list(parsed_entry,type='bool')
+        text_list = cleaned_entry
+    else:
+        print("Incorrect Text Type Entered")
+        text_list = entry    
+    return text_list
