@@ -37,7 +37,8 @@ from tslearn.svm import TimeSeriesSVC
 
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import ConfusionMatrixDisplay, classification_report, RocCurveDisplay, auc, roc_curve, roc_auc_score
-from lib.utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model, create_model_yaml
+#from lib.utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model, create_model_yaml
+from utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model, create_model_yaml
 
 #import load_data as ld
 
@@ -3750,6 +3751,7 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
 
     return
 
+"""
 # MAIN
 if __name__ == '__main__':
   p = Path('.')
@@ -3934,3 +3936,5 @@ if __name__ == '__main__':
       fig.show()
   plt.tight_layout()
   plt.show()
+
+#"""

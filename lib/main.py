@@ -4,11 +4,13 @@ import yaml
 import threading
 from pathlib import Path
 from utils import run_script
+from classification_gui import open_decision_tree_window
 
 current_dir = Path.cwd() # assumes your working directory is in "SensorwebAiFramework"
 
 
 # Load the YAML file
+"""
 with open(current_dir / "config/classification.yaml", "r") as file:
     classifiers = yaml.safe_load(file)
 
@@ -26,26 +28,12 @@ with open(current_dir / "config/outlier.yaml", "r") as file:
 
 with open(current_dir / "config/regression.yaml", "r") as file:
     regressors = yaml.safe_load(file)
+#"""
 
 ftype_yaml = [("yaml files","*.yaml")]
 
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
-
-
-"""        
-def run_script(script_path, args, stop_flag):   
-      
-    command = ["start", "cmd", "/k", "python", script_path] + args
-    process = subprocess.Popen(command, shell=True)
-    while not stop_flag.is_set():
-        if process.poll() is not None:
-            break
-        time.sleep(0.1)
-    if not stop_flag.is_set():
-       process.terminate()
-       process.wait()
-#"""
 
 device =None
 model = None
@@ -183,6 +171,8 @@ tab_7 = my_tab.add("Historical Download")
 # Put stuff in tab 1 - DSP
 
 # Put stuff in tab 2 - Classification
+decision_tree_button = customtkinter.CTkButton(tab_2, text="Open Decision Tree", command=open_decision_tree_window)
+decision_tree_button.pack(padx=20, pady=20)
 
 # Put stuff in tab 3 - Clustering
 
