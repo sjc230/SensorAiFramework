@@ -8,28 +8,7 @@ from classification_gui import open_decision_tree_window
 
 current_dir = Path.cwd() # assumes your working directory is in "SensorwebAiFramework"
 
-
-# Load the YAML file
-"""
-with open(current_dir / "config/classification.yaml", "r") as file:
-    classifiers = yaml.safe_load(file)
-
-with open(current_dir / "config/clustering.yaml", "r") as file:
-    clusterers = yaml.safe_load(file)
-
-with open(current_dir / "config/dsp.yaml", "r") as file:
-    dsps = yaml.safe_load(file)
-
-with open(current_dir / "config/novelty.yaml", "r") as file:
-    novelties = yaml.safe_load(file)
-
-with open(current_dir / "config/outlier.yaml", "r") as file:
-    outliers = yaml.safe_load(file)
-
-with open(current_dir / "config/regression.yaml", "r") as file:
-    regressors = yaml.safe_load(file)
-#"""
-
+ftype_npy = [("npy files","*.npy")]
 ftype_yaml = [("yaml files","*.yaml")]
 
 customtkinter.set_appearance_mode("dark")
@@ -160,6 +139,7 @@ my_tab = customtkinter.CTkTabview(root,
 my_tab.pack(pady=10)
 
 # Create tabs
+tab_0 = my_tab.add("Data")
 tab_1 = my_tab.add("DSP")
 tab_2 = my_tab.add("Classification")
 tab_3 = my_tab.add("Clustering")
