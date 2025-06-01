@@ -10,6 +10,7 @@ import yaml
 import re
 import subprocess
 import time
+import customtkinter
 
 # 此代码需要大改，但暂时可以用
 def calc_mae(gt, pred):
@@ -212,6 +213,10 @@ def create_model_yaml(yaml_name,model_name,model_path,model_type,n_inputs,n_outp
         # Write the data to the YAML file
         yaml.dump(data, file, default_flow_style=False)
     return
+
+def open_file(title='Select a File',filetypes=("All files", "*.*")):
+    filename = customtkinter.filedialog.askopenfilename(title=title,filetypes=filetypes)
+    return filename
 
 # GUI RELATED METHODS
 
