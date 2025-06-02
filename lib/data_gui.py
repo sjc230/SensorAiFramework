@@ -10,23 +10,24 @@ config_path = current_dir / "config/current_data.yaml"
 
 ftype_npy = [("npy files","*.npy")]
 
-def open_data_loader_window():
-    data_file = None
-    label_file = None
+data_file = None
+label_file = None
+def retrieve_files(button_name):
+    global data_file
+    global label_file
+    if button_name == 'select_data':
+        data_file = open_file(title="Select your .npy data file",filetypes=ftype_npy)
+        update_yaml_variable(config_path, "current_data_file", data_file)
+    elif button_name == 'select_labels':
+        label_file = open_file(title="Select your .npy label file",filetypes=ftype_npy)
+        update_yaml_variable(config_path, "current_label_file", label_file)
 
-    def retrieve_files(button_name):
-        if button_name == 'select_data':
-            data_file = open_file(title="Select your .npy data file",filetypes=ftype_npy)
-            update_yaml_variable(config_path, "current_data_file", data_file)
-        elif button_name == 'select_labels':
-            label_file = open_file(title="Select your .npy label file",filetypes=ftype_npy)
-            update_yaml_variable(config_path, "current_label_file", label_file)
-
-    
+def open_data_loader_window():         
     data_loader_window = customtkinter.CTkToplevel()
     data_loader_window.title("Load Data Files (.npy)")
-    data_loader_window.geometry("400x200")
-    data_loader_window.attributes('-topmost', True)
+    data_loader_window.geometry("400x400")
+    data_loader_window.grab_set() # Keep focus
+    data_loader_window.lift() # Bring to front
 
     # Checkbox state
     labels_check_var = customtkinter.StringVar(value="off")
@@ -45,8 +46,7 @@ def open_data_loader_window():
         command=labels_check_action,
         variable=labels_check_var,
         onvalue="on",
-        offvalue="off",
-        state="disabled"
+        offvalue="off"
     )
     labels_checkbox.pack(pady=10)
 
@@ -67,7 +67,8 @@ def open_data_loader_window():
         command=check_action,
         variable=check_var,
         onvalue="on",
-        offvalue="off"
+        offvalue="off",
+        state="disabled"
     )
     checkbox.pack(pady=10)
 

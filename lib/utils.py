@@ -284,6 +284,30 @@ def parse_text_entry(entry,text_type='string'):
     return text_list
 
 # Updates a specific variable of a yaml file
-def update_yaml_variable(filepath, variable_path, new_value):
-       with open(filepath, 'r') as file:
-           yaml_data = yaml.safe_load(file)
+def update_yaml_variable(file_path, variable_path, new_value):
+    """
+    Updates a specific variable in a YAML file.
+
+    Args:
+        file_path (str): Path to the YAML file.
+        variable_path (str): Path to the variable, separated by dots (e.g., "section1.subsection2.variable").
+        new_value: The new value for the variable.
+    """
+    with open(file_path, 'r') as file:
+        yaml_data = yaml.safe_load(file)
+
+    if yaml_data is None:
+        yaml_data = {}
+
+    keys = variable_path.split('.')
+    current = yaml_data
+
+    for key in keys[:-1]:
+        if key not in current:
+            current[key] = {}
+        current = current[key]
+
+    current[keys[-1]] = new_value
+
+    with open(file_path, 'w') as file:
+        yaml.dump(yaml_data, file, sort_keys=False)
