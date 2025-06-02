@@ -2,6 +2,7 @@
 import customtkinter
 import shutil
 from pathlib import Path
+import yaml
 from utils import open_file, update_yaml_variable
 
 current_dir = Path.cwd()
@@ -10,18 +11,6 @@ config_path = current_dir / "config/current_data.yaml"
 
 ftype_npy = [("npy files","*.npy")]
 
-data_file = None
-label_file = None
-def retrieve_files(button_name):
-    global data_file
-    global label_file
-    if button_name == 'select_data':
-        data_file = open_file(title="Select your .npy data file",filetypes=ftype_npy)
-        update_yaml_variable(config_path, "current_data_file", data_file)
-    elif button_name == 'select_labels':
-        label_file = open_file(title="Select your .npy label file",filetypes=ftype_npy)
-        update_yaml_variable(config_path, "current_label_file", label_file)
-
 def open_data_loader_window():         
     data_loader_window = customtkinter.CTkToplevel()
     data_loader_window.title("Load Data Files (.npy)")
@@ -29,6 +18,7 @@ def open_data_loader_window():
     data_loader_window.grab_set() # Keep focus
     data_loader_window.lift() # Bring to front
 
+    
     # Checkbox state
     labels_check_var = customtkinter.StringVar(value="off")
     # Checkbox Text
@@ -36,8 +26,10 @@ def open_data_loader_window():
 
     def labels_check_action():
         if labels_checkbox.get() == "on":
+            update_yaml_variable(config_path, "labeled_data", True)
             checkbox.configure(state="normal")
         else:
+            update_yaml_variable(config_path, "labeled_data", False)
             checkbox.configure(state="disabled")
 
     labels_checkbox = customtkinter.CTkCheckBox(
@@ -57,9 +49,11 @@ def open_data_loader_window():
 
     def check_action():
         if checkbox.get() == "on":
-            select_labels.configure(state="normal")
+            update_yaml_variable(config_path, "seperate_labels", True)
+            select_labels_button.configure(state="normal")
         else:
-            select_labels.configure(state="disabled")
+            update_yaml_variable(config_path, "seperate_labels", False)
+            select_labels_button.configure(state="disabled")
 
     checkbox = customtkinter.CTkCheckBox(
         master=data_loader_window,
@@ -72,25 +66,75 @@ def open_data_loader_window():
     )
     checkbox.pack(pady=10)
 
-    select_data = customtkinter.CTkButton(data_loader_window,text="select data npy",command=lambda: retrieve_files(button_name="select_data"))
-    select_data.pack(pady=10)
+    def load_files():
+        labels_checkbox.configure(state='disabled')
+        checkbox.configure(state='disabled')
+        select_data_button.configure(state='disabled')
+        select_labels_button.configure(state='disabled')
 
-    select_labels = customtkinter.CTkButton(data_loader_window,text="select labels npy",state="disabled" ,command=lambda: retrieve_files(button_name="select_labels"))
-    select_labels.pack(pady=10)
+    def clear_data():
+        labels_check_var.configure(variable='off')
+        check_var.configure(variable='off')
+        update_yaml_variable(config_path, "current_data_file", '')
+        select_data_button.configure(text="select data npy")
+        update_yaml_variable(config_path, "current_label_file", '')
+        select_labels_button.configure(text="select data npy",state='disabled')
+        load_files_button.configure(state='disabled')        
+
+
+    select_data_button = customtkinter.CTkButton(data_loader_window,text="select data npy",command=lambda: retrieve_files(button_name="select_data"))
+    select_data_button.pack(pady=10)
+
+    select_labels_button = customtkinter.CTkButton(data_loader_window,text="select labels npy",state="disabled" ,command=lambda: retrieve_files(button_name="select_labels"))
+    select_labels_button.pack(pady=10)
     
-    load_files_button = customtkinter.CTkButton(data_loader_window, text="load files", command=retrieve_files)
+    load_files_button = customtkinter.CTkButton(data_loader_window, text="load files",state="disabled", command=load_files)
     load_files_button.pack(pady=10)
 
+    clear_filedata_button = customtkinter.CTkButton(data_loader_window, text="clear all file data",command=clear_data)
+    clear_filedata_button.pack(pady=10)
+
+    def retrieve_files(button_name):
+        if button_name == 'select_data':
+            data_file = open_file(title="Select your .npy data file",filetypes=ftype_npy)
+            update_yaml_variable(config_path, "current_data_file", data_file)
+            select_data_button.configure(text = data_file)
+        elif button_name == 'select_labels':
+            label_file = open_file(title="Select your .npy label file",filetypes=ftype_npy)
+            update_yaml_variable(config_path, "current_label_file", label_file)
+            select_labels_button.configure(text = label_file)
+        
+        with open(config_path, 'r') as file:
+            yaml_data = yaml.safe_load(file)
+        
+        label_bool = yaml_data['labeled_data']
+        if label_bool == 'true':
+            label_bool = True
+        elif label_bool == 'false':
+            label_bool = False
+        seperate_labels = yaml_data['seperate_labels']
+        if seperate_labels == 'true':
+            seperate_labels = True
+        elif seperate_labels == 'false':
+            seperate_labels = False
+        data = yaml_data['current_data_file']
+        labels = yaml_data['current_label_file']
+        
+        #if (device != None) and (model != None) and (".yaml" in device) and (".yaml" in model):
+        if (label_bool == True) and (seperate_labels ==  True) and (data != '') and ('.yaml' in data) and (labels != '') and ('.yaml' in labels):
+            load_files_button.configure(state='normal')
+        elif (label_bool == True) and (seperate_labels ==  False) and (data != '') and ('.yaml' in data) and (labels == ''):
+            load_files_button.configure(state='normal')
+        elif (label_bool == False) and (seperate_labels ==  False) and (data != '') and ('.yaml' in data) and (labels == ''):
+            load_files_button.configure(state='normal')
+        else:
+            load_files_button.configure(state='disabled')
+
 def generate_wavedata_window_opener():
-    data_file = None
-    label_file = None
-
-    def retrieve_files():
-        return data_file, label_file
-
     generate_wavedata_window = customtkinter.CTkToplevel()
     generate_wavedata_window.title("Generate Waveform Data")
-    generate_wavedata_window.attributes('-topmost', True)
+    generate_wavedata_window.grab_set() # Keep focus
+    generate_wavedata_window.lift() # Bring to front
 
     random_state_entry = customtkinter.CTkEntry(generate_wavedata_window)
     random_state_entry.pack(pady=10)
@@ -100,15 +144,10 @@ def generate_wavedata_window_opener():
     add_to_queue_button.pack(pady=10)
 
 def generate_scg_window_opener():
-    data_file = None
-    label_file = None
-
-    def retrieve_files():
-        return data_file, label_file
-
     generate_scg_window = customtkinter.CTkToplevel()
     generate_scg_window.title("Generate SCG Data")
-    generate_scg_window.attributes('-topmost', True)
+    generate_scg_window.grab_set() # Keep focus
+    generate_scg_window.lift() # Bring to front
 
     random_state_entry = customtkinter.CTkEntry(generate_scg_window)
     random_state_entry.pack(pady=10)

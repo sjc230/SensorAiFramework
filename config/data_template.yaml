@@ -1,3 +1,5 @@
+labeled_data: false
+seperate_labels: false
 current_data_file: ''
 current_label_file: ''
 current_X_train: ''
