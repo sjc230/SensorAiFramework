@@ -1,6 +1,10 @@
 #from tkinter import Toplevel, Label, Entry, Button
 import customtkinter
+import shutil
+from pathlib import Path
 from utils import parse_text_entry, open_file
+
+current_dir = Path.cwd()
 
 ftype_npy = [("npy files","*.npy")]
 
@@ -18,6 +22,7 @@ def open_data_loader_window():
     data_loader_window = customtkinter.CTkToplevel()
     data_loader_window.title("Load Data Files (.npy)")
     data_loader_window.geometry("400x200")
+    data_loader_window.attributes('-topmost', True)
 
     # Checkbox state
     check_var = customtkinter.StringVar(value="off")
@@ -43,7 +48,7 @@ def open_data_loader_window():
     select_data = customtkinter.CTkButton(data_loader_window,text="select data npy",command=lambda: retrieve_files(button_name="select_data"))
     select_data.pack(pady=10)
 
-    select_labels = customtkinter.CTkButton(data_loader_window,text="select labels npy",state="disabled" ,command=lambda: connect_model_to_device(device_name=device,model_name=model))
+    select_labels = customtkinter.CTkButton(data_loader_window,text="select labels npy",state="disabled" ,command=lambda: retrieve_files(button_name="select_labels"))
     select_labels.pack(pady=10)
     
     load_files_button = customtkinter.CTkButton(data_loader_window, text="load files", command=retrieve_files)
@@ -58,6 +63,7 @@ def generate_wavedata_window_opener():
 
     generate_wavedata_window = customtkinter.CTkToplevel()
     generate_wavedata_window.title("Generate Waveform Data")
+    generate_wavedata_window.attributes('-topmost', True)
 
     random_state_entry = customtkinter.CTkEntry(generate_wavedata_window)
     random_state_entry.pack(pady=10)
@@ -75,6 +81,7 @@ def generate_scg_window_opener():
 
     generate_scg_window = customtkinter.CTkToplevel()
     generate_scg_window.title("Generate SCG Data")
+    generate_scg_window.attributes('-topmost', True)
 
     random_state_entry = customtkinter.CTkEntry(generate_scg_window)
     random_state_entry.pack(pady=10)

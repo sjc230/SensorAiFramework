@@ -23,7 +23,13 @@ ftype_yaml = [("yaml files","*.yaml")]
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
 
-device =None
+# Configure/Reset data file information
+def data_loader_confg():
+    source_file = current_dir / "config/data_template.yaml"
+    destination_file = current_dir / "config/current_data.yaml"
+    shutil.copy(source_file, destination_file)
+
+device = None
 model = None
 # Open File Dialog
 def select_yaml_file(button_name = None, tab = None):
@@ -132,6 +138,9 @@ root = customtkinter.CTk()
 root.title("Sensor AI")
 #root.inconbitmap("images/codemy.ico")
 root.geometry("700x300")
+
+# Ensure data configuration set to default
+data_loader_confg()
 
 # create Tabview
 my_tab = customtkinter.CTkTabview(root,

@@ -29,6 +29,7 @@ def open_decision_tree_window():
     decision_tree_window = customtkinter.CTkToplevel()
     decision_tree_window.title("Decision Tree Pipe Builder")
     decision_tree_window.geometry("400x200")
+    decision_tree_window.attributes('-topmost', True)
 
     criterion_entry = customtkinter.CTkEntry(decision_tree_window)
     criterion_entry.pack(pady=10)
@@ -58,11 +59,13 @@ def open_random_forest_window():
     new_window = customtkinter.CTkToplevel()
     new_window.title("New Window")
     label = customtkinter.CTkLabel(new_window, text="This is a new window")
+    new_window.attributes('-topmost', True)
     label.pack(padx=20, pady=20)
 
 def open_extra_trees_window():
     new_window = customtkinter.CTkToplevel()
     new_window.title("New Window")
+    new_window.attributes('-topmost', True)
     label = customtkinter.CTkLabel(new_window, text="This is a new window")
     label.pack(padx=20, pady=20)
 
@@ -75,5 +78,6 @@ def open_knn_window():
 def open_tsknn_window():
     new_window = customtkinter.CTkToplevel()
     new_window.title("New Window")
+    new_window.attributes('-topmost', True)
     label = customtkinter.CTkLabel(new_window, text="This is a new window")
     label.pack(padx=20, pady=20)
