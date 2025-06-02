@@ -282,3 +282,8 @@ def parse_text_entry(entry,text_type='string'):
         print("Incorrect Text Type Entered")
         text_list = entry    
     return text_list
+
+# Updates a specific variable of a yaml file
+def update_yaml_variable(filepath, variable_path, new_value):
+       with open(filepath, 'r') as file:
+           yaml_data = yaml.safe_load(file)

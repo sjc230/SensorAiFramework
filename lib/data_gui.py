@@ -2,9 +2,11 @@
 import customtkinter
 import shutil
 from pathlib import Path
-from utils import parse_text_entry, open_file
+from utils import open_file, update_yaml_variable
 
 current_dir = Path.cwd()
+config_path = current_dir / "config/current_data.yaml"
+
 
 ftype_npy = [("npy files","*.npy")]
 
@@ -14,15 +16,39 @@ def open_data_loader_window():
 
     def retrieve_files(button_name):
         if button_name == 'select_data':
-            data_file = open_file(title="Select you .npy data file",filetypes=ftype_npy)
+            data_file = open_file(title="Select your .npy data file",filetypes=ftype_npy)
+            update_yaml_variable(config_path, "current_data_file", data_file)
         elif button_name == 'select_labels':
-            label_file = open_file(title="Select you .npy label file",filetypes=ftype_npy)
+            label_file = open_file(title="Select your .npy label file",filetypes=ftype_npy)
+            update_yaml_variable(config_path, "current_label_file", label_file)
 
     
     data_loader_window = customtkinter.CTkToplevel()
     data_loader_window.title("Load Data Files (.npy)")
     data_loader_window.geometry("400x200")
     data_loader_window.attributes('-topmost', True)
+
+    # Checkbox state
+    labels_check_var = customtkinter.StringVar(value="off")
+    # Checkbox Text
+    labels_text_var = customtkinter.StringVar(value="Check if your data has labels")
+
+    def labels_check_action():
+        if labels_checkbox.get() == "on":
+            checkbox.configure(state="normal")
+        else:
+            checkbox.configure(state="disabled")
+
+    labels_checkbox = customtkinter.CTkCheckBox(
+        master=data_loader_window,
+        textvariable= labels_text_var,
+        command=labels_check_action,
+        variable=labels_check_var,
+        onvalue="on",
+        offvalue="off",
+        state="disabled"
+    )
+    labels_checkbox.pack(pady=10)
 
     # Checkbox state
     check_var = customtkinter.StringVar(value="off")
@@ -67,7 +93,7 @@ def generate_wavedata_window_opener():
 
     random_state_entry = customtkinter.CTkEntry(generate_wavedata_window)
     random_state_entry.pack(pady=10)
-    random_state_entry.insert(0, random_state)
+    #random_state_entry.insert(0, random_state)
 
     add_to_queue_button = customtkinter.CTkButton(generate_wavedata_window, text="Get Text", command=retrieve_files)
     add_to_queue_button.pack(pady=10)
@@ -85,7 +111,7 @@ def generate_scg_window_opener():
 
     random_state_entry = customtkinter.CTkEntry(generate_scg_window)
     random_state_entry.pack(pady=10)
-    random_state_entry.insert(0, random_state)
+    #random_state_entry.insert(0, random_state)
 
     add_to_queue_button = customtkinter.CTkButton(generate_scg_window, text="Get Text", command=retrieve_files)
     add_to_queue_button.pack(pady=10)
