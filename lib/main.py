@@ -3,7 +3,7 @@ import customtkinter
 import yaml
 import threading
 from pathlib import Path
-from utils import run_script
+from utils import run_script, data_loader_confg
 from data_gui import *
 from classification_gui import *
 
@@ -23,11 +23,6 @@ ftype_yaml = [("yaml files","*.yaml")]
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
 
-# Configure/Reset data file information
-def data_loader_confg():
-    source_file = current_dir / "config/data_template.yaml"
-    destination_file = current_dir / "config/current_data.yaml"
-    shutil.copy(source_file, destination_file)
 
 device = None
 model = None
