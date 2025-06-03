@@ -1,7 +1,7 @@
-labeled_data: true
-seperate_labels: true
-current_data_file: C:/Users/steph/OneDrive/Documents/GitHub/SensorAiFramework/data/4k_pmu_thd_data.npy
-current_label_file: C:/Users/steph/OneDrive/Documents/GitHub/SensorAiFramework/data/4k_pmu_thd_labels.npy
+labeled_data: false
+seperate_labels: false
+current_data_file: ''
+current_label_file: ''
 current_X_train: ''
 current_X_test: ''
 current_y_train: ''

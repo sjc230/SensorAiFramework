@@ -11,6 +11,13 @@ import re
 import subprocess
 import time
 import customtkinter
+import shutil
+from pathlib import Path
+
+
+current_dir = Path.cwd()
+config_path = current_dir / "config/current_data.yaml"
+
 
 # 此代码需要大改，但暂时可以用
 def calc_mae(gt, pred):
@@ -311,3 +318,9 @@ def update_yaml_variable(file_path, variable_path, new_value):
 
     with open(file_path, 'w') as file:
         yaml.dump(yaml_data, file, sort_keys=False)
+
+# Configure/Reset data file information
+def data_loader_confg():
+    source_file = current_dir / "config/data_template.yaml"
+    destination_file = current_dir / "config/current_data.yaml"
+    shutil.copy(source_file, destination_file)

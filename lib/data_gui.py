@@ -3,7 +3,7 @@ import customtkinter
 import shutil
 from pathlib import Path
 import yaml
-from utils import open_file, update_yaml_variable
+from utils import open_file, update_yaml_variable, data_loader_confg
 
 current_dir = Path.cwd()
 config_path = current_dir / "config/current_data.yaml"
@@ -73,13 +73,14 @@ def open_data_loader_window():
         select_labels_button.configure(state='disabled')
 
     def clear_data():
-        labels_check_var.configure(variable='off')
-        check_var.configure(variable='off')
+        data_loader_confg()
+        labels_check_var.set('off') #.configure(variable='off')
+        check_var.set('off') #.configure(variable='off')
         update_yaml_variable(config_path, "current_data_file", '')
         select_data_button.configure(text="select data npy")
         update_yaml_variable(config_path, "current_label_file", '')
         select_labels_button.configure(text="select data npy",state='disabled')
-        load_files_button.configure(state='disabled')        
+        load_files_button.configure(state='disabled')
 
 
     select_data_button = customtkinter.CTkButton(data_loader_window,text="select data npy",command=lambda: retrieve_files(button_name="select_data"))
@@ -108,27 +109,39 @@ def open_data_loader_window():
             yaml_data = yaml.safe_load(file)
         
         label_bool = yaml_data['labeled_data']
+        print(label_bool,": label")
+        print(type(label_bool),": label type")
         if label_bool == 'true':
-            label_bool = True
+            label_bool = True            
         elif label_bool == 'false':
-            label_bool = False
+            label_bool = False            
         seperate_labels = yaml_data['seperate_labels']
+        print(seperate_labels,": label")
+        print(type(seperate_labels),": label type")
         if seperate_labels == 'true':
-            seperate_labels = True
+            seperate_labels = True            
         elif seperate_labels == 'false':
-            seperate_labels = False
+            seperate_labels = False            
         data = yaml_data['current_data_file']
+        print(data,": data")
+        print(type(data),": data type")
         labels = yaml_data['current_label_file']
+        print(labels,": labels")
+        print(type(labels),": labels type")
         
         #if (device != None) and (model != None) and (".yaml" in device) and (".yaml" in model):
-        if (label_bool == True) and (seperate_labels ==  True) and (data != '') and ('.yaml' in data) and (labels != '') and ('.yaml' in labels):
+        if (label_bool == True) and (seperate_labels ==  True) and (data != '') and ('.npy' in data) and (labels != '') and ('.npy' in labels):
             load_files_button.configure(state='normal')
-        elif (label_bool == True) and (seperate_labels ==  False) and (data != '') and ('.yaml' in data) and (labels == ''):
+            print("if")
+        elif (label_bool == True) and (seperate_labels ==  False) and (data != '') and ('.npy' in data) and (labels == ''):
             load_files_button.configure(state='normal')
-        elif (label_bool == False) and (seperate_labels ==  False) and (data != '') and ('.yaml' in data) and (labels == ''):
+            print("elif 1")
+        elif (label_bool == False) and (seperate_labels ==  False) and (data != '') and ('.npy' in data) and (labels == ''):
             load_files_button.configure(state='normal')
+            print("elif 2")
         else:
             load_files_button.configure(state='disabled')
+            print("else")
 
 def generate_wavedata_window_opener():
     generate_wavedata_window = customtkinter.CTkToplevel()
