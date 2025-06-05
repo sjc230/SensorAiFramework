@@ -205,40 +205,40 @@ generate_scgdata_button.pack(padx=20, pady=20)
 
 # Tree based models
 decision_tree_button = customtkinter.CTkButton(tab_2, text="decision tree", command=open_decision_tree_window)
-decision_tree_button.pack(padx=10, pady=10)
+decision_tree_button.pack(row=0,column=0,padx=10, pady=10)
 
 extra_trees_button = customtkinter.CTkButton(tab_2, text="extra trees", command=open_decision_tree_window)
-extra_trees_button.pack(padx=10, pady=10)
+extra_trees_button.pack(row=1,column=0,padx=10, pady=10)
 
 random_forest_button = customtkinter.CTkButton(tab_2, text="random forest", command=open_decision_tree_window)
-random_forest_button.pack(padx=10, pady=10)
+random_forest_button.pack(row=2,column=0,padx=10, pady=10)
 
 gradient_boosting_button = customtkinter.CTkButton(tab_2, text="gradient boosting", command=open_decision_tree_window)
-gradient_boosting_button.pack(padx=10, pady=10)
+gradient_boosting_button.pack(row=3,column=0,padx=10, pady=10)
 
 # Nearest neighbor based models
 knn_button = customtkinter.CTkButton(tab_2, text="k nearest neighbors", command=open_decision_tree_window)
-knn_button.pack(padx=10, pady=10)
+knn_button.pack(row=0,column=10,padx=10, pady=10)
 
 nearest_centroid_button = customtkinter.CTkButton(tab_2, text="nearest centroid", command=open_decision_tree_window)
-nearest_centroid_button.pack(padx=10, pady=10)
+nearest_centroid_button.pack(row=1,column=1,padx=10, pady=10)
 
 radius_nn_button = customtkinter.CTkButton(tab_2, text="radius nearest neighbors", command=open_decision_tree_window)
-radius_nn_button.pack(padx=10, pady=10)
+radius_nn_button.pack(row=2,column=1,padx=10, pady=10)
 
 ts_knn_button = customtkinter.CTkButton(tab_2, text="time series knn", command=open_decision_tree_window)
-ts_knn_button.pack(padx=10, pady=10)
+ts_knn_button.pack(row=3,column=1,padx=10, pady=10)
 
 # Support Vector based models
 
 svc_button = customtkinter.CTkButton(tab_2, text="support vector", command=open_decision_tree_window)
-svc_button.pack(padx=10, pady=10)
+svc_button.pack(row=0,column=2,padx=10, pady=10)
 
 nu_svc_button = customtkinter.CTkButton(tab_2, text="nu support vector", command=open_decision_tree_window)
-nu_svc_button.pack(padx=10, pady=10)
+nu_svc_button.pack(row=1,column=2,padx=10, pady=10)
 
 ts_svc_button = customtkinter.CTkButton(tab_2, text="time series svc", command=open_decision_tree_window)
-ts_svc_button.pack(padx=10, pady=10)
+ts_svc_button.pack(row=2,column=2,padx=10, pady=10)
 
 #############################################################
 # TAB 3 - CLUSTERING
