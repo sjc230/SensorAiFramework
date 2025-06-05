@@ -132,7 +132,7 @@ root = customtkinter.CTk()
 
 root.title("Sensor AI")
 #root.inconbitmap("images/codemy.ico")
-root.geometry("800x400")
+root.geometry("850x400")
 
 # Ensure data configuration set to default
 data_loader_confg()
@@ -205,40 +205,40 @@ generate_scgdata_button.pack(padx=20, pady=20)
 
 # Tree based models
 decision_tree_button = customtkinter.CTkButton(tab_2, text="decision tree", command=open_decision_tree_window)
-decision_tree_button.pack(row=0,column=0,padx=10, pady=10)
+decision_tree_button.grid(row=0,column=0,padx=10, pady=10)
 
 extra_trees_button = customtkinter.CTkButton(tab_2, text="extra trees", command=open_decision_tree_window)
-extra_trees_button.pack(row=1,column=0,padx=10, pady=10)
+extra_trees_button.grid(row=1,column=0,padx=10, pady=10)
 
 random_forest_button = customtkinter.CTkButton(tab_2, text="random forest", command=open_decision_tree_window)
-random_forest_button.pack(row=2,column=0,padx=10, pady=10)
+random_forest_button.grid(row=2,column=0,padx=10, pady=10)
 
 gradient_boosting_button = customtkinter.CTkButton(tab_2, text="gradient boosting", command=open_decision_tree_window)
-gradient_boosting_button.pack(row=3,column=0,padx=10, pady=10)
+gradient_boosting_button.grid(row=3,column=0,padx=10, pady=10)
 
 # Nearest neighbor based models
 knn_button = customtkinter.CTkButton(tab_2, text="k nearest neighbors", command=open_decision_tree_window)
-knn_button.pack(row=0,column=10,padx=10, pady=10)
+knn_button.grid(row=0,column=1,padx=10, pady=10)
 
 nearest_centroid_button = customtkinter.CTkButton(tab_2, text="nearest centroid", command=open_decision_tree_window)
-nearest_centroid_button.pack(row=1,column=1,padx=10, pady=10)
+nearest_centroid_button.grid(row=1,column=1,padx=10, pady=10)
 
 radius_nn_button = customtkinter.CTkButton(tab_2, text="radius nearest neighbors", command=open_decision_tree_window)
-radius_nn_button.pack(row=2,column=1,padx=10, pady=10)
+radius_nn_button.grid(row=2,column=1,padx=10, pady=10)
 
 ts_knn_button = customtkinter.CTkButton(tab_2, text="time series knn", command=open_decision_tree_window)
-ts_knn_button.pack(row=3,column=1,padx=10, pady=10)
+ts_knn_button.grid(row=3,column=1,padx=10, pady=10)
 
 # Support Vector based models
 
 svc_button = customtkinter.CTkButton(tab_2, text="support vector", command=open_decision_tree_window)
-svc_button.pack(row=0,column=2,padx=10, pady=10)
+svc_button.grid(row=0,column=2,padx=10, pady=10)
 
 nu_svc_button = customtkinter.CTkButton(tab_2, text="nu support vector", command=open_decision_tree_window)
-nu_svc_button.pack(row=1,column=2,padx=10, pady=10)
+nu_svc_button.grid(row=1,column=2,padx=10, pady=10)
 
 ts_svc_button = customtkinter.CTkButton(tab_2, text="time series svc", command=open_decision_tree_window)
-ts_svc_button.pack(row=2,column=2,padx=10, pady=10)
+ts_svc_button.grid(row=2,column=2,padx=10, pady=10)
 
 #############################################################
 # TAB 3 - CLUSTERING
@@ -246,35 +246,35 @@ ts_svc_button.pack(row=2,column=2,padx=10, pady=10)
 
 # Hierarchical base algorithms
 affin_prop_button = customtkinter.CTkButton(tab_3, text="affinity propagation", command=open_decision_tree_window)
-affin_prop_button.pack(padx=10, pady=10)
+affin_prop_button.grid(row=0,column=0,padx=10, pady=10)
 
 # density based algorithms
 dbscan_button = customtkinter.CTkButton(tab_3, text="dbscan", command=open_decision_tree_window)
-dbscan_button.pack(padx=10, pady=10)
+dbscan_button.grid(row=0,column=1,padx=10, pady=10)
 
 optics_button = customtkinter.CTkButton(tab_3, text="optics", command=open_decision_tree_window)
-optics_button.pack(padx=10, pady=10)
+optics_button.grid(row=1,column=1,padx=10, pady=10)
 
 mean_shift_button = customtkinter.CTkButton(tab_3, text="mean shift", command=open_decision_tree_window)
-mean_shift_button.pack(padx=10, pady=10)
+mean_shift_button.grid(row=2,column=1,padx=10, pady=10)
 
 # k means based algorithms
 
 kmeans_button = customtkinter.CTkButton(tab_3, text="k means", command=open_decision_tree_window)
-kmeans_button.pack(padx=10, pady=10)
+kmeans_button.grid(row=0,column=2,padx=10, pady=10)
 
 bi_kmeans_button = customtkinter.CTkButton(tab_3, text="bisecting k means", command=open_decision_tree_window)
-bi_kmeans_button.pack(padx=10, pady=10)
+bi_kmeans_button.grid(row=1,column=2,padx=10, pady=10)
 
 mini_kmeans_button = customtkinter.CTkButton(tab_3, text="mini-batch k means", command=open_decision_tree_window)
-mini_kmeans_button.pack(padx=10, pady=10)
+mini_kmeans_button.grid(row=2,column=2,padx=10, pady=10)
 
 ts_kmeans_button = customtkinter.CTkButton(tab_3, text="time series k means", command=open_decision_tree_window)
-ts_kmeans_button.pack(padx=10, pady=10)
+ts_kmeans_button.grid(row=3,column=2,padx=10, pady=10)
 
 # Spectral based algorithms
 spectral_button= customtkinter.CTkButton(tab_3, text="spectral clustering", command=open_decision_tree_window)
-spectral_button.pack(padx=10, pady=10)
+spectral_button.grid(row=0,column=3,padx=10, pady=10)
 
 #############################################################
 # TAB 4 - DETECTION
@@ -298,57 +298,57 @@ iso_forest_button.pack(padx=10, pady=10)
 
 # Linear models
 linear_button = customtkinter.CTkButton(tab_5, text="linear", command=open_decision_tree_window)
-linear_button.pack(padx=10, pady=10)
+linear_button.grid(row=0,column=0,padx=10, pady=10)
 
 gamma_button = customtkinter.CTkButton(tab_5, text="gamma", command=open_decision_tree_window)
-gamma_button.pack(padx=10, pady=10)
+gamma_button.grid(row=1,column=0,padx=10, pady=10)
 
 poisson_button = customtkinter.CTkButton(tab_5, text="poisson", command=open_decision_tree_window)
-poisson_button.pack(padx=10, pady=10)
+poisson_button.grid(row=2,column=0,padx=10, pady=10)
 
 tweedie_button = customtkinter.CTkButton(tab_5, text="tweedie", command=open_decision_tree_window)
-tweedie_button.pack(padx=10, pady=10)
+tweedie_button.grid(row=3,column=0,padx=10, pady=10)
 
 # Lars / Lasso based models
 lars_cv_button = customtkinter.CTkButton(tab_5, text="lars", command=open_decision_tree_window)
-lars_cv_button.pack(padx=10, pady=10)
+lars_cv_button.grid(row=0,column=1,padx=10, pady=10)
 
 lasso_cv_button = customtkinter.CTkButton(tab_5, text="lasso", command=open_decision_tree_window)
-lasso_cv_button.pack(padx=10, pady=10)
+lasso_cv_button.grid(row=1,column=1,padx=10, pady=10)
 
 lasso_lars_cv_button = customtkinter.CTkButton(tab_5, text="lasso-lars", command=open_decision_tree_window)
-lasso_lars_cv_button.pack(padx=10, pady=10)
+lasso_lars_cv_button.grid(row=2,column=1,padx=10, pady=10)
 
 lasso_lars_ic_button = customtkinter.CTkButton(tab_5, text="lasso-lars w/ info criteria", command=open_decision_tree_window)
-lasso_lars_ic_button.pack(padx=10, pady=10)
+lasso_lars_ic_button.grid(row=3,column=1,padx=10, pady=10)
 
 # Ridge based models
 ridge_cv_button = customtkinter.CTkButton(tab_5, text="ridge", command=open_decision_tree_window)
-ridge_cv_button.pack(padx=10, pady=10)
+ridge_cv_button.grid(row=0,column=2,padx=10, pady=10)
 
 bays_ridge_button = customtkinter.CTkButton(tab_5, text="baesian ridge", command=open_decision_tree_window)
-bays_ridge_button.pack(padx=10, pady=10)
+bays_ridge_button.grid(row=1,column=2,padx=10, pady=10)
 
 # Elastic nets
 enet_cv_button = customtkinter.CTkButton(tab_5, text="elastic net", command=open_decision_tree_window)
-enet_cv_button.pack(padx=10, pady=10)
+enet_cv_button.grid(row=0,column=3,padx=10, pady=10)
 
 # Quantile
 quantile_button = customtkinter.CTkButton(tab_5, text="quantile", command=open_decision_tree_window)
-quantile_button.pack(padx=10, pady=10)
+quantile_button.grid(row=1,column=3,padx=10, pady=10)
 
 # Support vector based models
 svr_button = customtkinter.CTkButton(tab_5, text="support vector", command=open_decision_tree_window)
-svr_button.pack(padx=10, pady=10)
+svr_button.grid(row=0,column=4,padx=10, pady=10)
 
 lin_svr_button = customtkinter.CTkButton(tab_5, text="linear svr", command=open_decision_tree_window)
-lin_svr_button.pack(padx=10, pady=10)
+lin_svr_button.grid(row=1,column=4,padx=10, pady=10)
 
 nu_svr_button = customtkinter.CTkButton(tab_5, text="nu svr", command=open_decision_tree_window)
-nu_svr_button.pack(padx=10, pady=10)
+nu_svr_button.grid(row=2,column=4,padx=10, pady=10)
 
 ts_svr_button = customtkinter.CTkButton(tab_5, text="time series svr", command=open_decision_tree_window)
-ts_svr_button.pack(padx=10, pady=10)
+ts_svr_button.grid(row=3,column=4,padx=10, pady=10)
 
 #############################################################
 # TAB 6 - DEVICE CONNECTOR
