@@ -138,21 +138,47 @@ root.geometry("800x400")
 data_loader_confg()
 
 # create Tabview
-my_tab = customtkinter.CTkTabview(root,
+main_tab = customtkinter.CTkTabview(root,
                                   width=700,
                                   height=350,
                                   corner_radius=10)
-my_tab.pack(pady=10)
+main_tab.pack(pady=10)
 
 # Create tabs
-tab_0 = my_tab.add("Data")
-tab_1 = my_tab.add("DSP")
-tab_2 = my_tab.add("Classification")
-tab_3 = my_tab.add("Clustering")
-tab_4 = my_tab.add("Detection")
-tab_5 = my_tab.add("Regression")
-tab_6 = my_tab.add("Device Connector")
-tab_7 = my_tab.add("Historical Data Connector")
+tab_0 = main_tab.add("Data")
+tab_1 = main_tab.add("DSP")
+tab_2 = main_tab.add("Classification")
+tab_3 = main_tab.add("Clustering")
+tab_4 = main_tab.add("Detection")
+tab_5 = main_tab.add("Regression")
+tab_6 = main_tab.add("Device Connector")
+tab_7 = main_tab.add("Historical Data Connector")
+
+# create dsp tabview
+dsp_tab = customtkinter.CTkTabview(tab_1,
+                                  width=650,
+                                  height=30,
+                                  corner_radius=10)
+dsp_tab.pack(pady=10)
+
+# Create dsp subtabs
+tab_noise = dsp_tab.add("Noise")
+tab_filters = dsp_tab.add("Filters")
+tab_decomp = dsp_tab.add("Decomposition")
+tab_time = dsp_tab.add("Time Domain Features")
+tab_trans = dsp_tab.add("Transforms")
+tab_misc = dsp_tab.add("Misc")
+
+# create detection tabview
+detection_tab = customtkinter.CTkTabview(tab_4,
+                                  width=650,
+                                  height=30,
+                                  corner_radius=10)
+detection_tab.pack(pady=10)
+
+# Create detection tabs
+tab_nov = detection_tab.add("Novelty")
+tab_out = detection_tab.add("Outlier")
 
 
 #############################################################
@@ -254,6 +280,16 @@ spectral_button.pack(padx=10, pady=10)
 # TAB 4 - DETECTION
 #############################################################
 
+# Novelty Detection
+lof_nov_button= customtkinter.CTkButton(tab_nov, text="local outlier factor", command=open_decision_tree_window)
+lof_nov_button.pack(padx=10, pady=10)
+
+# Outlier Detection
+lof_out_button = customtkinter.CTkButton(tab_out, text="local outlier factor", command=open_decision_tree_window)
+lof_out_button.pack(padx=10, pady=10)
+
+iso_forest_button = customtkinter.CTkButton(tab_out, text="isolation forest", command=open_decision_tree_window)
+iso_forest_button.pack(padx=10, pady=10)
 
 
 #############################################################
@@ -329,7 +365,9 @@ start_connection.pack(pady=10)
 stop_connection = customtkinter.CTkButton(tab_6,text="stop the connection",state="disabled" ,command=lambda: disconnect_model_from_device(device_name=device,model_name=model))
 stop_connection.pack(pady=10)
 
-# Put stuff in tab 7 - Historical Data
+#############################################################
+# TAB 7 - HISTORICAL DATA
+#############################################################
 select_historical = customtkinter.CTkButton(tab_7,text="select device yaml",command=lambda: select_yaml_file("select_device","tab_7"))
 select_historical.pack(pady=10)
 
