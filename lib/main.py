@@ -186,13 +186,27 @@ tab_out = detection_tab.add("Outlier")
 #############################################################
 
 load_datafile_button = customtkinter.CTkButton(tab_0, text="load data from .npy file", command=open_data_loader_window)
-load_datafile_button.pack(padx=20, pady=20)
+load_datafile_button.grid(row=0,column=0,padx=10, pady=10)
 
 generate_wavedata_button = customtkinter.CTkButton(tab_0, text="generate waveform dataset", command=generate_wavedata_window_opener)
-generate_wavedata_button.pack(padx=20, pady=20)
+generate_wavedata_button.grid(row=1,column=0,padx=10, pady=10)
 
 generate_scgdata_button = customtkinter.CTkButton(tab_0, text="generate scg dataset", command=generate_scg_window_opener)
-generate_scgdata_button.pack(padx=20, pady=20)
+generate_scgdata_button.grid(row=2,column=0,padx=10, pady=10)
+
+x_train_data = customtkinter.CTkLabel(tab_0, text="Training Data: None Selected")
+x_train_data.grid(row=0,column=2,padx=10, pady=10)
+
+y_train_labels = customtkinter.CTkLabel(tab_0, text="Training Labels: None Selected")
+y_train_labels.grid(row=1,column=2,padx=10, pady=10)
+
+x_test_data = customtkinter.CTkLabel(tab_0, text="Test Data: None Selected!")
+x_test_data.grid(row=2,column=2,padx=10, pady=10)
+
+y_test_labels = customtkinter.CTkLabel(tab_0, text="Test Labels: : None Selected")
+y_test_labels.grid(row=3,column=2,padx=10, pady=10)
+
+
 
 #############################################################
 # TAB 1 - DSP

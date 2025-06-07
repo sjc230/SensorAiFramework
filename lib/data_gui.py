@@ -28,9 +28,11 @@ def open_data_loader_window():
         if labels_checkbox.get() == "on":
             update_yaml_variable(config_path, "labeled_data", True)
             checkbox.configure(state="normal")
+            split_checkbox.configure(state="normal")
         else:
             update_yaml_variable(config_path, "labeled_data", False)
             checkbox.configure(state="disabled")
+            split_checkbox.configure(state="disabled")
 
     labels_checkbox = customtkinter.CTkCheckBox(
         master=data_loader_window,
@@ -66,22 +68,60 @@ def open_data_loader_window():
     )
     checkbox.pack(pady=10)
 
+    # Checkbox state
+    split_check_var = customtkinter.StringVar(value="off")
+    # Checkbox Text
+    split_text_var = customtkinter.StringVar(value="Check if you require a train / test split on data")
+
+    def split_check_action():
+        if checkbox.get() == "on":
+            split_entry.configure(state="normal")
+        else:
+           split_entry.configure(state="disabled")
+
+    split_checkbox = customtkinter.CTkCheckBox(
+        master=data_loader_window,
+        textvariable=split_text_var,
+        command=split_check_action,
+        variable=split_check_var,
+        onvalue="on",
+        offvalue="off",
+        state="disabled"
+    )
+    split_checkbox.pack(pady=10)
+
+    split_label = customtkinter.CTkLabel(data_loader_window, text="Enter Split Value Here:")
+    split_label.pack()
+
+    split_entry = customtkinter.CTkEntry(data_loader_window,state='disabled')
+    split_entry.pack(pady=10) 
+       
+    
+
     def load_files():
         labels_checkbox.configure(state='disabled')
         checkbox.configure(state='disabled')
+        split_checkbox.configure(state='disabled')
+        split_entry.configure(state='disabled')
         select_data_button.configure(state='disabled')
         select_labels_button.configure(state='disabled')
         load_files_button.configure(state='disabled')
+
+        
 
     def clear_data():
         data_loader_confg()
         labels_check_var.set('off') #.configure(variable='off')
         labels_checkbox.configure(state='normal')
         check_var.set('off') #.configure(variable='off')
+        split_check_var.set('off')
         update_yaml_variable(config_path, "current_data_file", '')
         select_data_button.configure(text="select data npy",state='normal')
         update_yaml_variable(config_path, "current_label_file", '')
         select_labels_button.configure(text="select data npy",state='disabled')
+        split_entry.insert(0, '')
+        split_entry.pack(pady=10)
+        split_entry.configure(state='disabled')
         load_files_button.configure(state='disabled')
 
 
@@ -132,7 +172,8 @@ def open_data_loader_window():
             load_files_button.configure(state='normal')
         else:
             load_files_button.configure(state='disabled')
-
+    
+    
 def generate_wavedata_window_opener():
     generate_wavedata_window = customtkinter.CTkToplevel()
     generate_wavedata_window.title("Generate Waveform Data")
