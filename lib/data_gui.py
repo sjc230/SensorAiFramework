@@ -75,8 +75,10 @@ def open_data_loader_window():
 
     def split_check_action():
         if checkbox.get() == "on":
+            update_yaml_variable(config_path, "test_train_split", True)
             split_entry.configure(state="normal")
         else:
+           update_yaml_variable(config_path, "test_train_split", False)
            split_entry.configure(state="disabled")
 
     split_checkbox = customtkinter.CTkCheckBox(
@@ -99,6 +101,8 @@ def open_data_loader_window():
     
 
     def load_files():
+        split_val = split_entry.get()
+        update_yaml_variable(config_path, "split_value", split_val)
         labels_checkbox.configure(state='disabled')
         checkbox.configure(state='disabled')
         split_checkbox.configure(state='disabled')
@@ -172,7 +176,6 @@ def open_data_loader_window():
             load_files_button.configure(state='normal')
         else:
             load_files_button.configure(state='disabled')
-    
     
 def generate_wavedata_window_opener():
     generate_wavedata_window = customtkinter.CTkToplevel()

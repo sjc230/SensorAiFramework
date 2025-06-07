@@ -13,6 +13,7 @@ import time
 import customtkinter
 import shutil
 from pathlib import Path
+from sklearn.model_selection import train_test_split
 
 
 current_dir = Path.cwd()
@@ -324,3 +325,37 @@ def data_loader_confg():
     source_file = current_dir / "config/data_template.yaml"
     destination_file = current_dir / "config/current_data.yaml"
     shutil.copy(source_file, destination_file)
+
+def load_gui_data():
+    with open(config_path, 'r') as file:
+        yaml_data = yaml.safe_load(file)
+
+    label_bool = yaml_data['labeled_data']
+    sep_data_bool = yaml_data['seperate_labels']
+    split_bool = yaml_data['test_train_split']
+    split_value = yaml_data['split_value']
+    data_file = yaml_data['current_data_file']
+    label_file = yaml_data['current_label_file']
+
+    data = np.load(data_file)
+
+    if label_bool == True and sep_data_bool == False:
+        y = data[:, -1]
+        x = data[:, :-1]
+    elif label_bool == True and sep_data_bool == True:
+        x = data
+        y = np.load(label_file)
+    else:
+        x = data
+        y = None
+    
+    if split_bool == True:
+        X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=float(split_value), random_state=None)
+    else:
+        X_train = None
+        y_train = None
+        X_test = x
+        y_test = y
+
+    return X_train, y_train, X_test, y_test
+

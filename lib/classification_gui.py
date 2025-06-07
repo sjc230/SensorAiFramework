@@ -6,6 +6,10 @@ from classification import *
 
 class_models = ['decision tree','random forest','knn','gaussian','adaboost','gaussian nb','qda','svc','mlp','nusvc','bagging','extra trees','gradient boost','histogram gradient boost','bernoulli nb','nearest centroid','passive agressive','lda','sgd','radius nn','non-myopic early','time series knn','time series svc']
 
+global queue_names
+global queue_models
+
+
 def open_decision_tree_window():
     criterion = 'gini'
     splitter = 'best'
