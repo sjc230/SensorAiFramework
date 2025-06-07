@@ -23,3 +23,7 @@ jupyter
 h5py
 chart_studio
 plotly
+influxdb-client
+paho-mqtt
+tkinter
+customtkinter==0.3
