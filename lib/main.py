@@ -195,9 +195,98 @@ generate_scgdata_button = customtkinter.CTkButton(tab_0, text="generate scg data
 generate_scgdata_button.pack(padx=20, pady=20)
 
 #############################################################
-# TAB 1 - DSB
+# TAB 1 - DSP
 #############################################################
 
+# Noise Tab
+
+white_noise_button = customtkinter.CTkButton(tab_noise, text="white", command=open_decision_tree_window)
+white_noise_button.grid(row=0,column=0,padx=10, pady=10)
+
+bl_white_noise_button = customtkinter.CTkButton(tab_noise, text="band limited white", command=open_decision_tree_window)
+bl_white_noise_button.grid(row=1,column=0,padx=10, pady=10)
+
+impulse_noise_button = customtkinter.CTkButton(tab_noise, text="impulse", command=open_decision_tree_window)
+impulse_noise_button.grid(row=2,column=0,padx=10, pady=10)
+
+burst_noise_button = customtkinter.CTkButton(tab_noise, text="burst", command=open_decision_tree_window)
+burst_noise_button.grid(row=0,column=1,padx=10, pady=10)
+
+brown_noise_button = customtkinter.CTkButton(tab_noise, text="brown", command=open_decision_tree_window)
+brown_noise_button.grid(row=1,column=1,padx=10, pady=10)
+
+pink_noise_button = customtkinter.CTkButton(tab_noise, text="pink", command=open_decision_tree_window)
+pink_noise_button.grid(row=2,column=1,padx=10, pady=10)
+
+flicker_noise_button = customtkinter.CTkButton(tab_noise, text="flicker", command=open_decision_tree_window)
+flicker_noise_button.grid(row=0,column=2,padx=10, pady=10)
+
+powerline_noise_button = customtkinter.CTkButton(tab_noise, text="powerline", command=open_decision_tree_window)
+powerline_noise_button.grid(row=1,column=2,padx=10, pady=10)
+
+resonance_noise_button = customtkinter.CTkButton(tab_noise, text="resonance", command=open_decision_tree_window)
+resonance_noise_button.grid(row=2,column=2,padx=10, pady=10)
+
+# Filters Tab
+
+lowpass_button = customtkinter.CTkButton(tab_filters, text="low pass", command=open_decision_tree_window)
+lowpass_button.grid(row=0,column=0,padx=10, pady=10)
+
+highpass_button = customtkinter.CTkButton(tab_filters, text="high pass", command=open_decision_tree_window)
+highpass_button.grid(row=1,column=0,padx=10, pady=10)
+
+bandpass_button = customtkinter.CTkButton(tab_filters, text="band pass", command=open_decision_tree_window)
+bandpass_button.grid(row=2,column=0,padx=10, pady=10)
+
+bandstop_button = customtkinter.CTkButton(tab_filters, text="band stop", command=open_decision_tree_window)
+bandstop_button.grid(row=3,column=0,padx=10, pady=10)
+
+kalman_button = customtkinter.CTkButton(tab_filters, text="kalman", command=open_decision_tree_window)
+kalman_button.grid(row=0,column=1,padx=10, pady=10)
+
+matched_button = customtkinter.CTkButton(tab_filters, text="matched", command=open_decision_tree_window)
+matched_button.grid(row=1,column=1,padx=10, pady=10)
+
+notch_button = customtkinter.CTkButton(tab_filters, text="notch", command=open_decision_tree_window)
+notch_button.grid(row=2,column=1,padx=10, pady=10)
+
+wiener_button = customtkinter.CTkButton(tab_filters, text="weiner", command=open_decision_tree_window)
+wiener_button.grid(row=3,column=1,padx=10, pady=10)
+
+adaptive_button = customtkinter.CTkButton(tab_filters, text="adaptive", command=open_decision_tree_window)
+adaptive_button.grid(row=0,column=2,padx=10, pady=10)
+
+savgol_button = customtkinter.CTkButton(tab_filters, text="savitzky-golay", command=open_decision_tree_window)
+savgol_button.grid(row=1,column=2,padx=10, pady=10)
+
+fft_denoising_button = customtkinter.CTkButton(tab_filters, text="fft denoising", command=open_decision_tree_window)
+fft_denoising_button.grid(row=0,column=3,padx=10, pady=10)
+
+wavelet_denoising_button = customtkinter.CTkButton(tab_filters, text="wavelet denoising", command=open_decision_tree_window)
+wavelet_denoising_button.grid(row=1,column=3,padx=10, pady=10)
+
+# Decomposition Tab
+
+seasonal_button = customtkinter.CTkButton(tab_decomp, text="seasonal", command=open_decision_tree_window)
+seasonal_button.grid(row=0,column=0,padx=10, pady=10)
+
+emd_button = customtkinter.CTkButton(tab_decomp, text="emperical mode", command=open_decision_tree_window)
+emd_button.grid(row=0,column=1,padx=10, pady=10)
+
+eemd_button = customtkinter.CTkButton(tab_decomp, text="ensemble emd", command=open_decision_tree_window)
+eemd_button.grid(row=1,column=1,padx=10, pady=10)
+
+ceemd_button = customtkinter.CTkButton(tab_decomp, text="complete eemd", command=open_decision_tree_window)
+ceemd_button.grid(row=2,column=1,padx=10, pady=10)
+
+vmd_button = customtkinter.CTkButton(tab_decomp, text="variational mode", command=open_decision_tree_window)
+vmd_button.grid(row=0,column=2,padx=10, pady=10)
+
+pca_blind_button = customtkinter.CTkButton(tab_decomp, text="pca blind source", command=open_decision_tree_window)
+pca_blind_button.grid(row=0,column=3,padx=10, pady=10)
+
+ica_blind_button = customtkinter.CTkButton(tab_decomp, text="ica blind source", command=open_decision_tree_window)
+ica_blind_button.grid(row=1,column=3,padx=10, pady=10)
 
 #############################################################
 # TAB 2 - CLASSIFICATION
