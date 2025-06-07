@@ -445,17 +445,17 @@ spectral_button= customtkinter.CTkButton(tab_3, text="spectral clustering", comm
 spectral_button.grid(row=0,column=3,padx=10, pady=10)
 
 # Function Buttons
-reset_clust_queue_button = customtkinter.CTkButton(tab_2, text="reset queue", command=reset_clust_queue,
+reset_clust_queue_button = customtkinter.CTkButton(tab_3, text="reset queue", command=reset_clust_queue,
                                                   fg_color='red',
                                                   hover_color='pink')
 reset_clust_queue_button.grid(row=9,column=2,padx=10, pady=10)
 
-show_clust_queue_button = customtkinter.CTkButton(tab_2, text="show queue", command=show_clust_queue,
+show_clust_queue_button = customtkinter.CTkButton(tab_3, text="show queue", command=show_clust_queue,
                                                   fg_color='red',
                                                   hover_color='pink')
 show_clust_queue_button.grid(row=9,column=3,padx=10, pady=10)
 
-clust_gridsearch_button = customtkinter.CTkButton(tab_2, text="run clustering gridsearch", command=execute_clust_gridsearch,
+clust_gridsearch_button = customtkinter.CTkButton(tab_3, text="run clustering gridsearch", command=execute_clust_gridsearch,
                                                   fg_color='red',
                                                   hover_color='pink')
 clust_gridsearch_button.grid(row=9,column=4,padx=10, pady=10)
@@ -476,17 +476,17 @@ iso_forest_button = customtkinter.CTkButton(tab_out, text="isolation forest", co
 iso_forest_button.pack(padx=10, pady=10)
 
 # Function Buttons
-reset_detect_queue_button = customtkinter.CTkButton(tab_2, text="reset queue", command=reset_detect_queue,
+reset_detect_queue_button = customtkinter.CTkButton(tab_4, text="reset queue", command=reset_detect_queue,
                                                   fg_color='red',
                                                   hover_color='pink')
 reset_detect_queue_button.grid(row=9,column=2,padx=10, pady=10)
 
-show_detect_queue_button = customtkinter.CTkButton(tab_2, text="show queue", command=show_detect_queue,
+show_detect_queue_button = customtkinter.CTkButton(tab_4, text="show queue", command=show_detect_queue,
                                                   fg_color='red',
                                                   hover_color='pink')
 show_detect_queue_button.grid(row=9,column=3,padx=10, pady=10)
 
-detect_gridsearch_button = customtkinter.CTkButton(tab_2, text="run detector gridsearch", command=execute_detect_gridsearch,
+detect_gridsearch_button = customtkinter.CTkButton(tab_4, text="run detector gridsearch", command=execute_detect_gridsearch,
                                                   fg_color='red',
                                                   hover_color='pink')
 detect_gridsearch_button.grid(row=9,column=4,padx=10, pady=10)
@@ -551,17 +551,17 @@ ts_svr_button = customtkinter.CTkButton(tab_5, text="time series svr", command=o
 ts_svr_button.grid(row=3,column=4,padx=10, pady=10)
 
 # Function Buttons
-reset_regress_queue_button = customtkinter.CTkButton(tab_2, text="reset queue", command=reset_regress_queue,
+reset_regress_queue_button = customtkinter.CTkButton(tab_5, text="reset queue", command=reset_regress_queue,
                                                   fg_color='red',
                                                   hover_color='pink')
 reset_regress_queue_button.grid(row=9,column=2,padx=10, pady=10)
 
-show_regress_queue_button = customtkinter.CTkButton(tab_2, text="show queue", command=show_regress_queue,
+show_regress_queue_button = customtkinter.CTkButton(tab_5, text="show queue", command=show_regress_queue,
                                                   fg_color='red',
                                                   hover_color='pink')
 show_regress_queue_button.grid(row=9,column=3,padx=10, pady=10)
 
-regress_gridsearch_button = customtkinter.CTkButton(tab_2, text="run regressor gridsearch", command=execute_regress_gridsearch,
+regress_gridsearch_button = customtkinter.CTkButton(tab_5, text="run regressor gridsearch", command=execute_regress_gridsearch,
                                                   fg_color='red',
                                                   hover_color='pink')
 regress_gridsearch_button.grid(row=9,column=4,padx=10, pady=10)

@@ -30,8 +30,8 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report, auc, roc_curve, roc_auc_score
 from sklearn.metrics import PredictionErrorDisplay 
 
-import lib.utils as utils
-from lib.utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model, create_model_yaml
+import utils as utils
+from utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model, create_model_yaml
 
 #import load_data as ld
 

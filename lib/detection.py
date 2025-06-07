@@ -27,7 +27,7 @@ from sklearn.metrics import confusion_matrix, classification_report
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import plotly.express as px
-from lib.utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model, create_model_yaml
+from utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model, create_model_yaml
 
 #from anomaly_detection import sst_class as sst
 

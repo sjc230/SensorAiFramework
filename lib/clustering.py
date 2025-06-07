@@ -24,7 +24,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import ConfusionMatrixDisplay, classification_report, RocCurveDisplay, auc, roc_curve, roc_auc_score
 
 from tslearn.clustering import KernelKMeans, KShape, TimeSeriesKMeans
-from lib.utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model, create_model_yaml
+from utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model, create_model_yaml
 
 #import load_data as ld
 
