@@ -26,4 +26,4 @@ plotly
 influxdb-client
 paho-mqtt
 tkinter
-customtkinter==0.3
+customtkinter
