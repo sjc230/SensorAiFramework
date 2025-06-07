@@ -25,5 +25,4 @@ chart_studio
 plotly
 influxdb-client
 paho-mqtt
-tkinter
 customtkinter
