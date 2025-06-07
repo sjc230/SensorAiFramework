@@ -288,6 +288,58 @@ pca_blind_button.grid(row=0,column=3,padx=10, pady=10)
 ica_blind_button = customtkinter.CTkButton(tab_decomp, text="ica blind source", command=open_decision_tree_window)
 ica_blind_button.grid(row=1,column=3,padx=10, pady=10)
 
+# Time Domain Tab
+
+peaks_button = customtkinter.CTkButton(tab_time, text="peak of peak", command=open_decision_tree_window)
+peaks_button.grid(row=0,column=0,padx=10, pady=10)
+
+envelope_button = customtkinter.CTkButton(tab_time, text="envelope from peaks", command=open_decision_tree_window)
+envelope_button.grid(row=1,column=0,padx=10, pady=10)
+
+average_env_button = customtkinter.CTkButton(tab_time, text="average envelope", command=open_decision_tree_window)
+average_env_button.grid(row=2,column=0,padx=10, pady=10)
+
+pfd_button = customtkinter.CTkButton(tab_time, text="petrosian fractal dimension", command=open_decision_tree_window)
+pfd_button.grid(row=0,column=1,padx=10, pady=10)
+
+mean_button = customtkinter.CTkButton(tab_time, text="mean", command=open_decision_tree_window)
+mean_button.grid(row=0,column=2,padx=10, pady=10)
+
+variance_button = customtkinter.CTkButton(tab_time, text="variance", command=open_decision_tree_window)
+variance_button.grid(row=1,column=2,padx=10, pady=10)
+
+skewness_button = customtkinter.CTkButton(tab_time, text="skewness", command=open_decision_tree_window)
+skewness_button.grid(row=2,column=2,padx=10, pady=10)
+
+kurtosis_button = customtkinter.CTkButton(tab_time, text="kurtosis", command=open_decision_tree_window)
+kurtosis_button.grid(row=3,column=2,padx=10, pady=10)
+
+# Transforms Tab
+
+fft_button = customtkinter.CTkButton(tab_trans, text="fft", command=open_decision_tree_window)
+fft_button.grid(row=0,column=0,padx=10, pady=10)
+
+psd_button = customtkinter.CTkButton(tab_trans, text="power spectral density", command=open_decision_tree_window)
+psd_button.grid(row=1,column=0,padx=10, pady=10)
+
+stft_button = customtkinter.CTkButton(tab_trans, text="short time ft", command=open_decision_tree_window)
+stft_button.grid(row=2,column=0,padx=10, pady=10)
+
+wavelet_button = customtkinter.CTkButton(tab_trans, text="wavelet", command=open_decision_tree_window)
+wavelet_button.grid(row=0,column=1,padx=10, pady=10)
+
+chirplet_button = customtkinter.CTkButton(tab_trans, text="chirplet", command=open_decision_tree_window)
+chirplet_button.grid(row=1,column=1,padx=10, pady=10)
+
+hilbert_button = customtkinter.CTkButton(tab_trans, text="hilbert", command=open_decision_tree_window)
+hilbert_button.grid(row=0,column=2,padx=10, pady=10)
+
+synchro_squeeze_button = customtkinter.CTkButton(tab_trans, text="synchro-squeezing", command=open_decision_tree_window)
+synchro_squeeze_button.grid(row=1,column=2,padx=10, pady=10)
+
+wigner_button = customtkinter.CTkButton(tab_trans, text="wigner ville dist", command=open_decision_tree_window)
+wigner_button.grid(row=2,column=2,padx=10, pady=10)
+
 #############################################################
 # TAB 2 - CLASSIFICATION
 #############################################################
