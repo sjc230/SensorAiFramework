@@ -12,7 +12,7 @@ global class_queue_models
 class_queue_names = []
 class_queue_models = []
 
-def add_to_queue(name,model):
+def add_to_class_queue(name,model):
     global class_queue_names
     class_queue_names.append(name)
     class_queue_models.append(model)
@@ -29,6 +29,12 @@ def show_class_queue():
     queue_label = customtkinter.CTkLabel(master=class_queue_window,text=queue_string)
     queue_label.pack()
 
+def reset_class_queue():
+    global class_queue_names
+    global class_queue_models
+    class_queue_names = []
+    class_queue_models = []
+
 def execute_class_gridsearch():
     global class_queue_names
     global class_queue_models
@@ -37,7 +43,7 @@ def execute_class_gridsearch():
 
     gridsearch_classifier(names=class_queue_names,pipes=class_queue_models,
                               X_train=X_train,X_test=X_test,y_train=y_train,y_test=y_test,
-                              plot_number=1,scoring="neg_mean_squared_error",save_best=False)
+                              plot_number=3,scoring="neg_mean_squared_error",save_best=True)
 
 def open_decision_tree_window():
     criterion = 'gini'
@@ -58,7 +64,7 @@ def open_decision_tree_window():
 
         name = "Decision Tree"
         decision_tree = pipeBuild_DecisionTreeClassifier(criterion=criterion_list,splitter=splitter_list,max_depth=max_depth_list,random_state=random_state_list[0])
-        add_to_queue(name,decision_tree)
+        add_to_class_queue(name,decision_tree)
         print("Decision Tree Model Created")
 
     decision_tree_window = customtkinter.CTkToplevel()
@@ -109,7 +115,7 @@ def open_random_forest_window():
 
         name = "Random Forest"
         random_forest = pipeBuild_RandomForestClassifier(n_estimators=n_estimators_list,criterion=criterion_list,max_depth=max_depth_list,random_state=random_state_list[0])
-        add_to_queue(name,random_forest)
+        add_to_class_queue(name,random_forest)
         print("Random Forest Model Created")
 
     
@@ -166,7 +172,7 @@ def open_extra_trees_window():
 
         name = "Extra Trees"
         extra_trees = pipeBuild_ExtraTreesClassifier(n_estimators=n_estimators_list,criterion=criterion_list,max_depth=max_depth_list,min_samples_split=min_split_list,min_samples_leaf=min_leaf_list,random_state=random_state_list[0])
-        add_to_queue(name,extra_trees)
+        add_to_class_queue(name,extra_trees)
         print("Extra Trees Model Created")
 
     

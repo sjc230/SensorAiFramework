@@ -1737,27 +1737,6 @@ def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all'
             rows=plot_number, cols=n_classes,
             subplot_titles=titles)
 
-        """
-        count = 0
-        current_label = 0
-        plot_num = 0
-        if isinstance(plot_number,int) and plot_number > 0 and plot_number <= 10:
-            while current_label < n_classes:
-                while count < len(y):
-                    if labels[count] == current_label and plot_num < plot_number:
-                        fig.add_trace(
-                            go.Scatter(x=x_axis,y=X[count]),
-                            row=plot_num+1, col=current_label+1
-                        )
-                        plot_num = plot_num +1
-                    count = count + 1
-                current_label = current_label +1
-                plot_num = 0
-                count = 0
-        else:
-            print("Incorrect plot number value entered")
-        fig.show()
-        #"""
         count = 0
         current_label = 0
         plot_num = 0
@@ -1791,7 +1770,7 @@ def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all'
         fig.show()
     return
 
-
+"""
 if __name__ == '__main__':
   p = Path('.')
   datapath = p / "test_data/"
@@ -1907,3 +1886,4 @@ if __name__ == '__main__':
           fig.update_xaxes(title_text="Class "+str(f), row=f+1, col=2)
           f = f + 1
       fig.show()
+#"""

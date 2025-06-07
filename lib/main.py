@@ -388,16 +388,20 @@ ts_svc_button = customtkinter.CTkButton(tab_2, text="time series svc", command=o
 ts_svc_button.grid(row=2,column=2,padx=10, pady=10)
 
 # Function Buttons
+reset_class_queue_button = customtkinter.CTkButton(tab_2, text="reset queue", command=reset_class_queue,
+                                                  fg_color='red',
+                                                  hover_color='pink')
+reset_class_queue_button.grid(row=9,column=2,padx=10, pady=10)
 
 show_class_queue_button = customtkinter.CTkButton(tab_2, text="show queue", command=show_class_queue,
                                                   fg_color='red',
                                                   hover_color='pink')
-show_class_queue_button.grid(row=8,column=4,padx=10, pady=10)
+show_class_queue_button.grid(row=9,column=3,padx=10, pady=10)
 
 class_gridsearch_button = customtkinter.CTkButton(tab_2, text="run class gridsearch", command=execute_class_gridsearch,
                                                   fg_color='red',
                                                   hover_color='pink')
-class_gridsearch_button.grid(row=8,column=5,padx=10, pady=10)
+class_gridsearch_button.grid(row=9,column=4,padx=10, pady=10)
 
 
 #############################################################
@@ -435,6 +439,22 @@ ts_kmeans_button.grid(row=3,column=2,padx=10, pady=10)
 # Spectral based algorithms
 spectral_button= customtkinter.CTkButton(tab_3, text="spectral clustering", command=open_decision_tree_window)
 spectral_button.grid(row=0,column=3,padx=10, pady=10)
+
+# Function Buttons
+reset_clust_queue_button = customtkinter.CTkButton(tab_2, text="reset queue", command=reset_clust_queue,
+                                                  fg_color='red',
+                                                  hover_color='pink')
+reset_clust_queue_button.grid(row=9,column=2,padx=10, pady=10)
+
+show_clust_queue_button = customtkinter.CTkButton(tab_2, text="show queue", command=show_clust_queue,
+                                                  fg_color='red',
+                                                  hover_color='pink')
+show_clust_queue_button.grid(row=9,column=3,padx=10, pady=10)
+
+clust_gridsearch_button = customtkinter.CTkButton(tab_2, text="run class gridsearch", command=execute_clust_gridsearch,
+                                                  fg_color='red',
+                                                  hover_color='pink')
+clust_gridsearch_button.grid(row=9,column=4,padx=10, pady=10)
 
 #############################################################
 # TAB 4 - DETECTION
