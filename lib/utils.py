@@ -359,3 +359,9 @@ def load_gui_data():
 
     return X_train, y_train, X_test, y_test
 
+def convert_list_to_string(list):
+    """
+    converst a list to a string
+    """
+    formatted_string = "\n".join(str(item) for item in list)
+    return formatted_string

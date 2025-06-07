@@ -74,7 +74,7 @@ def open_data_loader_window():
     split_text_var = customtkinter.StringVar(value="Check if you require a train / test split on data")
 
     def split_check_action():
-        if checkbox.get() == "on":
+        if split_checkbox.get() == "on":
             update_yaml_variable(config_path, "test_train_split", True)
             split_entry.configure(state="normal")
         else:

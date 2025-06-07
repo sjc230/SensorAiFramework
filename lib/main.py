@@ -7,14 +7,6 @@ from utils import run_script, data_loader_confg
 from data_gui import *
 from classification_gui import *
 
-global current_dataset
-global current_labels
-global current_model_queue
-
-current_dataset = None
-current_labels = None
-current_model_queue = []
-
 current_dir = Path.cwd() # assumes your working directory is in "SensorwebAiFramework"
 
 ftype_npy = [("npy files","*.npy")]
@@ -362,10 +354,10 @@ wigner_button.grid(row=2,column=2,padx=10, pady=10)
 decision_tree_button = customtkinter.CTkButton(tab_2, text="decision tree", command=open_decision_tree_window)
 decision_tree_button.grid(row=0,column=0,padx=10, pady=10)
 
-extra_trees_button = customtkinter.CTkButton(tab_2, text="extra trees", command=open_decision_tree_window)
+extra_trees_button = customtkinter.CTkButton(tab_2, text="extra trees", command=open_extra_trees_window)
 extra_trees_button.grid(row=1,column=0,padx=10, pady=10)
 
-random_forest_button = customtkinter.CTkButton(tab_2, text="random forest", command=open_decision_tree_window)
+random_forest_button = customtkinter.CTkButton(tab_2, text="random forest", command=open_random_forest_window)
 random_forest_button.grid(row=2,column=0,padx=10, pady=10)
 
 gradient_boosting_button = customtkinter.CTkButton(tab_2, text="gradient boosting", command=open_decision_tree_window)
@@ -394,6 +386,19 @@ nu_svc_button.grid(row=1,column=2,padx=10, pady=10)
 
 ts_svc_button = customtkinter.CTkButton(tab_2, text="time series svc", command=open_decision_tree_window)
 ts_svc_button.grid(row=2,column=2,padx=10, pady=10)
+
+# Function Buttons
+
+show_class_queue_button = customtkinter.CTkButton(tab_2, text="show queue", command=show_class_queue,
+                                                  fg_color='red',
+                                                  hover_color='pink')
+show_class_queue_button.grid(row=8,column=4,padx=10, pady=10)
+
+class_gridsearch_button = customtkinter.CTkButton(tab_2, text="run class gridsearch", command=execute_class_gridsearch,
+                                                  fg_color='red',
+                                                  hover_color='pink')
+class_gridsearch_button.grid(row=8,column=5,padx=10, pady=10)
+
 
 #############################################################
 # TAB 3 - CLUSTERING
