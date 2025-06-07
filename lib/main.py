@@ -5,7 +5,11 @@ import threading
 from pathlib import Path
 from utils import run_script, data_loader_confg
 from data_gui import *
+from dsp import *
 from classification_gui import *
+from clustering_gui import *
+from detection_gui import *
+from regression_gui import *
 
 current_dir = Path.cwd() # assumes your working directory is in "SensorwebAiFramework"
 
@@ -398,7 +402,7 @@ show_class_queue_button = customtkinter.CTkButton(tab_2, text="show queue", comm
                                                   hover_color='pink')
 show_class_queue_button.grid(row=9,column=3,padx=10, pady=10)
 
-class_gridsearch_button = customtkinter.CTkButton(tab_2, text="run class gridsearch", command=execute_class_gridsearch,
+class_gridsearch_button = customtkinter.CTkButton(tab_2, text="run classifier gridsearch", command=execute_class_gridsearch,
                                                   fg_color='red',
                                                   hover_color='pink')
 class_gridsearch_button.grid(row=9,column=4,padx=10, pady=10)
@@ -451,7 +455,7 @@ show_clust_queue_button = customtkinter.CTkButton(tab_2, text="show queue", comm
                                                   hover_color='pink')
 show_clust_queue_button.grid(row=9,column=3,padx=10, pady=10)
 
-clust_gridsearch_button = customtkinter.CTkButton(tab_2, text="run class gridsearch", command=execute_clust_gridsearch,
+clust_gridsearch_button = customtkinter.CTkButton(tab_2, text="run clustering gridsearch", command=execute_clust_gridsearch,
                                                   fg_color='red',
                                                   hover_color='pink')
 clust_gridsearch_button.grid(row=9,column=4,padx=10, pady=10)
@@ -470,6 +474,22 @@ lof_out_button.pack(padx=10, pady=10)
 
 iso_forest_button = customtkinter.CTkButton(tab_out, text="isolation forest", command=open_decision_tree_window)
 iso_forest_button.pack(padx=10, pady=10)
+
+# Function Buttons
+reset_detect_queue_button = customtkinter.CTkButton(tab_2, text="reset queue", command=reset_detect_queue,
+                                                  fg_color='red',
+                                                  hover_color='pink')
+reset_detect_queue_button.grid(row=9,column=2,padx=10, pady=10)
+
+show_detect_queue_button = customtkinter.CTkButton(tab_2, text="show queue", command=show_detect_queue,
+                                                  fg_color='red',
+                                                  hover_color='pink')
+show_detect_queue_button.grid(row=9,column=3,padx=10, pady=10)
+
+detect_gridsearch_button = customtkinter.CTkButton(tab_2, text="run detector gridsearch", command=execute_detect_gridsearch,
+                                                  fg_color='red',
+                                                  hover_color='pink')
+detect_gridsearch_button.grid(row=9,column=4,padx=10, pady=10)
 
 
 #############################################################
@@ -529,6 +549,22 @@ nu_svr_button.grid(row=2,column=4,padx=10, pady=10)
 
 ts_svr_button = customtkinter.CTkButton(tab_5, text="time series svr", command=open_decision_tree_window)
 ts_svr_button.grid(row=3,column=4,padx=10, pady=10)
+
+# Function Buttons
+reset_regress_queue_button = customtkinter.CTkButton(tab_2, text="reset queue", command=reset_regress_queue,
+                                                  fg_color='red',
+                                                  hover_color='pink')
+reset_regress_queue_button.grid(row=9,column=2,padx=10, pady=10)
+
+show_regress_queue_button = customtkinter.CTkButton(tab_2, text="show queue", command=show_regress_queue,
+                                                  fg_color='red',
+                                                  hover_color='pink')
+show_regress_queue_button.grid(row=9,column=3,padx=10, pady=10)
+
+regress_gridsearch_button = customtkinter.CTkButton(tab_2, text="run regressor gridsearch", command=execute_regress_gridsearch,
+                                                  fg_color='red',
+                                                  hover_color='pink')
+regress_gridsearch_button.grid(row=9,column=4,padx=10, pady=10)
 
 #############################################################
 # TAB 6 - DEVICE CONNECTOR
