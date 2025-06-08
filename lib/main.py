@@ -479,17 +479,17 @@ iso_forest_button.pack(padx=10, pady=10)
 reset_detect_queue_button = customtkinter.CTkButton(tab_4, text="reset queue", command=reset_detect_queue,
                                                   fg_color='red',
                                                   hover_color='pink')
-reset_detect_queue_button.grid(row=9,column=2,padx=10, pady=10)
+reset_detect_queue_button.pack(padx=10, pady=10)
 
 show_detect_queue_button = customtkinter.CTkButton(tab_4, text="show queue", command=show_detect_queue,
                                                   fg_color='red',
                                                   hover_color='pink')
-show_detect_queue_button.grid(row=9,column=3,padx=10, pady=10)
+show_detect_queue_button.pack(padx=10, pady=10)
 
 detect_gridsearch_button = customtkinter.CTkButton(tab_4, text="run detector gridsearch", command=execute_detect_gridsearch,
                                                   fg_color='red',
                                                   hover_color='pink')
-detect_gridsearch_button.grid(row=9,column=4,padx=10, pady=10)
+detect_gridsearch_button.pack(padx=10, pady=10)
 
 
 #############################################################

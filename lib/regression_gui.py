@@ -44,7 +44,7 @@ def execute_regress_gridsearch():
                               X=X_test,y=y_test,
                               plot_number=3,save_best=True)
 
-def open_decision_tree_window():
+def open_temp_tree_window():
     criterion = 'gini'
     splitter = 'best'
     max_depth = 'None'

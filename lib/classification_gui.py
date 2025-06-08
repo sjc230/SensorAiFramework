@@ -82,10 +82,16 @@ def open_decision_tree_window():
     splitter_entry.insert(0, splitter)
     splitter_entry.pack(pady=10)
 
+    max_depth_label = customtkinter.CTkLabel(decision_tree_window, text="Maximum Tree Depth: integers")
+    max_depth_label.pack()
+
     max_depth_entry = customtkinter.CTkEntry(decision_tree_window)
     max_depth_entry.pack(pady=10)
     max_depth_entry.insert(0, max_depth)
     max_depth_entry.pack(pady=10)
+
+    random_label = customtkinter.CTkLabel(decision_tree_window, text="Random State: None or a single integer")
+    random_label.pack()
 
     random_state_entry = customtkinter.CTkEntry(decision_tree_window)
     random_state_entry.pack(pady=10)
@@ -124,6 +130,9 @@ def open_random_forest_window():
     random_forest_window.geometry("500x400")
     random_forest_window.attributes('-topmost', True)
 
+    n_estimators_label = customtkinter.CTkLabel(random_forest_window, text="Number of Estimators: integers")
+    n_estimators_label.pack() 
+
     n_estimators_entry = customtkinter.CTkEntry(random_forest_window)
     n_estimators_entry.pack(pady=10)
     n_estimators_entry.insert(0, n_estimators)
@@ -134,10 +143,16 @@ def open_random_forest_window():
     criterion_entry.insert(0, criterion)
     criterion_entry.pack(pady=10)
 
+    max_depth_label = customtkinter.CTkLabel(random_forest_window, text="Maximum Tree Depth: integers")
+    max_depth_label.pack()
+
     max_depth_entry = customtkinter.CTkEntry(random_forest_window)
     max_depth_entry.pack(pady=10)
     max_depth_entry.insert(0, max_depth)
     max_depth_entry.pack(pady=10)
+
+    random_label = customtkinter.CTkLabel(random_forest_window, text="Random State: None or a single integer")
+    random_label.pack()
 
     random_state_entry = customtkinter.CTkEntry(random_forest_window)
     random_state_entry.pack(pady=10)
@@ -181,30 +196,50 @@ def open_extra_trees_window():
     extra_trees_window.geometry("500x400")
     extra_trees_window.attributes('-topmost', True)
 
+
+    n_estimators_label = customtkinter.CTkLabel(extra_trees_window, text="Number of Estimators: integers")
+    n_estimators_label.pack()  
+
     n_estimators_entry = customtkinter.CTkEntry(extra_trees_window)
     n_estimators_entry.pack(pady=10)
     n_estimators_entry.insert(0, n_estimators)
     n_estimators_entry.pack(pady=10)
+
+    criterion_label = customtkinter.CTkLabel(extra_trees_window, text="Criterion: gini, entropy, or log_loss")
+    criterion_label.pack()
 
     criterion_entry = customtkinter.CTkEntry(extra_trees_window)
     criterion_entry.pack(pady=10)
     criterion_entry.insert(0, criterion)
     criterion_entry.pack(pady=10)
 
+    max_depth_label = customtkinter.CTkLabel(extra_trees_window, text="Maximum Tree Depth: integers")
+    max_depth_label.pack()
+
     max_depth_entry = customtkinter.CTkEntry(extra_trees_window)
     max_depth_entry.pack(pady=10)
     max_depth_entry.insert(0, max_depth)
     max_depth_entry.pack(pady=10)
+
+
+    min_split_label = customtkinter.CTkLabel(extra_trees_window, text="Minimum Sample # for Node Splits: integers")
+    min_split_label.pack()
 
     min_split_entry = customtkinter.CTkEntry(extra_trees_window)
     min_split_entry.pack(pady=10)
     min_split_entry.insert(0, min_samples_split)
     min_split_entry.pack(pady=10)
 
+    min_leaf_label = customtkinter.CTkLabel(extra_trees_window, text="Minimum Sample # Required for a Leaf: integers")
+    min_leaf_label.pack()
+
     min_leaf_entry = customtkinter.CTkEntry(extra_trees_window)
     min_leaf_entry.pack(pady=10)
     min_leaf_entry.insert(0, min_samples_leaf)
     min_leaf_entry.pack(pady=10)
+
+    random_label = customtkinter.CTkLabel(extra_trees_window, text="Random State: None or a single integer")
+    random_label.pack()
 
     random_state_entry = customtkinter.CTkEntry(extra_trees_window)
     random_state_entry.pack(pady=10)
