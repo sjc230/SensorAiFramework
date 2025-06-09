@@ -45,6 +45,9 @@ def execute_class_gridsearch():
                               X_train=X_train,X_test=X_test,y_train=y_train,y_test=y_test,
                               plot_number=3,scoring="neg_mean_squared_error",save_best=True)
 
+
+
+# Decision Tree Window
 def open_decision_tree_window():
     criterion = 'gini'
     splitter = 'best'
@@ -69,13 +72,19 @@ def open_decision_tree_window():
 
     decision_tree_window = customtkinter.CTkToplevel()
     decision_tree_window.title("Decision Tree Pipe Builder")
-    decision_tree_window.geometry("500x400")
+    decision_tree_window.geometry("500x500")
     decision_tree_window.attributes('-topmost', True)
+
+    criterion_label = customtkinter.CTkLabel(decision_tree_window, text="Criterion: gini, entropy, or log_loss")
+    criterion_label.pack()
 
     criterion_entry = customtkinter.CTkEntry(decision_tree_window)
     criterion_entry.pack(pady=10)
     criterion_entry.insert(0, criterion)
     criterion_entry.pack(pady=10)
+
+    splitter_label = customtkinter.CTkLabel(decision_tree_window, text="Splitter: best, random")
+    splitter_label.pack()
 
     splitter_entry = customtkinter.CTkEntry(decision_tree_window)
     splitter_entry.pack(pady=10)
@@ -102,6 +111,7 @@ def open_decision_tree_window():
     add_to_queue_button.pack(pady=20)
     
 
+# Random Forest Window
 def open_random_forest_window():
     n_estimators = 100
     criterion = 'gini'    
@@ -127,7 +137,7 @@ def open_random_forest_window():
     
     random_forest_window = customtkinter.CTkToplevel()
     random_forest_window.title("Raondom Forest Pipe Builder")
-    random_forest_window.geometry("500x400")
+    random_forest_window.geometry("500x500")
     random_forest_window.attributes('-topmost', True)
 
     n_estimators_label = customtkinter.CTkLabel(random_forest_window, text="Number of Estimators: integers")
@@ -137,6 +147,9 @@ def open_random_forest_window():
     n_estimators_entry.pack(pady=10)
     n_estimators_entry.insert(0, n_estimators)
     n_estimators_entry.pack(pady=10)
+
+    criterion_label = customtkinter.CTkLabel(random_forest_window, text="Criterion: gini, entropy, or log_loss")
+    criterion_label.pack()
 
     criterion_entry = customtkinter.CTkEntry(random_forest_window)
     criterion_entry.pack(pady=10)
@@ -162,6 +175,8 @@ def open_random_forest_window():
     add_to_queue_button = customtkinter.CTkButton(random_forest_window, text="Add Model to Queue", command=retrieve_data)
     add_to_queue_button.pack(pady=20)
 
+
+# Extra Trees Window
 def open_extra_trees_window():
     n_estimators = 100
     criterion = 'gini'    
@@ -193,9 +208,8 @@ def open_extra_trees_window():
     
     extra_trees_window = customtkinter.CTkToplevel()
     extra_trees_window.title("Extra Trees Pipe Builder")
-    extra_trees_window.geometry("500x400")
+    extra_trees_window.geometry("500x550")
     extra_trees_window.attributes('-topmost', True)
-
 
     n_estimators_label = customtkinter.CTkLabel(extra_trees_window, text="Number of Estimators: integers")
     n_estimators_label.pack()  
@@ -250,15 +264,473 @@ def open_extra_trees_window():
     add_to_queue_button.pack(pady=20)
 
 
+# K Nearest Neighbors Window
 def open_knn_window():
-    new_window = customtkinter.CTkToplevel()
-    new_window.title("New Window")
-    label = customtkinter.CTkLabel(new_window, text="This is a new window")
-    label.pack(padx=20, pady=20)
+    n_neighbors = 5
+    weights = 'uniform'
+    algorithm = 'auto'
+    leaf_size = 30
 
+    def retrieve_data():
+        nn = nn_entry.get()
+        wt = wt_entry.get()
+        algo = algo_entry.get()
+        leaf = leaf_entry.get()
+
+        nn_list = parse_text_entry(nn,'int')
+        wt_list = parse_text_entry(wt,'string')
+        algo_list = parse_text_entry(algo,'string')
+        leaf_list = parse_text_entry(leaf,'int')
+
+        name = "K Nearest Neighbors"
+        knn = pipeBuild_KNeighborsClassifier(n_neighbors=nn_list,weights=wt_list,algorithm=algo_list,leaf_size=leaf_list)
+        add_to_class_queue(name,knn)
+        print("K Nearest Neighbors Model Created")
+
+    knn_window = customtkinter.CTkToplevel()
+    knn_window.title("K Nearest Neighbors Pipe Builder")
+    knn_window.geometry("500x500")
+    knn_window.attributes('-topmost', True)
+
+    nn_label = customtkinter.CTkLabel(knn_window, text="Number of Neighbors: integers only")
+    nn_label.pack()
+
+    nn_entry = customtkinter.CTkEntry(knn_window)
+    nn_entry.pack(pady=10)
+    nn_entry.insert(0, n_neighbors)
+    nn_entry.pack(pady=10)
+
+    wt_label = customtkinter.CTkLabel(knn_window, text="Weights: uniform, distance")
+    wt_label.pack()
+
+    wt_entry = customtkinter.CTkEntry(knn_window)
+    wt_entry.pack(pady=10)
+    wt_entry.insert(0, weights)
+    wt_entry.pack(pady=10)
+
+    algo_label = customtkinter.CTkLabel(knn_window, text="Algorithm: auto, ball_tree, kd_tree, brute")
+    algo_label.pack()
+
+    algo_entry = customtkinter.CTkEntry(knn_window)
+    algo_entry.pack(pady=10)
+    algo_entry.insert(0, algorithm)
+    algo_entry.pack(pady=10)
+
+    leaf_label = customtkinter.CTkLabel(knn_window, text="Leaf Size: integers only")
+    leaf_label.pack()
+
+    leaf_entry = customtkinter.CTkEntry(knn_window)
+    leaf_entry.pack(pady=10)
+    leaf_entry.insert(0, leaf_size)
+    leaf_entry.pack(pady=10)
+
+    add_to_queue_button = customtkinter.CTkButton(knn_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=20)
+
+
+# Nearest Cetroid Window
+def open_nearest_centroid_window():
+    metric = 'euclidean'
+    shrink_treshold = 'None'
+
+    def retrieve_data():
+        met = metric_entry.get()
+        shrink = shrink_entry.get()
+
+        metric_list = parse_text_entry(met,'string')
+        shrink_list = parse_text_entry(shrink,'float')
+
+        name = "Nearest Centroid"
+        nc = pipeBuild_NearestCentroid(metric=metric_list,shrink_threshold=shrink_list)
+        add_to_class_queue(name,nc)
+        print("Nearest Centroid Model Created")
+
+    nc_window = customtkinter.CTkToplevel()
+    nc_window.title("Nearest Centroid Pipe Builder")
+    nc_window.geometry("500x500")
+    nc_window.attributes('-topmost', True)
+
+    nn_label = customtkinter.CTkLabel(nc_window, text="Distance Metric: euclidean, manhattan, chebyshev, minkowski")
+    nn_label.pack()
+
+    metric_entry = customtkinter.CTkEntry(nc_window)
+    metric_entry.pack(pady=10)
+    metric_entry.insert(0, metric)
+    metric_entry.pack(pady=10)
+
+    shrink_label = customtkinter.CTkLabel(nc_window, text="Shrink Threshold: None and floats")
+    shrink_label.pack()
+
+    shrink_entry = customtkinter.CTkEntry(nc_window)
+    shrink_entry.pack(pady=10)
+    shrink_entry.insert(0, shrink_treshold)
+    shrink_entry.pack(pady=10)    
+
+    add_to_queue_button = customtkinter.CTkButton(nc_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=20)
+
+
+# Radius Nearest Neighbors
+def open_radiusnn_window():
+    radius = 1.0
+    weights = 'uniform'
+    algorithm = 'auto'
+    leaf_size = 30
+    p = 2
+    metric = 'minkowski'
+
+    def retrieve_data():
+        rad = radius_entry.get()
+        wt = weights_entry.get()
+        algo = algo_entry.get()
+        leaf = leaf_entry.get()
+        power = power_entry.get()
+        met = metric_entry.get()
+        
+        radius_list = parse_text_entry(rad,'float')
+        weight_list = parse_text_entry(wt,'string')
+        algo_list = parse_text_entry(algo,'string')
+        leaf_list = parse_text_entry(leaf,'int')
+        power_list = parse_text_entry(power,'int')
+        metric_list = parse_text_entry(met,'string')
+        
+
+        name = "Radius Nearest Neighbors"
+        rnn = pipeBuild_RadiusNeighborsClassifier(radius=radius_list,weights=weight_list,algorithm=algo_list,leaf_size=leaf_list,p=power_list,metric=metric_list)
+        add_to_class_queue(name,rnn)
+        print("Radius Nearest Neighbors Model Created")
+
+    radiusnn_window = customtkinter.CTkToplevel()
+    radiusnn_window.title("Radius Nearest Neighbor Pipe Builder")
+    radiusnn_window.geometry("500x550")
+    radiusnn_window.attributes('-topmost', True)
+
+    radius_label = customtkinter.CTkLabel(radiusnn_window, text="Radius: floats only")
+    radius_label.pack()
+
+    radius_entry = customtkinter.CTkEntry(radiusnn_window)
+    radius_entry.pack(pady=10)
+    radius_entry.insert(0, radius)
+    radius_entry.pack(pady=10)
+
+    weights_label = customtkinter.CTkLabel(radiusnn_window, text="Weight: uniform, distance")
+    weights_label.pack()
+
+    weights_entry = customtkinter.CTkEntry(radiusnn_window)
+    weights_entry.pack(pady=10)
+    weights_entry.insert(0, weights)
+    weights_entry.pack(pady=10)
+
+    algo_label = customtkinter.CTkLabel(radiusnn_window, text="Algorithm: auto, ball_tree, kd_tree, brute")
+    algo_label.pack()
+
+    algo_entry = customtkinter.CTkEntry(radiusnn_window)
+    algo_entry.pack(pady=10)
+    algo_entry.insert(0, algorithm)
+    algo_entry.pack(pady=10)
+
+    leaf_label = customtkinter.CTkLabel(radiusnn_window, text="Leaf Size: integers only")
+    leaf_label.pack()
+
+    leaf_entry = customtkinter.CTkEntry(radiusnn_window)
+    leaf_entry.pack(pady=10)
+    leaf_entry.insert(0, leaf_size)
+    leaf_entry.pack(pady=10)
+
+    power_label = customtkinter.CTkLabel(radiusnn_window, text="Weight: uniform, distance")
+    power_label.pack()
+
+    power_entry = customtkinter.CTkEntry(radiusnn_window)
+    power_entry.pack(pady=10)
+    power_entry.insert(0, p)
+    power_entry.pack(pady=10)
+
+    metric_label = customtkinter.CTkLabel(radiusnn_window, text="Distance Metric: euclidean, manhattan, chebyshev, minkowski")
+    metric_label.pack()
+
+    metric_entry = customtkinter.CTkEntry(radiusnn_window)
+    metric_entry.pack(pady=10)
+    metric_entry.insert(0, metric)
+    metric_entry.pack(pady=10)    
+
+    add_to_queue_button = customtkinter.CTkButton(radiusnn_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=20)
+
+
+# Time Series KNN Window
 def open_tsknn_window():
-    new_window = customtkinter.CTkToplevel()
-    new_window.title("New Window")
-    new_window.attributes('-topmost', True)
-    label = customtkinter.CTkLabel(new_window, text="This is a new window")
-    label.pack(padx=20, pady=20)
+    n_neighbors = 5
+    weights = 'uniform'
+    metric = 'dtw'
+
+    def retrieve_data():
+        nn = nn_entry.get()
+        wt = wt_entry.get()
+        met = metric_entry.get()
+
+        nn_list = parse_text_entry(nn,'int')
+        wt_list = parse_text_entry(wt,'string')
+        met_list = parse_text_entry(met,'string')
+
+        name = "Time Series KNN"
+        tsknn = pipeBuild_KNeighborsTimeSeriesClassifier(n_neighbors=nn_list, weights=wt_list, metric=met_list)
+        add_to_class_queue(name,tsknn)
+        print("Time Series KNN Model Created")
+
+    tsknn_window = customtkinter.CTkToplevel()
+    tsknn_window.title("Time Series KNN Pipe Builder")
+    tsknn_window.geometry("500x500")
+    tsknn_window.attributes('-topmost', True)
+
+    nn_label = customtkinter.CTkLabel(tsknn_window, text="Number of Neighbors: integers only")
+    nn_label.pack()
+
+    nn_entry = customtkinter.CTkEntry(tsknn_window)
+    nn_entry.pack(pady=10)
+    nn_entry.insert(0, n_neighbors)
+    nn_entry.pack(pady=10)
+
+    wt_label = customtkinter.CTkLabel(tsknn_window, text="Weights: uniform, distance")
+    wt_label.pack()
+
+    wt_entry = customtkinter.CTkEntry(tsknn_window)
+    wt_entry.pack(pady=10)
+    wt_entry.insert(0, weights)
+    wt_entry.pack(pady=10)
+
+    metric_label = customtkinter.CTkLabel(tsknn_window, text="Distance Metric: dtw, softdtw, ctw, sqeuclidean, sax")
+    metric_label.pack()
+
+    metric_entry = customtkinter.CTkEntry(tsknn_window)
+    metric_entry.pack(pady=10)
+    metric_entry.insert(0, metric)
+    metric_entry.pack(pady=10) 
+
+    add_to_queue_button = customtkinter.CTkButton(tsknn_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=20)
+
+
+# Support Vector Classifier Window
+def open_svc_window():
+    C = 1.0
+    kernel = 'rbf'
+    degree = 3
+    gamma = 'scale'
+    tol = 0.001
+
+    def retrieve_data():
+        c = reg_entry.get()
+        k = kernel_entry.get()
+        d = degree_entry.get()
+        g = gamma_entry.get()
+        t = tol_entry.get()
+        
+        reg_list = parse_text_entry(c,'float')
+        kernel_list = parse_text_entry(k,'string')
+        degree_list = parse_text_entry(d,'int')
+        gamma_list = parse_text_entry(g,'string')
+        tol_list = parse_text_entry(t,'float')        
+
+        name = "Support Vector Classifier"
+        svc = pipeBuild_SVC(C=reg_list,kernel=kernel_list,degree=degree_list,gamma=gamma_list,tol=tol_list,random_state=None)
+        add_to_class_queue(name,svc)
+        print("Support Vector Classifier Model Created")
+
+    svc_window = customtkinter.CTkToplevel()
+    svc_window.title("Support Vector Classifier Pipe Builder")
+    svc_window.geometry("500x500")
+    svc_window.attributes('-topmost', True)
+
+    reg_label = customtkinter.CTkLabel(svc_window, text="Regularization Parameter: floats only")
+    reg_label.pack()
+
+    reg_entry = customtkinter.CTkEntry(svc_window)
+    reg_entry.pack(pady=10)
+    reg_entry.insert(0, C)
+    reg_entry.pack(pady=10)
+
+    kernel_label = customtkinter.CTkLabel(svc_window, text="Kernel: linear, poly, rbf, sigmoid")
+    kernel_label.pack()
+
+    kernel_entry = customtkinter.CTkEntry(svc_window)
+    kernel_entry.pack(pady=10)
+    kernel_entry.insert(0, kernel)
+    kernel_entry.pack(pady=10)
+
+    degree_label = customtkinter.CTkLabel(svc_window, text="Degree (for poly kernel): integers only")
+    degree_label.pack()
+
+    degree_entry = customtkinter.CTkEntry(svc_window)
+    degree_entry.pack(pady=10)
+    degree_entry.insert(0, degree)
+    degree_entry.pack(pady=10)
+
+    gamma_label = customtkinter.CTkLabel(svc_window, text="Gamma: scale, auto")
+    gamma_label.pack()
+
+    gamma_entry = customtkinter.CTkEntry(svc_window)
+    gamma_entry.pack(pady=10)
+    gamma_entry.insert(0, gamma)
+    gamma_entry.pack(pady=10)
+
+    tol_label = customtkinter.CTkLabel(svc_window, text="Tolerance: floats only")
+    tol_label.pack()
+
+    tol_entry = customtkinter.CTkEntry(svc_window)
+    tol_entry.pack(pady=10)
+    tol_entry.insert(0, tol)
+    tol_entry.pack(pady=10)
+   
+    add_to_queue_button = customtkinter.CTkButton(svc_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=20)
+
+# Nu Support Vector Classifier Window
+def open_nusvc_window():
+    nu = 0.5
+    kernel = 'rbf'
+    degree = 3
+    gamma = 'scale'
+    tol = 0.001
+
+    def retrieve_data():
+        n = nu_entry.get()
+        k = kernel_entry.get()
+        d = degree_entry.get()
+        g = gamma_entry.get()
+        t = tol_entry.get()
+        
+        nu_list = parse_text_entry(n,'float')
+        kernel_list = parse_text_entry(k,'string')
+        degree_list = parse_text_entry(d,'int')
+        gamma_list = parse_text_entry(g,'string')
+        tol_list = parse_text_entry(t,'float')        
+
+        name = "Nu Support Vector Classifier"
+        nusvc = pipeBuild_NuSVC(nu=nu_list,kernel=kernel_list,degree=degree_list,gamma=gamma_list,tol=tol_list,random_state=None)
+        add_to_class_queue(name,nusvc)
+        print("Nu Support Vector Classifier Model Created")
+
+    nusvc_window = customtkinter.CTkToplevel()
+    nusvc_window.title("Nu Support Vector Classifier Pipe Builder")
+    nusvc_window.geometry("500x500")
+    nusvc_window.attributes('-topmost', True)
+
+    nu_label = customtkinter.CTkLabel(nusvc_window, text="Regularization Parameter: floats only")
+    nu_label.pack()
+
+    nu_entry = customtkinter.CTkEntry(nusvc_window)
+    nu_entry.pack(pady=10)
+    nu_entry.insert(0, nu)
+    nu_entry.pack(pady=10)
+
+    kernel_label = customtkinter.CTkLabel(nusvc_window, text="Kernel: linear, poly, rbf, sigmoid")
+    kernel_label.pack()
+
+    kernel_entry = customtkinter.CTkEntry(nusvc_window)
+    kernel_entry.pack(pady=10)
+    kernel_entry.insert(0, kernel)
+    kernel_entry.pack(pady=10)
+
+    degree_label = customtkinter.CTkLabel(nusvc_window, text="Degree (for poly kernel): integers only")
+    degree_label.pack()
+
+    degree_entry = customtkinter.CTkEntry(nusvc_window)
+    degree_entry.pack(pady=10)
+    degree_entry.insert(0, degree)
+    degree_entry.pack(pady=10)
+
+    gamma_label = customtkinter.CTkLabel(nusvc_window, text="Gamma: scale, auto")
+    gamma_label.pack()
+
+    gamma_entry = customtkinter.CTkEntry(nusvc_window)
+    gamma_entry.pack(pady=10)
+    gamma_entry.insert(0, gamma)
+    gamma_entry.pack(pady=10)
+
+    tol_label = customtkinter.CTkLabel(nusvc_window, text="Tolerance: floats only")
+    tol_label.pack()
+
+    tol_entry = customtkinter.CTkEntry(nusvc_window)
+    tol_entry.pack(pady=10)
+    tol_entry.insert(0, tol)
+    tol_entry.pack(pady=10)
+   
+    add_to_queue_button = customtkinter.CTkButton(nusvc_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=20)
+
+# Time Series Support Vector Classifier Window
+def open_tssvc_window():
+    C = 1.0
+    kernel = 'gak'
+    degree = 3
+    gamma = 'None'
+    tol = 0.001
+
+    def retrieve_data():
+        c = reg_entry.get()
+        k = kernel_entry.get()
+        d = degree_entry.get()
+        g = gamma_entry.get()
+        t = tol_entry.get()
+
+             
+        reg_list = parse_text_entry(c,'float')
+        kernel_list = parse_text_entry(k,'string')
+        degree_list = parse_text_entry(d,'int')
+        gamma_list = parse_text_entry(g,'float')
+        tol_list = parse_text_entry(t,'float')
+
+        gamma_list = ['auto' if item is None else item for item in gamma_list]
+
+        name = "Time Series SVC"
+        svc = pipeBuild_TimeSeriesSVC(C=reg_list,kernel=kernel_list,degree=degree_list,gamma=gamma_list,tol=tol_list,random_state=None)
+        add_to_class_queue(name,svc)
+        print("Time Series SVC Model Created")
+
+    svc_window = customtkinter.CTkToplevel()
+    svc_window.title("Time Series SVC Pipe Builder")
+    svc_window.geometry("500x500")
+    svc_window.attributes('-topmost', True)
+
+    reg_label = customtkinter.CTkLabel(svc_window, text="Regularization Parameter: None or floats")
+    reg_label.pack()
+
+    reg_entry = customtkinter.CTkEntry(svc_window)
+    reg_entry.pack(pady=10)
+    reg_entry.insert(0, C)
+    reg_entry.pack(pady=10)
+
+    kernel_label = customtkinter.CTkLabel(svc_window, text="Kernel: gak, linear, poly, rbf, sigmoid")
+    kernel_label.pack()
+
+    kernel_entry = customtkinter.CTkEntry(svc_window)
+    kernel_entry.pack(pady=10)
+    kernel_entry.insert(0, kernel)
+    kernel_entry.pack(pady=10)
+
+    degree_label = customtkinter.CTkLabel(svc_window, text="Degree (for poly kernel): integers only")
+    degree_label.pack()
+
+    degree_entry = customtkinter.CTkEntry(svc_window)
+    degree_entry.pack(pady=10)
+    degree_entry.insert(0, degree)
+    degree_entry.pack(pady=10)
+
+    gamma_label = customtkinter.CTkLabel(svc_window, text="Gamma: None or floats")
+    gamma_label.pack()
+
+    gamma_entry = customtkinter.CTkEntry(svc_window)
+    gamma_entry.pack(pady=10)
+    gamma_entry.insert(0, gamma)
+    gamma_entry.pack(pady=10)
+
+    tol_label = customtkinter.CTkLabel(svc_window, text="Tolerance: floats only")
+    tol_label.pack()
+
+    tol_entry = customtkinter.CTkEntry(svc_window)
+    tol_entry.pack(pady=10)
+    tol_entry.insert(0, tol)
+    tol_entry.pack(pady=10)
+   
+    add_to_queue_button = customtkinter.CTkButton(svc_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=20)

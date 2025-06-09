@@ -40,6 +40,9 @@ from sklearn.metrics import ConfusionMatrixDisplay, classification_report, RocCu
 #from lib.utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model, create_model_yaml
 from utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model, create_model_yaml
 
+import warnings
+warnings.filterwarnings("ignore", category=Warning, module="", lineno=0, append=False)
+
 #import load_data as ld
 
 algo_list = ['decision tree','random forest','knn','gaussian','adaboost','gaussian nb','qda','svc','mlp','nusvc','bagging','extra trees','gradient boost','histogram gradient boost','bernoulli nb','nearest centroid','passive agressive','lda','sgd','radius nn','non-myopic early','time series knn','time series svc']

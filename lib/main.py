@@ -368,27 +368,27 @@ gradient_boosting_button = customtkinter.CTkButton(tab_2, text="gradient boostin
 gradient_boosting_button.grid(row=3,column=0,padx=10, pady=10)
 
 # Nearest neighbor based models
-knn_button = customtkinter.CTkButton(tab_2, text="k nearest neighbors", command=open_decision_tree_window)
+knn_button = customtkinter.CTkButton(tab_2, text="k nearest neighbors", command=open_knn_window)
 knn_button.grid(row=0,column=1,padx=10, pady=10)
 
-nearest_centroid_button = customtkinter.CTkButton(tab_2, text="nearest centroid", command=open_decision_tree_window)
+nearest_centroid_button = customtkinter.CTkButton(tab_2, text="nearest centroid", command=open_nearest_centroid_window)
 nearest_centroid_button.grid(row=1,column=1,padx=10, pady=10)
 
-radius_nn_button = customtkinter.CTkButton(tab_2, text="radius nearest neighbors", command=open_decision_tree_window)
+radius_nn_button = customtkinter.CTkButton(tab_2, text="radius nearest neighbors", command=open_radiusnn_window)
 radius_nn_button.grid(row=2,column=1,padx=10, pady=10)
 
-ts_knn_button = customtkinter.CTkButton(tab_2, text="time series knn", command=open_decision_tree_window)
+ts_knn_button = customtkinter.CTkButton(tab_2, text="time series knn", command=open_tsknn_window)
 ts_knn_button.grid(row=3,column=1,padx=10, pady=10)
 
 # Support Vector based models
 
-svc_button = customtkinter.CTkButton(tab_2, text="support vector", command=open_decision_tree_window)
+svc_button = customtkinter.CTkButton(tab_2, text="support vector", command=open_svc_window)
 svc_button.grid(row=0,column=2,padx=10, pady=10)
 
-nu_svc_button = customtkinter.CTkButton(tab_2, text="nu support vector", command=open_decision_tree_window)
+nu_svc_button = customtkinter.CTkButton(tab_2, text="nu support vector", command=open_nusvc_window)
 nu_svc_button.grid(row=1,column=2,padx=10, pady=10)
 
-ts_svc_button = customtkinter.CTkButton(tab_2, text="time series svc", command=open_decision_tree_window)
+ts_svc_button = customtkinter.CTkButton(tab_2, text="time series svc", command=open_tssvc_window)
 ts_svc_button.grid(row=2,column=2,padx=10, pady=10)
 
 # Function Buttons
