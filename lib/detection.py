@@ -157,6 +157,7 @@ def pipeBuild_IsolationForest(n_estimators=[100],max_samples=['auto'], contamina
   return pipeline, params
 
 # OUTLIE DETECTION GRID BUILDER
+"""
 def gridsearch_outlier_out(names,pipes,X,y,scoring='neg_mean_squared_error',plot_number=10,save_best=False):
     n_classes = int(np.amax(y)+1)
     n_inputs = X.shape[1]
@@ -197,7 +198,7 @@ def gridsearch_outlier_out(names,pipes,X,y,scoring='neg_mean_squared_error',plot
                             model_type='detection',
                             n_inputs=n_inputs,
                             n_outputs=n_classes)
-        """           
+                   
         #n_classes = int(np.amax(y)+1) 
         x_axis = np.arange(len(X[0]))
         j = 0
@@ -228,9 +229,9 @@ def gridsearch_outlier_out(names,pipes,X,y,scoring='neg_mean_squared_error',plot
                 count = 0
         else:
             print("Incorrect plot number value entered")
-        fig.show()
-        #"""
+        fig.show()        
     return
+    #"""
 
 # NOVELTY UNSUPERVISED
 def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_number='all',save_best=False): #scoring='rand_score'
@@ -251,7 +252,7 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
         #score = grid_search.score(X, y)
         print("Best parameter (CV score=%0.3f):" % grid_search.best_score_)
         print(grid_search.best_params_)
-        print("Best "+scoring+"score: ",grid_search.best_score_)
+        #print("Best "+scoring+"score: ",grid_search.best_score_) ## current change
         labels = y
         #labels = grid_search.best_estimator_.predict(X)
         #print("Best Model Labels: ",labels)
@@ -275,15 +276,10 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
                             n_inputs=n_inputs,
                             n_outputs=n_classes)
 
-        #print("Accuracy: ",accuracy_score(y_true, labels))
-        #print("Precision: ")
-        #print("F1 Score: ") 
-        #print("Recall: ") 
 
         x_classes = int(np.amax(labels)+1)
         y_classes = int(np.amax(y)+1)
-        #print("# of X's clusters is: ",x_classes)
-        #print("# of y's clusters is: ",y_classes)
+
         if x_classes > y_classes:
             n_classes = x_classes
         else:
