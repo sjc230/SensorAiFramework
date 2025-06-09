@@ -77,7 +77,7 @@ def execute_detect_gridsearch(nov=False):
                               X=X_test,y=y_test,
                               plot_number=3,save_best=True)
     else:
-        gridsearch_outlier_old(names=detect_queue_names,pipes=detect_queue_models,
+        gridsearch_outlier_out(names=detect_queue_names,pipes=detect_queue_models,
                               X=X_test,y=y_test,
                               plot_number=3,save_best=True)
 

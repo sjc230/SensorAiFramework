@@ -157,7 +157,7 @@ def pipeBuild_IsolationForest(n_estimators=[100],max_samples=['auto'], contamina
   return pipeline, params
 
 # OUTLIE DETECTION GRID BUILDER
-def gridsearch_outlier_old(names,pipes,X,y,scoring='neg_mean_squared_error',plot_number=10,save_best=False):
+def gridsearch_outlier_out(names,pipes,X,y,scoring='neg_mean_squared_error',plot_number=10,save_best=False):
     n_classes = int(np.amax(y)+1)
     n_inputs = X.shape[1]
 
@@ -231,7 +231,7 @@ def gridsearch_outlier_old(names,pipes,X,y,scoring='neg_mean_squared_error',plot
         fig.show()
     return
 
-# OUTLIER CLUSTER
+# NOVELTY UNSUPERVISED
 def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_number='all',save_best=False): #scoring='rand_score'
     n_classes = int(np.amax(y)+1)
     n_inputs = X.shape[1]
@@ -333,6 +333,8 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
       # Confusion Matrix here
     return
 
+
+"""
 if __name__ == '__main__':
   p = Path('.')
   datapath = p / "test_data/"
@@ -455,6 +457,8 @@ if __name__ == '__main__':
       fig.show()
   plt.tight_layout()
   plt.show()
+
+#"""
 """      best_title = 'Best Model: ' + names[j]
       plt.title(best_title) 
       
