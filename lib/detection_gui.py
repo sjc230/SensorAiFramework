@@ -7,91 +7,229 @@ from detection import *
 
 global detect_queue_names
 global detect_queue_models
+global outlier_queue_names
+global outlier_queue_models
 
 detect_queue_names = []
 detect_queue_models = []
+outlier_queue_names = []
+outlier_queue_models = []
 
-def add_to_detect_queue(name,model):
+def add_to_detect_queue(name,model,nov=False):
     global detect_queue_names
-    detect_queue_names.append(name)
-    detect_queue_models.append(model)
-    print("Queue: ", detect_queue_names)
+    global outlier_queue_names
 
-def show_detect_queue():
+    if nov == True:
+        detect_queue_names.append(name)
+        detect_queue_models.append(model)
+        print("Queue: ", detect_queue_names)
+    else:
+        outlier_queue_names.append(name)
+        outlier_queue_models.append(model)
+        print("Queue: ", outlier_queue_names)
+
+def show_detect_queue(nov=False):
     global detect_queue_names
-    detect_queue_window = customtkinter.CTkToplevel()
-    detect_queue_window.title("Detection Queue")
-    detect_queue_window.geometry("200x400")
-    detect_queue_window.attributes('-topmost', True)
+    global outlier_queue_names
 
-    queue_string = convert_list_to_string(detect_queue_names)
-    queue_label = customtkinter.CTkLabel(master=detect_queue_window,text=queue_string)
-    queue_label.pack()
+    if nov == True:
+        detect_queue_window = customtkinter.CTkToplevel()
+        detect_queue_window.title("Novelty Detection Queue")
+        detect_queue_window.geometry("200x400")
+        detect_queue_window.attributes('-topmost', True)
 
-def reset_detect_queue():
+        queue_string = convert_list_to_string(detect_queue_names)
+        queue_label = customtkinter.CTkLabel(master=detect_queue_window,text=queue_string)
+        queue_label.pack()
+    else:
+        outlier_queue_window = customtkinter.CTkToplevel()
+        outlier_queue_window.title("Outlier Detection Queue")
+        outlier_queue_window.geometry("200x400")
+        outlier_queue_window.attributes('-topmost', True)
+
+        queue_string = convert_list_to_string(outlier_queue_names)
+        queue_label = customtkinter.CTkLabel(master=outlier_queue_window,text=queue_string)
+        queue_label.pack()
+       
+
+def reset_detect_queue(nov=False):
     global detect_queue_names
     global detect_queue_models
-    detect_queue_names = []
-    detect_queue_models = []
+    global outlier_queue_names
+    global outlier_queue_models
+    
+    if nov == True:
+        detect_queue_names = []
+        detect_queue_models = []
+    else:
+        outlier_queue_names = []
+        outlier_queue_models = []
+    
 
-def execute_detect_gridsearch():
+def execute_detect_gridsearch(nov=False):
     global detect_queue_names
     global detect_queue_models
 
     X_train, y_train, X_test, y_test = load_gui_data()
 
-    gridsearch_outlier(names=detect_queue_names,pipes=detect_queue_models,
+    if nov == True:
+        gridsearch_outlier(names=detect_queue_names,pipes=detect_queue_models,
+                              X=X_test,y=y_test,
+                              plot_number=3,save_best=True)
+    else:
+        gridsearch_outlier_old(names=detect_queue_names,pipes=detect_queue_models,
                               X=X_test,y=y_test,
                               plot_number=3,save_best=True)
 
-def open_tempo_tree_window():
-    criterion = 'gini'
-    splitter = 'best'
-    max_depth = 'None'
-    random_state = 'None'
+
+
+# Local Outlier Factor Novelty Detection
+def open_lof_nov_window():
+    n_neighbors = 20
+    algorithm = 'auto'
+    leaf_size = 30
+    metric = 'minkowski'    
+    p = 2    
 
     def retrieve_data():
-        crit = criterion_entry.get()
-        split = splitter_entry.get()
-        max_d = max_depth_entry.get()
-        rand_st = random_state_entry.get()
+        nn = nn_entry.get()
+        algo = algo_entry.get()
+        leaf = leaf_entry.get()
+        power = power_entry.get()
+        met = metric_entry.get()
+        
+        nn_list = parse_text_entry(nn,'int')
+        algo_list = parse_text_entry(algo,'string')
+        leaf_list = parse_text_entry(leaf,'int')
+        power_list = parse_text_entry(power,'int')
+        metric_list = parse_text_entry(met,'string')
+        
 
-        criterion_list = parse_text_entry(crit,'string')
-        splitter_list = parse_text_entry(split,'string')
-        max_depth_list = parse_text_entry(max_d,'int')
-        random_state_list = parse_text_entry(rand_st,'int')
+        name = "LOT Novelty Detection"
+        lotn = pipeBuild_LocalOutlierFactor(n_neighbors=nn_list,algorithm=algo_list,leaf_size=leaf_list,p=power_list,metric=metric_list,novelty=[True])
+        add_to_detect_queue(name,lotn,nov=True)
+        print("Lot Novelty Detection Model Created")
 
-        name = "Decision Tree"
-        decision_tree = pipeBuild_DecisionTreedetectifier(criterion=criterion_list,splitter=splitter_list,max_depth=max_depth_list,random_state=random_state_list[0])
-        add_to_detect_queue(name,decision_tree)
-        print("Decision Tree Model Created")
+    lotn_window = customtkinter.CTkToplevel()
+    lotn_window.title("LOT Novelty Detection Pipe Builder")
+    lotn_window.geometry("500x550")
+    lotn_window.attributes('-topmost', True)
 
-    decision_tree_window = customtkinter.CTkToplevel()
-    decision_tree_window.title("Decision Tree Pipe Builder")
-    decision_tree_window.geometry("500x400")
-    decision_tree_window.attributes('-topmost', True)
+    nn_label = customtkinter.CTkLabel(lotn_window, text="Number of Neighbors: integers only")
+    nn_label.pack()
 
-    criterion_entry = customtkinter.CTkEntry(decision_tree_window)
-    criterion_entry.pack(pady=10)
-    criterion_entry.insert(0, criterion)
-    criterion_entry.pack(pady=10)
+    nn_entry = customtkinter.CTkEntry(lotn_window)
+    nn_entry.pack(pady=10)
+    nn_entry.insert(0, n_neighbors)
+    nn_entry.pack(pady=10)
 
-    splitter_entry = customtkinter.CTkEntry(decision_tree_window)
-    splitter_entry.pack(pady=10)
-    splitter_entry.insert(0, splitter)
-    splitter_entry.pack(pady=10)
+    algo_label = customtkinter.CTkLabel(lotn_window, text="Algorithm: auto, ball_tree, kd_tree, brute")
+    algo_label.pack()
 
-    max_depth_entry = customtkinter.CTkEntry(decision_tree_window)
-    max_depth_entry.pack(pady=10)
-    max_depth_entry.insert(0, max_depth)
-    max_depth_entry.pack(pady=10)
+    algo_entry = customtkinter.CTkEntry(lotn_window)
+    algo_entry.pack(pady=10)
+    algo_entry.insert(0, algorithm)
+    algo_entry.pack(pady=10)     
 
-    random_state_entry = customtkinter.CTkEntry(decision_tree_window)
-    random_state_entry.pack(pady=10)
-    random_state_entry.insert(0, random_state)
-    random_state_entry.pack(pady=10)
+    leaf_label = customtkinter.CTkLabel(lotn_window, text="Leaf Size: integers only")
+    leaf_label.pack()
 
-    add_to_queue_button = customtkinter.CTkButton(decision_tree_window, text="Add Model to Queue", command=retrieve_data)
+    leaf_entry = customtkinter.CTkEntry(lotn_window)
+    leaf_entry.pack(pady=10)
+    leaf_entry.insert(0, leaf_size)
+    leaf_entry.pack(pady=10)
+
+    power_label = customtkinter.CTkLabel(lotn_window, text="Power: intergers only")
+    power_label.pack()
+
+    power_entry = customtkinter.CTkEntry(lotn_window)
+    power_entry.pack(pady=10)
+    power_entry.insert(0, p)
+    power_entry.pack(pady=10)
+
+    metric_label = customtkinter.CTkLabel(lotn_window, text="Distance Metric: euclidean, manhattan, chebyshev, minkowski")
+    metric_label.pack()
+
+    metric_entry = customtkinter.CTkEntry(lotn_window)
+    metric_entry.pack(pady=10)
+    metric_entry.insert(0, metric)
+    metric_entry.pack(pady=10)    
+
+    add_to_queue_button = customtkinter.CTkButton(lotn_window, text="Add Model to Queue", command=retrieve_data)
     add_to_queue_button.pack(pady=20)
     
 
+# Local Outlier Factor - Outlier Detection
+def open_lof_out_window():
+    n_neighbors = 20
+    algorithm = 'auto'
+    leaf_size = 30
+    metric = 'minkowski'    
+    p = 2    
+
+    def retrieve_data():
+        nn = nn_entry.get()
+        algo = algo_entry.get()
+        leaf = leaf_entry.get()
+        power = power_entry.get()
+        met = metric_entry.get()
+        
+        nn_list = parse_text_entry(nn,'int')
+        algo_list = parse_text_entry(algo,'string')
+        leaf_list = parse_text_entry(leaf,'int')
+        power_list = parse_text_entry(power,'int')
+        metric_list = parse_text_entry(met,'string')
+        
+
+        name = "LOT Outlier Detection"
+        lot = pipeBuild_LocalOutlierFactor(n_neighbors=nn_list,algorithm=algo_list,leaf_size=leaf_list,p=power_list,metric=metric_list,novelty=[False])
+        add_to_detect_queue(name,lot)
+        print("Lot Outlier Detection Model Created")
+
+    lot_window = customtkinter.CTkToplevel()
+    lot_window.title("LOT Outlier Detection Pipe Builder")
+    lot_window.geometry("500x550")
+    lot_window.attributes('-topmost', True)
+
+    nn_label = customtkinter.CTkLabel(lot_window, text="Number of Neighbors: integers only")
+    nn_label.pack()
+
+    nn_entry = customtkinter.CTkEntry(lot_window)
+    nn_entry.pack(pady=10)
+    nn_entry.insert(0, n_neighbors)
+    nn_entry.pack(pady=10)
+
+    algo_label = customtkinter.CTkLabel(lot_window, text="Algorithm: auto, ball_tree, kd_tree, brute")
+    algo_label.pack()
+
+    algo_entry = customtkinter.CTkEntry(lot_window)
+    algo_entry.pack(pady=10)
+    algo_entry.insert(0, algorithm)
+    algo_entry.pack(pady=10)     
+
+    leaf_label = customtkinter.CTkLabel(lot_window, text="Leaf Size: integers only")
+    leaf_label.pack()
+
+    leaf_entry = customtkinter.CTkEntry(lot_window)
+    leaf_entry.pack(pady=10)
+    leaf_entry.insert(0, leaf_size)
+    leaf_entry.pack(pady=10)
+
+    power_label = customtkinter.CTkLabel(lot_window, text="Power: intergers only")
+    power_label.pack()
+
+    power_entry = customtkinter.CTkEntry(lot_window)
+    power_entry.pack(pady=10)
+    power_entry.insert(0, p)
+    power_entry.pack(pady=10)
+
+    metric_label = customtkinter.CTkLabel(lot_window, text="Distance Metric: euclidean, manhattan, chebyshev, minkowski")
+    metric_label.pack()
+
+    metric_entry = customtkinter.CTkEntry(lot_window)
+    metric_entry.pack(pady=10)
+    metric_entry.insert(0, metric)
+    metric_entry.pack(pady=10)    
+
+    add_to_queue_button = customtkinter.CTkButton(lot_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=20)

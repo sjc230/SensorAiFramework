@@ -269,7 +269,7 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
           save_model(model=best_model,filename=best_name)
           create_model_yaml(yaml_name=yaml_name,
                             model_name='Best_' + model_name + '.pkl',
-                            model_path=str(directory_path),
+                            model_path=str(current_directory / directory_path),
                             model_type='detection',
                             n_inputs=n_inputs,
                             n_outputs=n_classes)

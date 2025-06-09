@@ -465,28 +465,44 @@ clust_gridsearch_button.grid(row=9,column=4,padx=10, pady=10)
 #############################################################
 
 # Novelty Detection
-lof_nov_button= customtkinter.CTkButton(tab_nov, text="local outlier factor", command=open_decision_tree_window)
+lof_nov_button= customtkinter.CTkButton(tab_nov, text="local outlier factor", command=open_lof_nov_window)
 lof_nov_button.pack(padx=10, pady=10)
 
 # Outlier Detection
-lof_out_button = customtkinter.CTkButton(tab_out, text="local outlier factor", command=open_decision_tree_window)
+lof_out_button = customtkinter.CTkButton(tab_out, text="local outlier factor", command=open_lof_out_window)
 lof_out_button.pack(padx=10, pady=10)
 
-iso_forest_button = customtkinter.CTkButton(tab_out, text="isolation forest", command=open_decision_tree_window)
+iso_forest_button = customtkinter.CTkButton(tab_out, text="isolation forest", command=open_lof_nov_window)
 iso_forest_button.pack(padx=10, pady=10)
 
-# Function Buttons
-reset_detect_queue_button = customtkinter.CTkButton(tab_4, text="reset queue", command=reset_detect_queue,
+# Function Buttons - Novelty
+reset_detect_queue_button = customtkinter.CTkButton(tab_nov, text="reset novelty", command=lambda: reset_detect_queue(nov=True),
                                                   fg_color='red',
                                                   hover_color='pink')
 reset_detect_queue_button.pack(padx=10, pady=10)
 
-show_detect_queue_button = customtkinter.CTkButton(tab_4, text="show queue", command=show_detect_queue,
+show_detect_queue_button = customtkinter.CTkButton(tab_nov, text="show novelty queue", command=lambda: show_detect_queue(nov=True),
                                                   fg_color='red',
                                                   hover_color='pink')
 show_detect_queue_button.pack(padx=10, pady=10)
 
-detect_gridsearch_button = customtkinter.CTkButton(tab_4, text="run detector gridsearch", command=execute_detect_gridsearch,
+detect_gridsearch_button = customtkinter.CTkButton(tab_nov, text="run novelty gridsearch", command=lambda: execute_detect_gridsearch(nov=True),
+                                                  fg_color='red',
+                                                  hover_color='pink')
+detect_gridsearch_button.pack(padx=10, pady=10)
+
+# Function Buttons - Outlier
+reset_detect_queue_button = customtkinter.CTkButton(tab_out, text="reset outlier queue", command=reset_detect_queue,
+                                                  fg_color='red',
+                                                  hover_color='pink')
+reset_detect_queue_button.pack(padx=10, pady=10)
+
+show_detect_queue_button = customtkinter.CTkButton(tab_out, text="show outlier queue", command=show_detect_queue,
+                                                  fg_color='red',
+                                                  hover_color='pink')
+show_detect_queue_button.pack(padx=10, pady=10)
+
+detect_gridsearch_button = customtkinter.CTkButton(tab_out, text="run outlier gridsearch", command=execute_detect_gridsearch,
                                                   fg_color='red',
                                                   hover_color='pink')
 detect_gridsearch_button.pack(padx=10, pady=10)

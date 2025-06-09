@@ -437,7 +437,7 @@ def open_radiusnn_window():
     leaf_entry.insert(0, leaf_size)
     leaf_entry.pack(pady=10)
 
-    power_label = customtkinter.CTkLabel(radiusnn_window, text="Weight: uniform, distance")
+    power_label = customtkinter.CTkLabel(radiusnn_window, text="Power: integers only")
     power_label.pack()
 
     power_entry = customtkinter.CTkEntry(radiusnn_window)

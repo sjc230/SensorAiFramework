@@ -1,7 +1,7 @@
 labeled_data: true
 seperate_labels: false
-test_train_split: true
-split_value: '0.25'
+test_train_split: false
+split_value: ''
 current_data_file: C:/Users/steph/OneDrive/Documents/GitHub/SensorAiFramework/data/demo_data.npy
 current_label_file: ''
 current_log_file: ''
