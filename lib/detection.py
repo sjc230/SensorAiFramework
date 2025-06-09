@@ -29,7 +29,8 @@ import plotly.graph_objects as go
 import plotly.express as px
 from utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model, create_model_yaml
 
-#from anomaly_detection import sst_class as sst
+import warnings
+warnings.filterwarnings("ignore", category=Warning, module="", lineno=0, append=False)
 
 current_directory = Path.cwd()
 
