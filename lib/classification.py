@@ -43,6 +43,8 @@ from utils import plot_confusion_matrix, get_timestamp_string, create_directory,
 import warnings
 warnings.filterwarnings("ignore", category=Warning, module="", lineno=0, append=False)
 
+current_directory = Path.cwd()
+
 #import load_data as ld
 
 algo_list = ['decision tree','random forest','knn','gaussian','adaboost','gaussian nb','qda','svc','mlp','nusvc','bagging','extra trees','gradient boost','histogram gradient boost','bernoulli nb','nearest centroid','passive agressive','lda','sgd','radius nn','non-myopic early','time series knn','time series svc']
@@ -3705,7 +3707,7 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
           save_model(model=best_model,filename=best_name)
           create_model_yaml(yaml_name=yaml_name,
                             model_name='Best_' + model_name + '.pkl',
-                            model_path=str(directory_path),
+                            model_path=str(current_directory / directory_path),
                             model_type='classification',
                             n_inputs=n_inputs,
                             n_outputs=n_classes)

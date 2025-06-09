@@ -33,6 +33,8 @@ from sklearn.metrics import PredictionErrorDisplay
 import utils as utils
 from utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model, create_model_yaml
 
+current_directory = Path.cwd()
+
 #import load_data as ld
 
 algo_list = ['svr','nusvr','linear svr','ridge','ridge cv','linear regression','sgd','ard','bayesian ridge','passive aggressive','gamma','poisson','tweedie','huber','quantile','ranscar','thielsen','elasticnet','elasticnet cv','multitask elastic net','multitask elastic net cv','lars','lasso','lasso cv','lasso lars','lasso lars cv','lasso lars ic','orthogonal matching pursuit','orthogonal matching pursuit cv','ts knn','ts svr','mlpregressor']
@@ -697,7 +699,7 @@ def gridsearch_regressor(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_
           save_model(model=best_model,filename=best_name)
           create_model_yaml(yaml_name=yaml_name,
                             model_name='Best_' + model_name + '.pkl',
-                            model_path=str(directory_path),
+                            model_path=str(current_directory / directory_path),
                             model_type='regression',
                             n_inputs=n_inputs,
                             n_outputs=n_classes)

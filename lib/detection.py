@@ -31,6 +31,8 @@ from utils import plot_confusion_matrix, get_timestamp_string, create_directory,
 
 #from anomaly_detection import sst_class as sst
 
+current_directory = Path.cwd()
+
 #import tutorials_old.load_data as ld
 
 algo_list = ['one class svm','sgd one class svm','sst','lof novelty','lof outlier','elliptic envelope','isolation forest']
@@ -191,7 +193,7 @@ def gridsearch_outlier_old(names,pipes,X,y,scoring='neg_mean_squared_error',plot
           save_model(model=best_model,filename=best_name)
           create_model_yaml(yaml_name=yaml_name,
                             model_name='Best_' + model_name + '.pkl',
-                            model_path=str(directory_path),
+                            model_path=str(current_directory / directory_path),
                             model_type='detection',
                             n_inputs=n_inputs,
                             n_outputs=n_classes)

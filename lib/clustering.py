@@ -26,6 +26,8 @@ from sklearn.metrics import ConfusionMatrixDisplay, classification_report, RocCu
 from tslearn.clustering import KernelKMeans, KShape, TimeSeriesKMeans
 from utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model, create_model_yaml
 
+current_directory = Path.cwd()
+
 #import load_data as ld
 
 algo_list = ['k means','kernel k means','ts k means','k shape','affinity propagation','mini batch k means','bisecting k means']
@@ -1711,7 +1713,7 @@ def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all'
           save_model(model=best_model,filename=best_name)
           create_model_yaml(yaml_name=yaml_name,
                             model_name='Best_' + model_name + '.pkl',
-                            model_path=str(directory_path),
+                            model_path=str(current_directory / directory_path),
                             model_type='clustering',
                             n_inputs=n_inputs,
                             n_outputs=n_classes)
