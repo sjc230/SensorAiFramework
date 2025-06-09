@@ -176,13 +176,13 @@ def gridsearch_outlier_out(names,pipes,X,y,scoring='neg_mean_squared_error',plot
         print("Best parameter (CV score=%0.3f):" % grid_search.best_score_)
         print(grid_search.best_params_)
         #ConfusionMatrixDisplay.from_estimator(grid_search, X, y, xticks_rotation="vertical")
-        labels = grid_search.best_estimator_.predict(X)
+        #labels = grid_search.best_estimator_.predict(X)
         #print("Best Model Labels: ",labels)
-        noise = np.isin(labels, -1)
-        if np.any(noise)==True:
-            labels = np.where(labels == 1, 0, labels)
-            labels = np.where(labels == -1, 1, labels)
-        plot_confusion_matrix(y,labels,classes,f"{names[j]} Confusion Matrix")
+        #noise = np.isin(labels, -1)
+        #if np.any(noise)==True:
+        #    labels = np.where(labels == 1, 0, labels)
+        #    labels = np.where(labels == -1, 1, labels)
+        #plot_confusion_matrix(y,labels,classes,f"{names[j]} Confusion Matrix")
 
         if save_best == True:
           best_model = grid_search.best_estimator_
@@ -197,7 +197,7 @@ def gridsearch_outlier_out(names,pipes,X,y,scoring='neg_mean_squared_error',plot
                             model_type='detection',
                             n_inputs=n_inputs,
                             n_outputs=n_classes)
-                   
+        """           
         #n_classes = int(np.amax(y)+1) 
         x_axis = np.arange(len(X[0]))
         j = 0
@@ -229,6 +229,7 @@ def gridsearch_outlier_out(names,pipes,X,y,scoring='neg_mean_squared_error',plot
         else:
             print("Incorrect plot number value entered")
         fig.show()
+        #"""
     return
 
 # NOVELTY UNSUPERVISED
