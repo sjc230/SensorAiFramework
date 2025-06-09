@@ -236,77 +236,46 @@ def open_lof_out_window():
     add_to_queue_button = customtkinter.CTkButton(lot_window, text="Add Model to Queue", command=retrieve_data)
     add_to_queue_button.pack(pady=20)
 
-# Local Outlier Factor - Outlier Detection
-def open_lof_out_window():
-    n_neighbors = 20
-    algorithm = 'auto'
-    leaf_size = 30
-    metric = 'minkowski'    
-    p = 2    
+# Isolation Forest - Outlier Detection
+def open_iso_window():
+    n_estimators = 100
+    max_samples = 'None'
 
     def retrieve_data():
-        nn = nn_entry.get()
-        algo = algo_entry.get()
-        leaf = leaf_entry.get()
-        power = power_entry.get()
-        met = metric_entry.get()
-        
-        nn_list = parse_text_entry(nn,'int')
-        algo_list = parse_text_entry(algo,'string')
-        leaf_list = parse_text_entry(leaf,'int')
-        power_list = parse_text_entry(power,'int')
-        metric_list = parse_text_entry(met,'string')
-        
+        n_estimators = n_estimators_entry.get()
+        max_s = max_samples_entry.get()
 
-        name = "LOT Outlier Detection"
-        lot = pipeBuild_LocalOutlierFactor(n_neighbors=nn_list,algorithm=algo_list,leaf_size=leaf_list,p=power_list,metric=metric_list,novelty=[False])
-        add_to_detect_queue(name,lot)
-        print("Lot Outlier Detection Model Created")
+        n_estimators_list = parse_text_entry(n_estimators,'int')
+        max_samples_list = parse_text_entry(max_s,'float')
 
-    lot_window = customtkinter.CTkToplevel()
-    lot_window.title("LOT Outlier Detection Pipe Builder")
-    lot_window.geometry("500x550")
-    lot_window.attributes('-topmost', True)
+        max_samples_list = ['auto' if item is None else item for item in max_samples_list]
 
-    nn_label = customtkinter.CTkLabel(lot_window, text="Number of Neighbors: integers only")
-    nn_label.pack()
+        name = "Isolation Forest"
+        iso_forest = pipeBuild_IsolationForest(n_estimators=n_estimators_list,max_samples=max_samples_list)
+        add_to_detect_queue(name,iso_forest)
+        print("Isolation Forest Model Created")
 
-    nn_entry = customtkinter.CTkEntry(lot_window)
-    nn_entry.pack(pady=10)
-    nn_entry.insert(0, n_neighbors)
-    nn_entry.pack(pady=10)
+    
+    iso_forest_window = customtkinter.CTkToplevel()
+    iso_forest_window.title("Isolation Forest Pipe Builder")
+    iso_forest_window.geometry("500x500")
+    iso_forest_window.attributes('-topmost', True)
 
-    algo_label = customtkinter.CTkLabel(lot_window, text="Algorithm: auto, ball_tree, kd_tree, brute")
-    algo_label.pack()
+    n_estimators_label = customtkinter.CTkLabel(iso_forest_window, text="Number of Estimators: integers")
+    n_estimators_label.pack() 
 
-    algo_entry = customtkinter.CTkEntry(lot_window)
-    algo_entry.pack(pady=10)
-    algo_entry.insert(0, algorithm)
-    algo_entry.pack(pady=10)     
+    n_estimators_entry = customtkinter.CTkEntry(iso_forest_window)
+    n_estimators_entry.pack(pady=10)
+    n_estimators_entry.insert(0, n_estimators)
+    n_estimators_entry.pack(pady=10)
 
-    leaf_label = customtkinter.CTkLabel(lot_window, text="Leaf Size: integers only")
-    leaf_label.pack()
+    max_samples_label = customtkinter.CTkLabel(iso_forest_window, text="Maximum Samples: None or floats")
+    max_samples_label.pack()
 
-    leaf_entry = customtkinter.CTkEntry(lot_window)
-    leaf_entry.pack(pady=10)
-    leaf_entry.insert(0, leaf_size)
-    leaf_entry.pack(pady=10)
-
-    power_label = customtkinter.CTkLabel(lot_window, text="Power: intergers only")
-    power_label.pack()
-
-    power_entry = customtkinter.CTkEntry(lot_window)
-    power_entry.pack(pady=10)
-    power_entry.insert(0, p)
-    power_entry.pack(pady=10)
-
-    metric_label = customtkinter.CTkLabel(lot_window, text="Distance Metric: euclidean, manhattan, chebyshev, minkowski")
-    metric_label.pack()
-
-    metric_entry = customtkinter.CTkEntry(lot_window)
-    metric_entry.pack(pady=10)
-    metric_entry.insert(0, metric)
-    metric_entry.pack(pady=10)    
-
-    add_to_queue_button = customtkinter.CTkButton(lot_window, text="Add Model to Queue", command=retrieve_data)
+    max_samples_entry = customtkinter.CTkEntry(iso_forest_window)
+    max_samples_entry.pack(pady=10)
+    max_samples_entry.insert(0, max_samples)
+    max_samples_entry.pack(pady=10)
+    
+    add_to_queue_button = customtkinter.CTkButton(iso_forest_window, text="Add Model to Queue", command=retrieve_data)
     add_to_queue_button.pack(pady=20)

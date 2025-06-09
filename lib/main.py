@@ -472,7 +472,7 @@ lof_nov_button.pack(padx=10, pady=10)
 lof_out_button = customtkinter.CTkButton(tab_out, text="local outlier factor", command=open_lof_out_window)
 lof_out_button.pack(padx=10, pady=10)
 
-iso_forest_button = customtkinter.CTkButton(tab_out, text="isolation forest", command=open_lof_nov_window)
+iso_forest_button = customtkinter.CTkButton(tab_out, text="isolation forest", command=open_iso_window)
 iso_forest_button.pack(padx=10, pady=10)
 
 # Function Buttons - Novelty
