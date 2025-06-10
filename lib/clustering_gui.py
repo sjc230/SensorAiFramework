@@ -366,7 +366,7 @@ def open_mean_shift_window():
     cluster_all_entry.insert(0, cluster_all)
     cluster_all_entry.pack(pady=10)
 
-    max_iter_label = customtkinter.CTkLabel(mean_shift_window, text="Distance Metric: euclidean, manhattan, chebyshev, minkowski")
+    max_iter_label = customtkinter.CTkLabel(mean_shift_window, text="Max Iterations: integers")
     max_iter_label.pack()
     
     max_iter_entry = customtkinter.CTkEntry(mean_shift_window)
@@ -444,7 +444,7 @@ def open_kmeans_window():
     n_init_entry.pack(pady=5)
 
 
-    max_iter_label = customtkinter.CTkLabel(kmeans_window, text="Distance Metric: euclidean, manhattan, chebyshev, minkowski")
+    max_iter_label = customtkinter.CTkLabel(kmeans_window, text="Max Iterations: integers")
     max_iter_label.pack(pady=5)
     
     max_iter_entry = customtkinter.CTkEntry(kmeans_window)
@@ -549,7 +549,7 @@ def open_bi_kmeans_window():
     n_init_entry.pack(pady=5)
 
 
-    max_iter_label = customtkinter.CTkLabel(bikmeans_window, text="Distance Metric: euclidean, manhattan, chebyshev, minkowski")
+    max_iter_label = customtkinter.CTkLabel(bikmeans_window, text="Max Iterations: integers")
     max_iter_label.pack(pady=5)
     
     max_iter_entry = customtkinter.CTkEntry(bikmeans_window)
@@ -597,8 +597,8 @@ def open_mini_kmeans_window():
     n_clusters = 8
     init = 'k-means++'
     n_init = 10    
-    max_iter = 300
-    tol = 0.0001
+    max_iter = 100
+    tol = 0.0
     batch_size = 1024
     random_state = 'None'
 
@@ -659,7 +659,7 @@ def open_mini_kmeans_window():
     n_init_entry.pack(pady=5)
 
 
-    max_iter_label = customtkinter.CTkLabel(mini_kmeans_window, text="Distance Metric: euclidean, manhattan, chebyshev, minkowski")
+    max_iter_label = customtkinter.CTkLabel(mini_kmeans_window, text="Max Iterations: integers")
     max_iter_label.pack(pady=5)
     
     max_iter_entry = customtkinter.CTkEntry(mini_kmeans_window)
@@ -692,4 +692,182 @@ def open_mini_kmeans_window():
     random_state_entry.pack(pady=10)
 
     add_to_queue_button = customtkinter.CTkButton(mini_kmeans_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=5)
+
+
+# Time Series K Means Window
+def open_ts_kmeans_window():
+    n_clusters = 8
+    init = 'k-means++'
+    n_init = 10    
+    max_iter = 50
+    tol = 0.000001
+    metric = 'dtw'
+    random_state = 'None'
+
+    def retrieve_data():
+        nc = n_clusters_entry.get()
+        i = init_entry.get()
+        ni = n_init_entry.get()
+        mi = max_iter_entry.get()
+        t = tol_entry.get()
+        m = metric_entry.get()
+        rs = random_state_entry.get()
+
+        ni = ni.replace('auto', 'None') if 'auto' in ni else ni
+
+        n_clusters_list = parse_text_entry(nc,'int')
+        init_list = parse_text_entry(i,'string')
+        n_init_list = parse_text_entry(ni,'int')
+        max_iter_list = parse_text_entry(mi,'int')
+        tol_list = parse_text_entry(t,'float')
+        metric_list = parse_text_entry(m,'string')
+        rand_state_list = parse_text_entry(rs,'int')
+
+        n_init_list = ['auto' if item is None else item for item in n_init_list]
+        
+        name = "Time Series K Means"
+        tskmeans = pipeBuild_TimeSeriesKMeans(n_clusters=n_clusters_list,init=init_list, n_init=n_init_list,max_iter=max_iter_list,tol=tol_list,
+                     random_state=rand_state_list[0],metric=metric_list)
+        add_to_clust_queue(name,tskmeans)
+        print("Time Series K Means Model Created")
+
+    ts_kmeans_window = customtkinter.CTkToplevel()
+    ts_kmeans_window.title("Time Series K Means Pipe Builder")
+    ts_kmeans_window.geometry("500x650")
+    ts_kmeans_window.attributes('-topmost', True)
+
+    n_clusters_label = customtkinter.CTkLabel(ts_kmeans_window, text="Number of Clusters: integers")
+    n_clusters_label.pack(pady=5)
+
+    n_clusters_entry = customtkinter.CTkEntry(ts_kmeans_window)
+    n_clusters_entry.pack(pady=5)
+    n_clusters_entry.insert(0, n_clusters)
+    n_clusters_entry.pack(pady=5)
+
+    init_label = customtkinter.CTkLabel(ts_kmeans_window, text="Initial Cluster Centroids: k-means++ , random")
+    init_label.pack(pady=5)
+
+    init_entry = customtkinter.CTkEntry(ts_kmeans_window)
+    init_entry.pack(pady=5)
+    init_entry.insert(0, init)
+    init_entry.pack(pady=5)
+
+    n_init_label = customtkinter.CTkLabel(ts_kmeans_window, text="Number of Initializations: auto or integers")
+    n_init_label.pack(pady=5)
+
+    n_init_entry = customtkinter.CTkEntry(ts_kmeans_window)
+    n_init_entry.pack(pady=5)
+    n_init_entry.insert(0, n_init)
+    n_init_entry.pack(pady=5)
+
+
+    max_iter_label = customtkinter.CTkLabel(ts_kmeans_window, text="Max Iterations: integers")
+    max_iter_label.pack(pady=5)
+    
+    max_iter_entry = customtkinter.CTkEntry(ts_kmeans_window)
+    max_iter_entry.pack(pady=5)
+    max_iter_entry.insert(0, max_iter)
+    max_iter_entry.pack(pady=5)
+
+    tol_label = customtkinter.CTkLabel(ts_kmeans_window, text="Tolerance: floats only")
+    tol_label.pack(pady=5)
+
+    tol_entry = customtkinter.CTkEntry(ts_kmeans_window)
+    tol_entry.pack(pady=5)
+    tol_entry.insert(0, tol)
+    tol_entry.pack(pady=5)
+
+    metric_label = customtkinter.CTkLabel(ts_kmeans_window, text="Distance Metric: euclidean, dtw, softdtw")
+    metric_label.pack()
+
+    metric_entry = customtkinter.CTkEntry(ts_kmeans_window)
+    metric_entry.pack(pady=10)
+    metric_entry.insert(0, metric)
+    metric_entry.pack(pady=10)
+
+    random_label = customtkinter.CTkLabel(ts_kmeans_window, text="Random State: None or a single integer")
+    random_label.pack(pady=5)
+
+    random_state_entry = customtkinter.CTkEntry(ts_kmeans_window)
+    random_state_entry.pack(pady=10)
+    random_state_entry.insert(0, random_state)
+    random_state_entry.pack(pady=10)
+
+    add_to_queue_button = customtkinter.CTkButton(ts_kmeans_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=5)
+
+# K Shape Window
+def open_kshape_window():
+    n_clusters = 3
+    n_init = 1   
+    max_iter = 100
+    tol = 0.000001
+    random_state = 'None'
+
+    def retrieve_data():
+        nc = n_clusters_entry.get()
+        ni = n_init_entry.get()
+        mi = max_iter_entry.get()
+        t = tol_entry.get()
+        rs = random_state_entry.get()
+
+        n_clusters_list = parse_text_entry(nc,'int')
+        n_init_list = parse_text_entry(ni,'int')
+        max_iter_list = parse_text_entry(mi,'int')
+        tol_list = parse_text_entry(t,'float')
+        rand_state_list = parse_text_entry(rs,'int')
+        
+        name = "K Shape"
+        kshape = pipeBuild_KShape(n_clusters=n_clusters_list, max_iter=max_iter_list, tol=tol_list, n_init=n_init_list, 
+                     random_state=rand_state_list[0])
+        add_to_clust_queue(name,kshape)
+        print("K Shape Model Created")
+
+    kshape_window = customtkinter.CTkToplevel()
+    kshape_window.title("K Shape Pipe Builder")
+    kshape_window.geometry("500x650")
+    kshape_window.attributes('-topmost', True)
+
+    n_clusters_label = customtkinter.CTkLabel(kshape_window, text="Number of Clusters: integers")
+    n_clusters_label.pack(pady=5)
+
+    n_clusters_entry = customtkinter.CTkEntry(kshape_window)
+    n_clusters_entry.pack(pady=5)
+    n_clusters_entry.insert(0, n_clusters)
+    n_clusters_entry.pack(pady=5)
+
+    n_init_label = customtkinter.CTkLabel(kshape_window, text="Number of Initializations: integers")
+    n_init_label.pack(pady=5)
+
+    n_init_entry = customtkinter.CTkEntry(kshape_window)
+    n_init_entry.pack(pady=5)
+    n_init_entry.insert(0, n_init)
+    n_init_entry.pack(pady=5)
+
+    max_iter_label = customtkinter.CTkLabel(kshape_window, text="Max Iteration: integers")
+    max_iter_label.pack(pady=5)
+    
+    max_iter_entry = customtkinter.CTkEntry(kshape_window)
+    max_iter_entry.pack(pady=5)
+    max_iter_entry.insert(0, max_iter)
+    max_iter_entry.pack(pady=5)
+
+    tol_label = customtkinter.CTkLabel(kshape_window, text="Tolerance: floats only")
+    tol_label.pack(pady=5)
+
+    tol_entry = customtkinter.CTkEntry(kshape_window)
+    tol_entry.pack(pady=5)
+    tol_entry.insert(0, tol)
+    tol_entry.pack(pady=5)
+
+    random_label = customtkinter.CTkLabel(kshape_window, text="Random State: None or a single integer")
+    random_label.pack(pady=5)
+
+    random_state_entry = customtkinter.CTkEntry(kshape_window)
+    random_state_entry.pack(pady=10)
+    random_state_entry.insert(0, random_state)
+    random_state_entry.pack(pady=10)
+
+    add_to_queue_button = customtkinter.CTkButton(kshape_window, text="Add Model to Queue", command=retrieve_data)
     add_to_queue_button.pack(pady=5)

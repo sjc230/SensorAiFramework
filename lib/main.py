@@ -445,8 +445,11 @@ bi_kmeans_button.grid(row=1,column=2,padx=10, pady=10)
 mini_kmeans_button = customtkinter.CTkButton(tab_3, text="mini-batch k means", command=open_mini_kmeans_window)
 mini_kmeans_button.grid(row=2,column=2,padx=10, pady=10)
 
-ts_kmeans_button = customtkinter.CTkButton(tab_3, text="time series k means", command=open_decision_tree_window)
+ts_kmeans_button = customtkinter.CTkButton(tab_3, text="time series k means", command=open_ts_kmeans_window)
 ts_kmeans_button.grid(row=3,column=2,padx=10, pady=10)
+
+kshape_button = customtkinter.CTkButton(tab_3, text="k shape", command=open_kshape_window)
+kshape_button.grid(row=4,column=2,padx=10, pady=10)
 
 # Spectral based algorithms
 spectral_button= customtkinter.CTkButton(tab_3, text="spectral clustering", command=open_decision_tree_window)
