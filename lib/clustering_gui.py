@@ -325,8 +325,8 @@ def open_mean_shift_window():
         max_iter_list = parse_text_entry(mi,'int')
         
         name = "Mean Shift"
-        optics = pipeBuild_MeanShift(bandwidth=bandwidth_list, bin_seeding=bin_list, min_bin_freq=min_freq_list, cluster_all=cluster_list, max_iter=max_iter_list)
-        add_to_clust_queue(name,optics)
+        mshift = pipeBuild_MeanShift(bandwidth=bandwidth_list, bin_seeding=bin_list, min_bin_freq=min_freq_list, cluster_all=cluster_list, max_iter=max_iter_list)
+        add_to_clust_queue(name,mshift)
         print("Mean Shift Model Created")
 
     mean_shift_window = customtkinter.CTkToplevel()
@@ -376,3 +376,105 @@ def open_mean_shift_window():
 
     add_to_queue_button = customtkinter.CTkButton(mean_shift_window, text="Add Model to Queue", command=retrieve_data)
     add_to_queue_button.pack(pady=10)
+
+# K Means Window
+def open_kmeans_window():
+    n_clusters = 8
+    init = 'k-means++'
+    n_init = 10    
+    max_iter = 300
+    tol = 0.0001
+    algorithm = 'lloyd'
+    random_state = 'None'
+
+    def retrieve_data():
+        nc = n_clusters_entry.get()
+        i = init_entry.get()
+        ni = n_init_entry.get()
+        mi = max_iter_entry.get()
+        t = tol_entry.get()
+        a = algo_entry.get()
+        rs = random_state_entry.get()
+
+        ni = ni.replace('auto', 'None') if 'auto' in ni else ni
+
+        n_clusters_list = parse_text_entry(nc,'int')
+        init_list = parse_text_entry(i,'int')
+        n_init_list = parse_text_entry(ni,'int')
+        max_iter_list = parse_text_entry(mi,'int')
+        tol_list = parse_text_entry(t,'float')
+        algo_list = parse_text_entry(a,'string')
+        rand_state_list = parse_text_entry(rs,'int')
+
+        n_init_list = ['auto' if item is None else item for item in n_init_list]
+        
+        name = "K Means"
+        kmeans = pipeBuild_KMeans(n_clusters=n_clusters_list,init=init_list, n_init=n_init_list,max_iter=max_iter_list,tol=tol_list,
+                     random_state=rand_state_list[0],algorithm=algo_list)
+        add_to_clust_queue(name,kmeans)
+        print("K Means Model Created")
+
+    kmeans_window = customtkinter.CTkToplevel()
+    kmeans_window.title("K Means Pipe Builder")
+    kmeans_window.geometry("500x650")
+    kmeans_window.attributes('-topmost', True)
+
+    n_clusters_label = customtkinter.CTkLabel(kmeans_window, text="Number of Clusters: integers")
+    n_clusters_label.pack(pady=5)
+
+    n_clusters_entry = customtkinter.CTkEntry(kmeans_window)
+    n_clusters_entry.pack(pady=5)
+    n_clusters_entry.insert(0, n_clusters)
+    n_clusters_entry.pack(pady=5)
+
+    init_label = customtkinter.CTkLabel(kmeans_window, text="Initial Cluster Centroids: k-means++ , random")
+    init_label.pack(pady=5)
+
+    init_entry = customtkinter.CTkEntry(kmeans_window)
+    init_entry.pack(pady=5)
+    init_entry.insert(0, init)
+    init_entry.pack(pady=5)
+
+    n_init_label = customtkinter.CTkLabel(kmeans_window, text="Number of Initializations: auto or integers")
+    n_init_label.pack(pady=5)
+
+    n_init_entry = customtkinter.CTkEntry(kmeans_window)
+    n_init_entry.pack(pady=5)
+    n_init_entry.insert(0, n_init)
+    n_init_entry.pack(pady=5)
+
+
+    max_iter_label = customtkinter.CTkLabel(kmeans_window, text="Distance Metric: euclidean, manhattan, chebyshev, minkowski")
+    max_iter_label.pack(pady=5)
+    
+    max_iter_entry = customtkinter.CTkEntry(kmeans_window)
+    max_iter_entry.pack(pady=5)
+    max_iter_entry.insert(0, max_iter)
+    max_iter_entry.pack(pady=5)
+
+    tol_label = customtkinter.CTkLabel(kmeans_window, text="Tolerance: floats only")
+    tol_label.pack(pady=5)
+
+    tol_entry = customtkinter.CTkEntry(kmeans_window)
+    tol_entry.pack(pady=5)
+    tol_entry.insert(0, tol)
+    tol_entry.pack(pady=5)
+
+    algo_label = customtkinter.CTkLabel(kmeans_window, text="Algorithm: auto, lloyd, elkan, full")
+    algo_label.pack(pady=5)
+
+    algo_entry = customtkinter.CTkEntry(kmeans_window)
+    algo_entry.pack(pady=5)
+    algo_entry.insert(0, algorithm)
+    algo_entry.pack(pady=5)
+
+    random_label = customtkinter.CTkLabel(kmeans_window, text="Random State: None or a single integer")
+    random_label.pack(pady=5)
+
+    random_state_entry = customtkinter.CTkEntry(kmeans_window)
+    random_state_entry.pack(pady=5)
+    random_state_entry.insert(0, random_state)
+    random_state_entry.pack(pady=5)
+
+    add_to_queue_button = customtkinter.CTkButton(kmeans_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=5)
