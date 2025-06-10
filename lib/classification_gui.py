@@ -350,8 +350,8 @@ def open_nearest_centroid_window():
     nc_window.geometry("500x500")
     nc_window.attributes('-topmost', True)
 
-    nn_label = customtkinter.CTkLabel(nc_window, text="Distance Metric: euclidean, manhattan, chebyshev, minkowski")
-    nn_label.pack()
+    metric_label = customtkinter.CTkLabel(nc_window, text="Distance Metric: euclidean, manhattan, chebyshev, minkowski")
+    metric_label.pack()
 
     metric_entry = customtkinter.CTkEntry(nc_window)
     metric_entry.pack(pady=10)

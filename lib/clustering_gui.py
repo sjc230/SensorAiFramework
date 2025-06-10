@@ -40,58 +40,265 @@ def execute_clust_gridsearch():
 
     X_train, y_train, X_test, y_test = load_gui_data()
 
-    gridsearch_clustering(names=clust_queue_names,pipes=clust_queue_models,
-                              X=X_test,y=y_test,
-                              plot_number=3,save_best=True)
+    gridsearch_clustering(names=clust_queue_names,pipes=clust_queue_models,X=X_test,y=y_test,plot_number=3,save_best=True)
 
-def open_decision_temp_window():
-    criterion = 'gini'
-    splitter = 'best'
-    max_depth = 'None'
+
+# Affinity Propagation Window
+def open_affin_prop_window():
+    dampening = 0.5
+    max_iterations = 200
+    verbose = 'False'
     random_state = 'None'
 
+
     def retrieve_data():
-        crit = criterion_entry.get()
-        split = splitter_entry.get()
-        max_d = max_depth_entry.get()
+        damp = dampening_entry.get()
+        max_it = max_it_entry.get()
+        verb = verbose_entry.get()
         rand_st = random_state_entry.get()
 
-        criterion_list = parse_text_entry(crit,'string')
-        splitter_list = parse_text_entry(split,'string')
-        max_depth_list = parse_text_entry(max_d,'int')
+        damenping_list = parse_text_entry(damp,'float')
+        max_it_list = parse_text_entry(max_it,'int')
+        verbose_list = parse_text_entry(verb,'bool')
         random_state_list = parse_text_entry(rand_st,'int')
 
-        name = "Decision Tree"
-        decision_tree = pipeBuild_DecisionTreeclustifier(criterion=criterion_list,splitter=splitter_list,max_depth=max_depth_list,random_state=random_state_list[0])
-        add_to_clust_queue(name,decision_tree)
-        print("Decision Tree Model Created")
+        name = "Affinity Progagation"
+        aff_prop = pipeBuild_AffinityPropagation(damping=damenping_list, max_iter=max_it_list, verbose=verbose_list, random_state=random_state_list[0])
+        add_to_clust_queue(name,aff_prop)
+        print("Affinity Progagation Model Created")
 
-    decision_tree_window = customtkinter.CTkToplevel()
-    decision_tree_window.title("Decision Tree Pipe Builder")
-    decision_tree_window.geometry("500x400")
-    decision_tree_window.attributes('-topmost', True)
+    affin_prop_window = customtkinter.CTkToplevel()
+    affin_prop_window.title("Decision Tree Pipe Builder")
+    affin_prop_window.geometry("500x500")
+    affin_prop_window.attributes('-topmost', True)
 
-    criterion_entry = customtkinter.CTkEntry(decision_tree_window)
-    criterion_entry.pack(pady=10)
-    criterion_entry.insert(0, criterion)
-    criterion_entry.pack(pady=10)
+    dampening_label = customtkinter.CTkLabel(affin_prop_window, text="Dampening: floats")
+    dampening_label.pack()
 
-    splitter_entry = customtkinter.CTkEntry(decision_tree_window)
-    splitter_entry.pack(pady=10)
-    splitter_entry.insert(0, splitter)
-    splitter_entry.pack(pady=10)
+    dampening_entry = customtkinter.CTkEntry(affin_prop_window)
+    dampening_entry.pack(pady=10)
+    dampening_entry.insert(0, dampening)
+    dampening_entry.pack(pady=10)
 
-    max_depth_entry = customtkinter.CTkEntry(decision_tree_window)
-    max_depth_entry.pack(pady=10)
-    max_depth_entry.insert(0, max_depth)
-    max_depth_entry.pack(pady=10)
+    max_it_label = customtkinter.CTkLabel(affin_prop_window, text="Max Iterations: None integers")
+    max_it_label.pack()
 
-    random_state_entry = customtkinter.CTkEntry(decision_tree_window)
+    max_it_entry = customtkinter.CTkEntry(affin_prop_window)
+    max_it_entry.pack(pady=10)
+    max_it_entry.insert(0, max_iterations)
+    max_it_entry.pack(pady=10)
+
+    verbose_label = customtkinter.CTkLabel(affin_prop_window, text="Verbose: True, False")
+    verbose_label.pack()
+
+    verbose_entry = customtkinter.CTkEntry(affin_prop_window)
+    verbose_entry.pack(pady=10)
+    verbose_entry.insert(0, verbose)
+    verbose_entry.pack(pady=10)
+
+    random_label = customtkinter.CTkLabel(affin_prop_window, text="Random State: None or a single integer")
+    random_label.pack()
+
+    random_state_entry = customtkinter.CTkEntry(affin_prop_window)
     random_state_entry.pack(pady=10)
     random_state_entry.insert(0, random_state)
     random_state_entry.pack(pady=10)
 
-    add_to_queue_button = customtkinter.CTkButton(decision_tree_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button = customtkinter.CTkButton(affin_prop_window, text="Add Model to Queue", command=retrieve_data)
     add_to_queue_button.pack(pady=20)
-    
 
+
+# DBSCAN Window
+def open_dbscan_window():
+    eps = 0.5
+    min_samples = 5
+    metric = 'euclidean'
+    algorithm = 'auto'
+    leaf_size = 30
+    p = 'None'
+
+
+    def retrieve_data():
+        e = eps_entry.get()
+        ms = min_samp_entry.get()
+        m = metric_entry.get()
+        a = algo_entry.get()
+        lf = leaf_entry.get()
+        p = power_entry.get()
+
+        eps_list = parse_text_entry(e,'float')
+        min_samp_list = parse_text_entry(ms,'int')
+        metric_list = parse_text_entry(m,'string')
+        algo_list = parse_text_entry(a,'string')
+        leaf_list = parse_text_entry(lf,'int')
+        power_list = parse_text_entry(p,'float')
+
+        name = "DBSCAN"
+        dbscan = pipeBuild_DBSCAN(eps=eps_list, min_samples=min_samp_list, metric=metric_list, algorithm=algo_list, leaf_size=leaf_list, p=power_list)
+        add_to_clust_queue(name,dbscan)
+        print("DBSCAN Model Created")
+
+    dbscan_window = customtkinter.CTkToplevel()
+    dbscan_window.title("DBSCAN Pipe Builder")
+    dbscan_window.geometry("500x550")
+    dbscan_window.attributes('-topmost', True)
+
+    eps_label = customtkinter.CTkLabel(dbscan_window, text="Eps: floats")
+    eps_label.pack()
+
+    eps_entry = customtkinter.CTkEntry(dbscan_window)
+    eps_entry.pack(pady=10)
+    eps_entry.insert(0, eps)
+    eps_entry.pack(pady=10)
+
+    min_samp_label = customtkinter.CTkLabel(dbscan_window, text="Minimum Samples: integers")
+    min_samp_label.pack()
+
+    min_samp_entry = customtkinter.CTkEntry(dbscan_window)
+    min_samp_entry.pack(pady=10)
+    min_samp_entry.insert(0, min_samples)
+    min_samp_entry.pack(pady=10)
+
+    metric_label = customtkinter.CTkLabel(dbscan_window, text="Distance Metric: euclidean, manhattan, chebyshev, minkowski")
+    metric_label.pack()
+
+    metric_entry = customtkinter.CTkEntry(dbscan_window)
+    metric_entry.pack(pady=10)
+    metric_entry.insert(0, metric)
+    metric_entry.pack(pady=10)      
+
+    algo_label = customtkinter.CTkLabel(dbscan_window, text="Algorithm: auto, ball_tree, kd_tree, brute")
+    algo_label.pack()
+
+    algo_entry = customtkinter.CTkEntry(dbscan_window)
+    algo_entry.pack(pady=10)
+    algo_entry.insert(0, algorithm)
+    algo_entry.pack(pady=10)
+
+    leaf_label = customtkinter.CTkLabel(dbscan_window, text="Leaf Size: integers only")
+    leaf_label.pack()
+
+    leaf_entry = customtkinter.CTkEntry(dbscan_window)
+    leaf_entry.pack(pady=10)
+    leaf_entry.insert(0, leaf_size)
+    leaf_entry.pack(pady=10)
+
+    power_label = customtkinter.CTkLabel(dbscan_window, text="Power: floats only")
+    power_label.pack()
+
+    power_entry = customtkinter.CTkEntry(dbscan_window)
+    power_entry.pack(pady=10)
+    power_entry.insert(0, p)
+    power_entry.pack(pady=10)
+
+    add_to_queue_button = customtkinter.CTkButton(dbscan_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=20)
+
+
+# OPTICS Window
+def open_optics_window():
+    cluster_method = 'xi'
+    xi = 0.05
+    eps = 0.5
+    min_samples = 5
+    metric = 'euclidean'
+    algorithm = 'auto'
+    leaf_size = 30
+    p = 'None'
+
+
+    def retrieve_data():
+        cm = method_entry.get()
+        x = xi_entry.get()
+        e = eps_entry.get()
+        ms = min_samp_entry.get()
+        m = metric_entry.get()
+        a = algo_entry.get()
+        lf = leaf_entry.get()
+        p = power_entry.get()
+
+        method_list = parse_text_entry(cm,'string')
+        xi_list = parse_text_entry(x,'float')
+        eps_list = parse_text_entry(e,'float')
+        min_samp_list = parse_text_entry(ms,'int')
+        metric_list = parse_text_entry(m,'string')
+        algo_list = parse_text_entry(a,'string')
+        leaf_list = parse_text_entry(lf,'int')
+        power_list = parse_text_entry(p,'float')
+
+        name = "OPTICS"
+        optics = pipeBuild_OPTICS(cluster_method=method_list,xi=xi_list,eps=eps_list, min_samples=min_samp_list, metric=metric_list, algorithm=algo_list, leaf_size=leaf_list, p=power_list)
+        add_to_clust_queue(name,optics)
+        print("OPTICS Model Created")
+
+    optics_window = customtkinter.CTkToplevel()
+    optics_window.title("OPTICSN Pipe Builder")
+    optics_window.geometry("500x650")
+    optics_window.attributes('-topmost', True)
+
+    method_label = customtkinter.CTkLabel(optics_window, text="Cluster Method: dbscan, xi")
+    method_label.pack()
+
+    method_entry = customtkinter.CTkEntry(optics_window)
+    method_entry.pack(pady=10)
+    method_entry.insert(0, cluster_method)
+    method_entry.pack(pady=10)
+
+    xi_label = customtkinter.CTkLabel(optics_window, text="Xi: floats between 0 and 1")
+    xi_label.pack()
+
+    xi_entry = customtkinter.CTkEntry(optics_window)
+    xi_entry.pack(pady=10)
+    xi_entry.insert(0, xi)
+    xi_entry.pack(pady=10)
+
+    eps_label = customtkinter.CTkLabel(optics_window, text="Eps: floats")
+    eps_label.pack()
+
+    eps_entry = customtkinter.CTkEntry(optics_window)
+    eps_entry.pack(pady=10)
+    eps_entry.insert(0, eps)
+    eps_entry.pack(pady=10)
+
+    min_samp_label = customtkinter.CTkLabel(optics_window, text="Minimum Samples: integers")
+    min_samp_label.pack()
+
+    min_samp_entry = customtkinter.CTkEntry(optics_window)
+    min_samp_entry.pack(pady=10)
+    min_samp_entry.insert(0, min_samples)
+    min_samp_entry.pack(pady=10)
+
+    metric_label = customtkinter.CTkLabel(optics_window, text="Distance Metric: euclidean, manhattan, chebyshev, minkowski")
+    metric_label.pack()
+
+    metric_entry = customtkinter.CTkEntry(optics_window)
+    metric_entry.pack(pady=10)
+    metric_entry.insert(0, metric)
+    metric_entry.pack(pady=10)      
+
+    algo_label = customtkinter.CTkLabel(optics_window, text="Algorithm: auto, ball_tree, kd_tree, brute")
+    algo_label.pack()
+
+    algo_entry = customtkinter.CTkEntry(optics_window)
+    algo_entry.pack(pady=10)
+    algo_entry.insert(0, algorithm)
+    algo_entry.pack(pady=10)
+
+    leaf_label = customtkinter.CTkLabel(optics_window, text="Leaf Size: integers only")
+    leaf_label.pack()
+
+    leaf_entry = customtkinter.CTkEntry(optics_window)
+    leaf_entry.pack(pady=10)
+    leaf_entry.insert(0, leaf_size)
+    leaf_entry.pack(pady=10)
+
+    power_label = customtkinter.CTkLabel(optics_window, text="Power: floats only")
+    power_label.pack()
+
+    power_entry = customtkinter.CTkEntry(optics_window)
+    power_entry.pack(pady=10)
+    power_entry.insert(0, p)
+    power_entry.pack(pady=10)
+
+    add_to_queue_button = customtkinter.CTkButton(optics_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=20)

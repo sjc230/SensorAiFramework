@@ -3,7 +3,7 @@ import customtkinter
 import yaml
 import threading
 from pathlib import Path
-from utils import run_script, data_loader_confg
+from utils import run_script, data_loader_confg, convert_list_to_string
 from data_gui import *
 from dsp import *
 from classification_gui import *
@@ -123,6 +123,23 @@ def disconnect_model_from_db(device_name,model_name):
     stop_historical.configure(state = "disabled")
     active_tab=None
 
+def veiw_data_file():
+    with open(current_dir / 'config/current_data.yaml', "r") as file:
+        config_data = yaml.safe_load(file)
+    current_file = config_data['current_data_file']
+    current_labels = config_data['current_label_file']
+
+    current_data_window = customtkinter.CTkToplevel()
+    current_data_window.title("Current Data & Label Files")
+    current_data_window.geometry("700x200")
+    current_data_window.attributes('-topmost', True)
+
+    current_file_label = customtkinter.CTkLabel(master=current_data_window,text="Current Data: " + current_file)
+    current_file_label.pack(pady=10)
+
+    current_labels_label = customtkinter.CTkLabel(master=current_data_window,text="Current Labels: " + current_labels)
+    current_labels_label.pack(pady=10)
+
 #root = Tk()
 root = customtkinter.CTk()
 
@@ -182,25 +199,16 @@ tab_out = detection_tab.add("Outlier")
 #############################################################
 
 load_datafile_button = customtkinter.CTkButton(tab_0, text="load data from .npy file", command=open_data_loader_window)
-load_datafile_button.grid(row=0,column=0,padx=10, pady=10)
+load_datafile_button.pack(pady=10)
 
 generate_wavedata_button = customtkinter.CTkButton(tab_0, text="generate waveform dataset", command=generate_wavedata_window_opener)
-generate_wavedata_button.grid(row=1,column=0,padx=10, pady=10)
+generate_wavedata_button.pack(pady=10)
 
 generate_scgdata_button = customtkinter.CTkButton(tab_0, text="generate scg dataset", command=generate_scg_window_opener)
-generate_scgdata_button.grid(row=2,column=0,padx=10, pady=10)
+generate_scgdata_button.pack(pady=10)
 
-x_train_data = customtkinter.CTkLabel(tab_0, text="Training Data: None Selected")
-x_train_data.grid(row=0,column=2,padx=10, pady=10)
-
-y_train_labels = customtkinter.CTkLabel(tab_0, text="Training Labels: None Selected")
-y_train_labels.grid(row=1,column=2,padx=10, pady=10)
-
-x_test_data = customtkinter.CTkLabel(tab_0, text="Test Data: None Selected!")
-x_test_data.grid(row=2,column=2,padx=10, pady=10)
-
-y_test_labels = customtkinter.CTkLabel(tab_0, text="Test Labels: : None Selected")
-y_test_labels.grid(row=3,column=2,padx=10, pady=10)
+view_current_data_file_button = customtkinter.CTkButton(tab_0, text="view active datafile", command=veiw_data_file)
+view_current_data_file_button.pack(pady=10)
 
 
 
@@ -413,14 +421,14 @@ class_gridsearch_button.grid(row=9,column=4,padx=10, pady=10)
 #############################################################
 
 # Hierarchical base algorithms
-affin_prop_button = customtkinter.CTkButton(tab_3, text="affinity propagation", command=open_decision_tree_window)
+affin_prop_button = customtkinter.CTkButton(tab_3, text="affinity propagation", command=open_affin_prop_window)
 affin_prop_button.grid(row=0,column=0,padx=10, pady=10)
 
 # density based algorithms
-dbscan_button = customtkinter.CTkButton(tab_3, text="dbscan", command=open_decision_tree_window)
+dbscan_button = customtkinter.CTkButton(tab_3, text="dbscan", command=open_dbscan_window)
 dbscan_button.grid(row=0,column=1,padx=10, pady=10)
 
-optics_button = customtkinter.CTkButton(tab_3, text="optics", command=open_decision_tree_window)
+optics_button = customtkinter.CTkButton(tab_3, text="optics", command=open_optics_window)
 optics_button.grid(row=1,column=1,padx=10, pady=10)
 
 mean_shift_button = customtkinter.CTkButton(tab_3, text="mean shift", command=open_decision_tree_window)

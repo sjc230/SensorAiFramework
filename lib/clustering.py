@@ -26,6 +26,9 @@ from sklearn.metrics import ConfusionMatrixDisplay, classification_report, RocCu
 from tslearn.clustering import KernelKMeans, KShape, TimeSeriesKMeans
 from utils import plot_confusion_matrix, get_timestamp_string, create_directory, save_model, create_model_yaml
 
+import warnings
+warnings.filterwarnings("ignore", category=Warning, module="", lineno=0, append=False)
+
 current_directory = Path.cwd()
 
 #import load_data as ld
