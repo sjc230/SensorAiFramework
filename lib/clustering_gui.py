@@ -399,7 +399,7 @@ def open_kmeans_window():
         ni = ni.replace('auto', 'None') if 'auto' in ni else ni
 
         n_clusters_list = parse_text_entry(nc,'int')
-        init_list = parse_text_entry(i,'int')
+        init_list = parse_text_entry(i,'string')
         n_init_list = parse_text_entry(ni,'int')
         max_iter_list = parse_text_entry(mi,'int')
         tol_list = parse_text_entry(t,'float')
@@ -472,9 +472,9 @@ def open_kmeans_window():
     random_label.pack(pady=5)
 
     random_state_entry = customtkinter.CTkEntry(kmeans_window)
-    random_state_entry.pack(pady=5)
+    random_state_entry.pack(pady=10)
     random_state_entry.insert(0, random_state)
-    random_state_entry.pack(pady=5)
+    random_state_entry.pack(pady=105)
 
     add_to_queue_button = customtkinter.CTkButton(kmeans_window, text="Add Model to Queue", command=retrieve_data)
     add_to_queue_button.pack(pady=5)
