@@ -431,7 +431,7 @@ dbscan_button.grid(row=0,column=1,padx=10, pady=10)
 optics_button = customtkinter.CTkButton(tab_3, text="optics", command=open_optics_window)
 optics_button.grid(row=1,column=1,padx=10, pady=10)
 
-mean_shift_button = customtkinter.CTkButton(tab_3, text="mean shift", command=open_decision_tree_window)
+mean_shift_button = customtkinter.CTkButton(tab_3, text="mean shift", command=open_mean_shift_window)
 mean_shift_button.grid(row=2,column=1,padx=10, pady=10)
 
 # k means based algorithms

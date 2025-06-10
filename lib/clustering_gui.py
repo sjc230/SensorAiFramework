@@ -302,3 +302,77 @@ def open_optics_window():
 
     add_to_queue_button = customtkinter.CTkButton(optics_window, text="Add Model to Queue", command=retrieve_data)
     add_to_queue_button.pack(pady=20)
+
+# Mean Shift Window
+def open_mean_shift_window():
+    bandwidth = 'None'
+    bin_seeding = 'True'
+    min_bin_freq = 1
+    cluster_all = 'True'
+    max_iter = 300
+
+    def retrieve_data():
+        b = bandwidth_entry.get()
+        bs = bin_seeding_entry.get()
+        mbf = min_bin_freq_entry.get()
+        ca = cluster_all_entry.get()
+        mi = max_iter_entry.get()
+
+        bandwidth_list = parse_text_entry(b,'float')
+        bin_list = parse_text_entry(bs,'bool')
+        min_freq_list = parse_text_entry(mbf,'int')
+        cluster_list = parse_text_entry(ca,'bool')
+        max_iter_list = parse_text_entry(mi,'int')
+        
+        name = "Mean Shift"
+        optics = pipeBuild_MeanShift(bandwidth=bandwidth_list, bin_seeding=bin_list, min_bin_freq=min_freq_list, cluster_all=cluster_list, max_iter=max_iter_list)
+        add_to_clust_queue(name,optics)
+        print("Mean Shift Model Created")
+
+    mean_shift_window = customtkinter.CTkToplevel()
+    mean_shift_window.title("Mean Shift Pipe Builder")
+    mean_shift_window.geometry("500x650")
+    mean_shift_window.attributes('-topmost', True)
+
+    bandwidth_label = customtkinter.CTkLabel(mean_shift_window, text="Bandwidth: None or floats")
+    bandwidth_label.pack()
+
+    bandwidth_entry = customtkinter.CTkEntry(mean_shift_window)
+    bandwidth_entry.pack(pady=10)
+    bandwidth_entry.insert(0, bandwidth)
+    bandwidth_entry.pack(pady=10)
+
+    bin_seeding_label = customtkinter.CTkLabel(mean_shift_window, text="Bin Seeding: True, False")
+    bin_seeding_label.pack()
+
+    bin_seeding_entry = customtkinter.CTkEntry(mean_shift_window)
+    bin_seeding_entry.pack(pady=10)
+    bin_seeding_entry.insert(0, bin_seeding)
+    bin_seeding_entry.pack(pady=10)
+
+    min_bin_freq_label = customtkinter.CTkLabel(mean_shift_window, text="Minimum Bin Frequency: integers")
+    min_bin_freq_label.pack()
+
+    min_bin_freq_entry = customtkinter.CTkEntry(mean_shift_window)
+    min_bin_freq_entry.pack(pady=10)
+    min_bin_freq_entry.insert(0, min_bin_freq)
+    min_bin_freq_entry.pack(pady=10)
+
+    cluster_all_label = customtkinter.CTkLabel(mean_shift_window, text="Cluster All: True, False")
+    cluster_all_label.pack()
+
+    cluster_all_entry = customtkinter.CTkEntry(mean_shift_window)
+    cluster_all_entry.pack(pady=10)
+    cluster_all_entry.insert(0, cluster_all)
+    cluster_all_entry.pack(pady=10)
+
+    max_iter_label = customtkinter.CTkLabel(mean_shift_window, text="Distance Metric: euclidean, manhattan, chebyshev, minkowski")
+    max_iter_label.pack()
+    
+    max_iter_entry = customtkinter.CTkEntry(mean_shift_window)
+    max_iter_entry.pack(pady=10)
+    max_iter_entry.insert(0, max_iter)
+    max_iter_entry.pack(pady=10)
+
+    add_to_queue_button = customtkinter.CTkButton(mean_shift_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=10)
