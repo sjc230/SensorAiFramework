@@ -478,3 +478,218 @@ def open_kmeans_window():
 
     add_to_queue_button = customtkinter.CTkButton(kmeans_window, text="Add Model to Queue", command=retrieve_data)
     add_to_queue_button.pack(pady=5)
+
+# Bisecting K Means Window
+def open_bi_kmeans_window():
+    n_clusters = 8
+    init = 'k-means++'
+    n_init = 10    
+    max_iter = 300
+    tol = 0.0001
+    algorithm = 'lloyd'
+    bisecting_strategy = 'biggest_inertia'
+    random_state = 'None'
+
+    def retrieve_data():
+        nc = n_clusters_entry.get()
+        i = init_entry.get()
+        ni = n_init_entry.get()
+        mi = max_iter_entry.get()
+        t = tol_entry.get()
+        a = algo_entry.get()
+        bs = strategy_entry.get()
+        rs = random_state_entry.get()
+
+        ni = ni.replace('auto', 'None') if 'auto' in ni else ni
+
+        n_clusters_list = parse_text_entry(nc,'int')
+        init_list = parse_text_entry(i,'string')
+        n_init_list = parse_text_entry(ni,'int')
+        max_iter_list = parse_text_entry(mi,'int')
+        tol_list = parse_text_entry(t,'float')
+        algo_list = parse_text_entry(a,'string')
+        strategy_list = parse_text_entry(bs,'string')
+        rand_state_list = parse_text_entry(rs,'int')
+
+        n_init_list = ['auto' if item is None else item for item in n_init_list]
+        
+        name = "Bisecting K Means"
+        bikmeans = pipeBuild_BisectingKMeans(n_clusters=n_clusters_list,init=init_list, n_init=n_init_list,max_iter=max_iter_list,tol=tol_list,
+                     random_state=rand_state_list[0],algorithm=algo_list,bisecting_strategy=strategy_list)
+        add_to_clust_queue(name,bikmeans)
+        print("Bisceting K Means Model Created")
+
+    bikmeans_window = customtkinter.CTkToplevel()
+    bikmeans_window.title("Bisecting K Means Pipe Builder")
+    bikmeans_window.geometry("500x650")
+    bikmeans_window.attributes('-topmost', True)
+
+    n_clusters_label = customtkinter.CTkLabel(bikmeans_window, text="Number of Clusters: integers")
+    n_clusters_label.pack(pady=5)
+
+    n_clusters_entry = customtkinter.CTkEntry(bikmeans_window)
+    n_clusters_entry.pack(pady=5)
+    n_clusters_entry.insert(0, n_clusters)
+    n_clusters_entry.pack(pady=5)
+
+    init_label = customtkinter.CTkLabel(bikmeans_window, text="Initial Cluster Centroids: k-means++ , random")
+    init_label.pack(pady=5)
+
+    init_entry = customtkinter.CTkEntry(bikmeans_window)
+    init_entry.pack(pady=5)
+    init_entry.insert(0, init)
+    init_entry.pack(pady=5)
+
+    n_init_label = customtkinter.CTkLabel(bikmeans_window, text="Number of Initializations: auto or integers")
+    n_init_label.pack(pady=5)
+
+    n_init_entry = customtkinter.CTkEntry(bikmeans_window)
+    n_init_entry.pack(pady=5)
+    n_init_entry.insert(0, n_init)
+    n_init_entry.pack(pady=5)
+
+
+    max_iter_label = customtkinter.CTkLabel(bikmeans_window, text="Distance Metric: euclidean, manhattan, chebyshev, minkowski")
+    max_iter_label.pack(pady=5)
+    
+    max_iter_entry = customtkinter.CTkEntry(bikmeans_window)
+    max_iter_entry.pack(pady=5)
+    max_iter_entry.insert(0, max_iter)
+    max_iter_entry.pack(pady=5)
+
+    tol_label = customtkinter.CTkLabel(bikmeans_window, text="Tolerance: floats only")
+    tol_label.pack(pady=5)
+
+    tol_entry = customtkinter.CTkEntry(bikmeans_window)
+    tol_entry.pack(pady=5)
+    tol_entry.insert(0, tol)
+    tol_entry.pack(pady=5)
+
+    algo_label = customtkinter.CTkLabel(bikmeans_window, text="Algorithm: auto, lloyd, elkan, full")
+    algo_label.pack(pady=5)
+
+    algo_entry = customtkinter.CTkEntry(bikmeans_window)
+    algo_entry.pack(pady=5)
+    algo_entry.insert(0, algorithm)
+    algo_entry.pack(pady=5)
+
+    strategy_label = customtkinter.CTkLabel(bikmeans_window, text="Algorithm: auto, lloyd, elkan, full")
+    strategy_label.pack(pady=5)
+
+    strategy_entry = customtkinter.CTkEntry(bikmeans_window)
+    strategy_entry.pack(pady=5)
+    strategy_entry.insert(0, bisecting_strategy)
+    strategy_entry.pack(pady=5)
+
+    random_label = customtkinter.CTkLabel(bikmeans_window, text="Random State: None or a single integer")
+    random_label.pack(pady=5)
+
+    random_state_entry = customtkinter.CTkEntry(bikmeans_window)
+    random_state_entry.pack(pady=10)
+    random_state_entry.insert(0, random_state)
+    random_state_entry.pack(pady=10)
+
+    add_to_queue_button = customtkinter.CTkButton(bikmeans_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=5)
+
+# Mini-Batch K Means Window
+def open_mini_kmeans_window():
+    n_clusters = 8
+    init = 'k-means++'
+    n_init = 10    
+    max_iter = 300
+    tol = 0.0001
+    batch_size = 1024
+    random_state = 'None'
+
+    def retrieve_data():
+        nc = n_clusters_entry.get()
+        i = init_entry.get()
+        ni = n_init_entry.get()
+        mi = max_iter_entry.get()
+        t = tol_entry.get()
+        bs = batch_entry.get()
+        rs = random_state_entry.get()
+
+        ni = ni.replace('auto', 'None') if 'auto' in ni else ni
+
+        n_clusters_list = parse_text_entry(nc,'int')
+        init_list = parse_text_entry(i,'string')
+        n_init_list = parse_text_entry(ni,'int')
+        max_iter_list = parse_text_entry(mi,'int')
+        tol_list = parse_text_entry(t,'float')
+        batch_size_list = parse_text_entry(bs,'int')
+        rand_state_list = parse_text_entry(rs,'int')
+
+        n_init_list = ['auto' if item is None else item for item in n_init_list]
+        
+        name = "Mini-Batch K Means"
+        minikmeans = pipeBuild_MiniBatchKMeans(n_clusters=n_clusters_list,init=init_list, n_init=n_init_list,max_iter=max_iter_list,tol=tol_list,
+                     random_state=rand_state_list[0],batch_size=batch_size_list)
+        add_to_clust_queue(name,minikmeans)
+        print("Mini-BatchK Means Model Created")
+
+    mini_kmeans_window = customtkinter.CTkToplevel()
+    mini_kmeans_window.title("Mini-BatchK Means Pipe Builder")
+    mini_kmeans_window.geometry("500x650")
+    mini_kmeans_window.attributes('-topmost', True)
+
+    n_clusters_label = customtkinter.CTkLabel(mini_kmeans_window, text="Number of Clusters: integers")
+    n_clusters_label.pack(pady=5)
+
+    n_clusters_entry = customtkinter.CTkEntry(mini_kmeans_window)
+    n_clusters_entry.pack(pady=5)
+    n_clusters_entry.insert(0, n_clusters)
+    n_clusters_entry.pack(pady=5)
+
+    init_label = customtkinter.CTkLabel(mini_kmeans_window, text="Initial Cluster Centroids: k-means++ , random")
+    init_label.pack(pady=5)
+
+    init_entry = customtkinter.CTkEntry(mini_kmeans_window)
+    init_entry.pack(pady=5)
+    init_entry.insert(0, init)
+    init_entry.pack(pady=5)
+
+    n_init_label = customtkinter.CTkLabel(mini_kmeans_window, text="Number of Initializations: auto or integers")
+    n_init_label.pack(pady=5)
+
+    n_init_entry = customtkinter.CTkEntry(mini_kmeans_window)
+    n_init_entry.pack(pady=5)
+    n_init_entry.insert(0, n_init)
+    n_init_entry.pack(pady=5)
+
+
+    max_iter_label = customtkinter.CTkLabel(mini_kmeans_window, text="Distance Metric: euclidean, manhattan, chebyshev, minkowski")
+    max_iter_label.pack(pady=5)
+    
+    max_iter_entry = customtkinter.CTkEntry(mini_kmeans_window)
+    max_iter_entry.pack(pady=5)
+    max_iter_entry.insert(0, max_iter)
+    max_iter_entry.pack(pady=5)
+
+    tol_label = customtkinter.CTkLabel(mini_kmeans_window, text="Tolerance: floats only")
+    tol_label.pack(pady=5)
+
+    tol_entry = customtkinter.CTkEntry(mini_kmeans_window)
+    tol_entry.pack(pady=5)
+    tol_entry.insert(0, tol)
+    tol_entry.pack(pady=5)
+
+    batch_label = customtkinter.CTkLabel(mini_kmeans_window, text="Batch Size: integers")
+    batch_label.pack(pady=5)
+
+    batch_entry = customtkinter.CTkEntry(mini_kmeans_window)
+    batch_entry.pack(pady=5)
+    batch_entry.insert(0, batch_size)
+    batch_entry.pack(pady=5)
+
+    random_label = customtkinter.CTkLabel(mini_kmeans_window, text="Random State: None or a single integer")
+    random_label.pack(pady=5)
+
+    random_state_entry = customtkinter.CTkEntry(mini_kmeans_window)
+    random_state_entry.pack(pady=10)
+    random_state_entry.insert(0, random_state)
+    random_state_entry.pack(pady=10)
+
+    add_to_queue_button = customtkinter.CTkButton(mini_kmeans_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=5)

@@ -439,10 +439,10 @@ mean_shift_button.grid(row=2,column=1,padx=10, pady=10)
 kmeans_button = customtkinter.CTkButton(tab_3, text="k means", command=open_kmeans_window)
 kmeans_button.grid(row=0,column=2,padx=10, pady=10)
 
-bi_kmeans_button = customtkinter.CTkButton(tab_3, text="bisecting k means", command=open_kmeans_window)
+bi_kmeans_button = customtkinter.CTkButton(tab_3, text="bisecting k means", command=open_bi_kmeans_window)
 bi_kmeans_button.grid(row=1,column=2,padx=10, pady=10)
 
-mini_kmeans_button = customtkinter.CTkButton(tab_3, text="mini-batch k means", command=open_decision_tree_window)
+mini_kmeans_button = customtkinter.CTkButton(tab_3, text="mini-batch k means", command=open_mini_kmeans_window)
 mini_kmeans_button.grid(row=2,column=2,padx=10, pady=10)
 
 ts_kmeans_button = customtkinter.CTkButton(tab_3, text="time series k means", command=open_decision_tree_window)
