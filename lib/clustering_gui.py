@@ -871,3 +871,68 @@ def open_kshape_window():
 
     add_to_queue_button = customtkinter.CTkButton(kshape_window, text="Add Model to Queue", command=retrieve_data)
     add_to_queue_button.pack(pady=5)
+
+
+# Spectral Clustering Window
+def open_spectral_window():
+    n_clusters = 8
+    eigen_solver = 'None'
+    n_init = 10   
+    random_state = 'None'
+
+    def retrieve_data():
+        nc = n_clusters_entry.get()
+        ni = n_init_entry.get()
+        es = eigen_entry.get()
+        rs = random_state_entry.get()
+
+        n_clusters_list = parse_text_entry(nc,'int')
+        n_init_list = parse_text_entry(ni,'int')
+        eigen_solver_list = parse_text_entry(es,'string')
+        rand_state_list = parse_text_entry(rs,'int')
+        
+        name = "Spectral Clustering"
+        spectral = pipeBuild_SpectralClustering(n_clusters=n_clusters_list, eigen_solver=eigen_solver_list, random_state=rand_state_list[0], 
+                                 n_init=n_init_list)
+        add_to_clust_queue(name,spectral)
+        print("Spectral Clustering Model Created")
+
+    spectral_window = customtkinter.CTkToplevel()
+    spectral_window.title("Spectral Clustering Pipe Builder")
+    spectral_window.geometry("500x500")
+    spectral_window.attributes('-topmost', True)
+
+    n_clusters_label = customtkinter.CTkLabel(spectral_window, text="Number of Clusters: integers")
+    n_clusters_label.pack(pady=5)
+
+    n_clusters_entry = customtkinter.CTkEntry(spectral_window)
+    n_clusters_entry.pack(pady=5)
+    n_clusters_entry.insert(0, n_clusters)
+    n_clusters_entry.pack(pady=5)
+
+    eigen_label = customtkinter.CTkLabel(spectral_window, text="Eigen Solver: None, arpack, lobpcg, amg")
+    eigen_label.pack(pady=5)
+    
+    eigen_entry = customtkinter.CTkEntry(spectral_window)
+    eigen_entry.pack(pady=5)
+    eigen_entry.insert(0, eigen_solver)
+    eigen_entry.pack(pady=5)
+
+    n_init_label = customtkinter.CTkLabel(spectral_window, text="Number of Initializations: integers")
+    n_init_label.pack(pady=5)
+
+    n_init_entry = customtkinter.CTkEntry(spectral_window)
+    n_init_entry.pack(pady=5)
+    n_init_entry.insert(0, n_init)
+    n_init_entry.pack(pady=5)
+
+    random_label = customtkinter.CTkLabel(spectral_window, text="Random State: None or a single integer")
+    random_label.pack(pady=5)
+
+    random_state_entry = customtkinter.CTkEntry(spectral_window)
+    random_state_entry.pack(pady=10)
+    random_state_entry.insert(0, random_state)
+    random_state_entry.pack(pady=10)
+
+    add_to_queue_button = customtkinter.CTkButton(spectral_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=5)

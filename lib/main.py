@@ -452,7 +452,7 @@ kshape_button = customtkinter.CTkButton(tab_3, text="k shape", command=open_ksha
 kshape_button.grid(row=4,column=2,padx=10, pady=10)
 
 # Spectral based algorithms
-spectral_button= customtkinter.CTkButton(tab_3, text="spectral clustering", command=open_decision_tree_window)
+spectral_button= customtkinter.CTkButton(tab_3, text="spectral clustering", command=open_spectral_window)
 spectral_button.grid(row=0,column=3,padx=10, pady=10)
 
 # Function Buttons

@@ -1,0 +1,5 @@
+inputs: 20
+model_path: C:\Users\steph\OneDrive\Documents\GitHub\SensorAiFramework\20250610172448_models
+model_type: clustering
+name: Best_Spectral-Clustering.pkl
+outputs: 2
