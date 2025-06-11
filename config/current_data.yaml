@@ -1,6 +1,6 @@
-labeled_data: true
-seperate_labels: true
-test_train_split: true
+labeled_data: false
+seperate_labels: false
+test_train_split: false
 split_value: 20.0
 current_data_file: ''
 current_label_file: ''

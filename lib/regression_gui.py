@@ -708,3 +708,304 @@ def open_quantile_window():
 
     add_to_queue_button = customtkinter.CTkButton(quant_window, text="Add Model to Queue", command=retrieve_data)
     add_to_queue_button.pack(pady=10)
+
+# Support Vector Regression Window
+def open_svr_window():
+    C = 1.0
+    kernel = 'rbf'
+    degree = 3
+    gamma = 'scale'
+    tol = 0.001
+
+    def retrieve_data():
+        c = reg_entry.get()
+        k = kernel_entry.get()
+        d = degree_entry.get()
+        g = gamma_entry.get()
+        t = tol_entry.get()
+        
+        reg_list = parse_text_entry(c,'float')
+        kernel_list = parse_text_entry(k,'string')
+        degree_list = parse_text_entry(d,'int')
+        gamma_list = parse_text_entry(g,'string')
+        tol_list = parse_text_entry(t,'float')        
+
+        name = "Support Vector Regressor"
+        svr = pipeBuild_SVR(C=reg_list,kernel=kernel_list,degree=degree_list,gamma=gamma_list,tol=tol_list)
+        add_to_regress_queue(name,svr)
+        print("Support Vector Regressor Model Created")
+
+    svr_window = customtkinter.CTkToplevel()
+    svr_window.title("Support Vector Regressor Pipe Builder")
+    svr_window.geometry("500x500")
+    svr_window.attributes('-topmost', True)
+
+    reg_label = customtkinter.CTkLabel(svr_window, text="Regularization Parameter: floats only")
+    reg_label.pack()
+
+    reg_entry = customtkinter.CTkEntry(svr_window)
+    reg_entry.pack(pady=10)
+    reg_entry.insert(0, C)
+    reg_entry.pack(pady=10)
+
+    kernel_label = customtkinter.CTkLabel(svr_window, text="Kernel: linear, poly, rbf, sigmoid")
+    kernel_label.pack()
+
+    kernel_entry = customtkinter.CTkEntry(svr_window)
+    kernel_entry.pack(pady=10)
+    kernel_entry.insert(0, kernel)
+    kernel_entry.pack(pady=10)
+
+    degree_label = customtkinter.CTkLabel(svr_window, text="Degree (for poly kernel): integers only")
+    degree_label.pack()
+
+    degree_entry = customtkinter.CTkEntry(svr_window)
+    degree_entry.pack(pady=10)
+    degree_entry.insert(0, degree)
+    degree_entry.pack(pady=10)
+
+    gamma_label = customtkinter.CTkLabel(svr_window, text="Gamma: scale, auto")
+    gamma_label.pack()
+
+    gamma_entry = customtkinter.CTkEntry(svr_window)
+    gamma_entry.pack(pady=10)
+    gamma_entry.insert(0, gamma)
+    gamma_entry.pack(pady=10)
+
+    tol_label = customtkinter.CTkLabel(svr_window, text="Tolerance: floats only")
+    tol_label.pack()
+
+    tol_entry = customtkinter.CTkEntry(svr_window)
+    tol_entry.pack(pady=10)
+    tol_entry.insert(0, tol)
+    tol_entry.pack(pady=10)
+   
+    add_to_queue_button = customtkinter.CTkButton(svr_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=20)
+
+# Nu Support Vector Regressor Window
+def open_nusvr_window():
+    nu = 0.5
+    kernel = 'rbf'
+    degree = 3
+    gamma = 'scale'
+    tol = 0.001
+
+    def retrieve_data():
+        n = nu_entry.get()
+        k = kernel_entry.get()
+        d = degree_entry.get()
+        g = gamma_entry.get()
+        t = tol_entry.get()
+        
+        nu_list = parse_text_entry(n,'float')
+        kernel_list = parse_text_entry(k,'string')
+        degree_list = parse_text_entry(d,'int')
+        gamma_list = parse_text_entry(g,'string')
+        tol_list = parse_text_entry(t,'float')        
+
+        name = "Nu Support Vector Regressor"
+        nusvr = pipeBuild_NuSVR(nu=nu_list,kernel=kernel_list,degree=degree_list,gamma=gamma_list,tol=tol_list)
+        add_to_regress_queue(name,nusvr)
+        print("Nu Support Vector Regressor Model Created")
+
+    nusvr_window = customtkinter.CTkToplevel()
+    nusvr_window.title("Nu Support Vector Regressor Pipe Builder")
+    nusvr_window.geometry("500x500")
+    nusvr_window.attributes('-topmost', True)
+
+    nu_label = customtkinter.CTkLabel(nusvr_window, text="Regularization Parameter: floats only")
+    nu_label.pack()
+
+    nu_entry = customtkinter.CTkEntry(nusvr_window)
+    nu_entry.pack(pady=10)
+    nu_entry.insert(0, nu)
+    nu_entry.pack(pady=10)
+
+    kernel_label = customtkinter.CTkLabel(nusvr_window, text="Kernel: linear, poly, rbf, sigmoid")
+    kernel_label.pack()
+
+    kernel_entry = customtkinter.CTkEntry(nusvr_window)
+    kernel_entry.pack(pady=10)
+    kernel_entry.insert(0, kernel)
+    kernel_entry.pack(pady=10)
+
+    degree_label = customtkinter.CTkLabel(nusvr_window, text="Degree (for poly kernel): integers only")
+    degree_label.pack()
+
+    degree_entry = customtkinter.CTkEntry(nusvr_window)
+    degree_entry.pack(pady=10)
+    degree_entry.insert(0, degree)
+    degree_entry.pack(pady=10)
+
+    gamma_label = customtkinter.CTkLabel(nusvr_window, text="Gamma: scale, auto")
+    gamma_label.pack()
+
+    gamma_entry = customtkinter.CTkEntry(nusvr_window)
+    gamma_entry.pack(pady=10)
+    gamma_entry.insert(0, gamma)
+    gamma_entry.pack(pady=10)
+
+    tol_label = customtkinter.CTkLabel(nusvr_window, text="Tolerance: floats only")
+    tol_label.pack()
+
+    tol_entry = customtkinter.CTkEntry(nusvr_window)
+    tol_entry.pack(pady=10)
+    tol_entry.insert(0, tol)
+    tol_entry.pack(pady=10)
+   
+    add_to_queue_button = customtkinter.CTkButton(nusvr_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=20)
+
+# Time Series Support Vector Regressor Window
+def open_tssvr_window():
+    C = 1.0
+    kernel = 'gak'
+    degree = 3
+    gamma = 'None'
+    tol = 0.001
+
+    def retrieve_data():
+        c = reg_entry.get()
+        k = kernel_entry.get()
+        d = degree_entry.get()
+        g = gamma_entry.get()
+        t = tol_entry.get()
+
+             
+        reg_list = parse_text_entry(c,'float')
+        kernel_list = parse_text_entry(k,'string')
+        degree_list = parse_text_entry(d,'int')
+        gamma_list = parse_text_entry(g,'float')
+        tol_list = parse_text_entry(t,'float')
+
+        gamma_list = ['auto' if item is None else item for item in gamma_list]
+
+        name = "Time Series SVR"
+        tssvr = pipeBuild_TimeSeriesSVR(C=reg_list,kernel=kernel_list,degree=degree_list,gamma=gamma_list,tol=tol_list)
+        add_to_regress_queue(name,tssvr)
+        print("Time Series SVR Model Created")
+
+    tssvr_window = customtkinter.CTkToplevel()
+    tssvr_window.title("Time Series SVR Pipe Builder")
+    tssvr_window.geometry("500x500")
+    tssvr_window.attributes('-topmost', True)
+
+    reg_label = customtkinter.CTkLabel(tssvr_window, text="Regularization Parameter: None or floats")
+    reg_label.pack()
+
+    reg_entry = customtkinter.CTkEntry(tssvr_window)
+    reg_entry.pack(pady=10)
+    reg_entry.insert(0, C)
+    reg_entry.pack(pady=10)
+
+    kernel_label = customtkinter.CTkLabel(tssvr_window, text="Kernel: gak, linear, poly, rbf, sigmoid")
+    kernel_label.pack()
+
+    kernel_entry = customtkinter.CTkEntry(tssvr_window)
+    kernel_entry.pack(pady=10)
+    kernel_entry.insert(0, kernel)
+    kernel_entry.pack(pady=10)
+
+    degree_label = customtkinter.CTkLabel(tssvr_window, text="Degree (for poly kernel): integers only")
+    degree_label.pack()
+
+    degree_entry = customtkinter.CTkEntry(tssvr_window)
+    degree_entry.pack(pady=10)
+    degree_entry.insert(0, degree)
+    degree_entry.pack(pady=10)
+
+    gamma_label = customtkinter.CTkLabel(tssvr_window, text="Gamma: None or floats")
+    gamma_label.pack()
+
+    gamma_entry = customtkinter.CTkEntry(tssvr_window)
+    gamma_entry.pack(pady=10)
+    gamma_entry.insert(0, gamma)
+    gamma_entry.pack(pady=10)
+
+    tol_label = customtkinter.CTkLabel(tssvr_window, text="Tolerance: floats only")
+    tol_label.pack()
+
+    tol_entry = customtkinter.CTkEntry(tssvr_window)
+    tol_entry.pack(pady=10)
+    tol_entry.insert(0, tol)
+    tol_entry.pack(pady=10)
+   
+    add_to_queue_button = customtkinter.CTkButton(tssvr_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=20)
+
+# Linear Support Vector Regression Window
+def open_linsvr_window():
+    C = 1.0
+    loss = 'hinge'
+    #degree = 3
+    fit_intercept = 'True'
+    tol = 0.001
+
+    def retrieve_data():
+        c = reg_entry.get()
+        l = loss_entry.get()
+        #d = degree_entry.get()
+        fi = fit_entry.get()
+        t = tol_entry.get()
+        
+        reg_list = parse_text_entry(c,'float')
+        loss_list = parse_text_entry(l,'string')
+        #degree_list = parse_text_entry(d,'int')
+        fit_list = parse_text_entry(fi,'bool')
+        tol_list = parse_text_entry(t,'float')        
+
+        name = "Linear Support Vector Regressor"
+        svr = pipeBuild_LinearSVR(C=reg_list,loss=loss_list,fit_intercept=fit_list,tol=tol_list)
+        add_to_regress_queue(name,svr)
+        print("Linear Support Vector Regressor Model Created")
+
+    linsvr_window = customtkinter.CTkToplevel()
+    linsvr_window.title("Linear Support Vector Regressor Pipe Builder")
+    linsvr_window.geometry("500x500")
+    linsvr_window.attributes('-topmost', True)
+
+    reg_label = customtkinter.CTkLabel(linsvr_window, text="Regularization Parameter: floats only")
+    reg_label.pack()
+
+    reg_entry = customtkinter.CTkEntry(linsvr_window)
+    reg_entry.pack(pady=10)
+    reg_entry.insert(0, C)
+    reg_entry.pack(pady=10)
+
+    loss_label = customtkinter.CTkLabel(linsvr_window, text="Loss: hinge, squared_hinge")
+    loss_label.pack()
+
+    loss_entry = customtkinter.CTkEntry(linsvr_window)
+    loss_entry.pack(pady=10)
+    loss_entry.insert(0, loss)
+    loss_entry.pack(pady=10)
+
+    """
+    degree_label = customtkinter.CTkLabel(linsvr_window, text="Degree (for poly kernel): integers only")
+    degree_label.pack()
+
+    degree_entry = customtkinter.CTkEntry(linsvr_window)
+    degree_entry.pack(pady=10)
+    degree_entry.insert(0, degree)
+    degree_entry.pack(pady=10)
+    #"""
+
+    fit_label = customtkinter.CTkLabel(linsvr_window, text="Fit Intercept: True, False")
+    fit_label.pack()
+
+    fit_entry = customtkinter.CTkEntry(linsvr_window)
+    fit_entry.pack(pady=10)
+    fit_entry.insert(0, fit_intercept)
+    fit_entry.pack(pady=10)
+
+    tol_label = customtkinter.CTkLabel(linsvr_window, text="Tolerance: floats only")
+    tol_label.pack()
+
+    tol_entry = customtkinter.CTkEntry(linsvr_window)
+    tol_entry.pack(pady=10)
+    tol_entry.insert(0, tol)
+    tol_entry.pack(pady=10)
+   
+    add_to_queue_button = customtkinter.CTkButton(linsvr_window, text="Add Model to Queue", command=retrieve_data)
+    add_to_queue_button.pack(pady=20)

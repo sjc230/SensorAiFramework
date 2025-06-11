@@ -683,8 +683,8 @@ def open_tssvc_window():
         gamma_list = ['auto' if item is None else item for item in gamma_list]
 
         name = "Time Series SVC"
-        svc = pipeBuild_TimeSeriesSVC(C=reg_list,kernel=kernel_list,degree=degree_list,gamma=gamma_list,tol=tol_list,random_state=None)
-        add_to_class_queue(name,svc)
+        tsssvc = pipeBuild_TimeSeriesSVC(C=reg_list,kernel=kernel_list,degree=degree_list,gamma=gamma_list,tol=tol_list,random_state=None)
+        add_to_class_queue(name,tsssvc)
         print("Time Series SVC Model Created")
 
     svc_window = customtkinter.CTkToplevel()

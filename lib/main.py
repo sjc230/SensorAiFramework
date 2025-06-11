@@ -565,16 +565,16 @@ quantile_button = customtkinter.CTkButton(tab_5, text="quantile", command=open_q
 quantile_button.grid(row=1,column=3,padx=10, pady=10)
 
 # Support vector based models
-svr_button = customtkinter.CTkButton(tab_5, text="support vector", command=open_decision_tree_window)
+svr_button = customtkinter.CTkButton(tab_5, text="support vector", command=open_svr_window)
 svr_button.grid(row=0,column=4,padx=10, pady=10)
 
-lin_svr_button = customtkinter.CTkButton(tab_5, text="linear svr", command=open_decision_tree_window)
+lin_svr_button = customtkinter.CTkButton(tab_5, text="linear svr", command=open_linsvr_window)
 lin_svr_button.grid(row=1,column=4,padx=10, pady=10)
 
-nu_svr_button = customtkinter.CTkButton(tab_5, text="nu svr", command=open_decision_tree_window)
+nu_svr_button = customtkinter.CTkButton(tab_5, text="nu svr", command=open_nusvr_window)
 nu_svr_button.grid(row=2,column=4,padx=10, pady=10)
 
-ts_svr_button = customtkinter.CTkButton(tab_5, text="time series svr", command=open_decision_tree_window)
+ts_svr_button = customtkinter.CTkButton(tab_5, text="time series svr", command=open_tssvr_window)
 ts_svr_button.grid(row=3,column=4,padx=10, pady=10)
 
 # Function Buttons
