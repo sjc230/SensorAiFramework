@@ -1,5 +1,5 @@
 inputs: 3
-model_path: C:/Users/steph/OneDrive/Documents/GitHub/SensorAiFramework/20250428190324_models
+model_path: C:/Users/steph/OneDrive/Documents/GitHub/SensorAiFramework/0_example_models
 model_type: classification
 name: Best_Extra-Trees.pkl
 outputs: 3
