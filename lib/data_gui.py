@@ -3,7 +3,8 @@ import customtkinter
 import shutil
 from pathlib import Path
 import yaml
-from utils import open_file, update_yaml_variable, data_loader_confg
+from utils import open_file, update_yaml_variable, data_loader_confg, parse_text_entry
+from dsp import scg_simulate
 
 current_dir = Path.cwd()
 config_path = current_dir / "config/current_data.yaml"
@@ -191,14 +192,102 @@ def generate_wavedata_window_opener():
     add_to_queue_button.pack(pady=10)
 
 def generate_scg_window_opener():
+    num_rows = 1
+    duration = 10
+    sampling_rate = 100
+    add_respritory = 'True'
+    respiratory_rate = '10,30'
+    systolic = '90,140'
+    diastolic = '80,100'
+    pulse_type = 'db'
+    noise_type = 'basic'
+    noise_shape = 'laplace'
+    noise_amplitude = 0.1
+    noise_frequency = '5,10,100'
+    power_line_amplitude = 0
+    power_line_frequency = 50
+    artifacts_amplitude = 0
+    artifacts_frequency = 100
+    artifacts_number = 5
+    artifacts_shape = 'laplace'
+    n_echo = 3
+    attenuation_factor = '0.1,0.05,0.02'
+    delay_factor = 15
+    random_state = 'None'
+    silent = 'False'
+
+    def retrieve_data():
+        n_rows = num_rows_entry.get()
+        n_rows = int(n_rows)
+
+        dur = duration_entry.get()
+        dur = int(dur)
+
+        s_rate = sampling_rate_entry.get()
+        s_rate = int(s_rate)
+
+        add_rep = add_repository_entry.get()
+        add_rep = bool(add_rep)
+
+        resp_rate = respiratory_rate_entry.get()
+        resp_rate = parse_text_entry(resp_rate,'int')
+        resp_rate = tuple(resp_rate)
+
+        syst = respiratory_rate_entry.get()
+        syst = parse_text_entry(syst,'int')
+        syst = tuple(syst)
+
+        dias = respiratory_rate_entry.get()
+        dias = parse_text_entry(dias,'int')
+        dias = tuple(dias)
+
+        pulse_t = pulse_type_entry.get()
+
+        noise_t = noise_type_entry.get()
+        noise_t = parse_text_entry(noise_t,'string')
+
+        noise_s = noise_shape_entry.get()
+
+        noise_a = noise_amplitude_entry.get()
+        noise_a = float(noise_a)
+
+        noise_f = noise_frequency_entry.get()
+        noise_f = parse_text_entry(noise_f,'float')
+
+        
+
+        rs = random_state_entry.get()
+        rs = int(rs)
+
+        ni = ni.replace('auto', 'None') if 'auto' in ni else ni
+
+        n_clusters_list = parse_text_entry(nc,'int')
+        init_list = parse_text_entry(i,'string')
+        n_init_list = parse_text_entry(ni,'int')
+        max_iter_list = parse_text_entry(mi,'int')
+        tol_list = parse_text_entry(t,'float')
+        algo_list = parse_text_entry(a,'string')
+        rand_state_list = parse_text_entry(rs,'int')
+
+        n_init_list = ['auto' if item is None else item for item in n_init_list]
+        
+        #name = "K Means"
+        scg_data = scg_simulate(n_clusters=n_clusters_list,init=init_list, n_init=n_init_list,max_iter=max_iter_list,tol=tol_list,
+                     random_state=rand_state_list[0],algorithm=algo_list)
+        #add_to_clust_queue(name,kmeans)
+        print("K Means Model Created")
+
     generate_scg_window = customtkinter.CTkToplevel()
     generate_scg_window.title("Generate SCG Data")
     generate_scg_window.grab_set() # Keep focus
     generate_scg_window.lift() # Bring to front
 
+    random_label = customtkinter.CTkLabel(generate_scg_window, text="Random State: None or a single integer")
+    random_label.pack(pady=5)
+
     random_state_entry = customtkinter.CTkEntry(generate_scg_window)
-    random_state_entry.pack(pady=10)
+    random_state_entry.pack(pady=5)
     #random_state_entry.insert(0, random_state)
 
-    add_to_queue_button = customtkinter.CTkButton(generate_scg_window, text="Get Text", command=retrieve_files)
-    add_to_queue_button.pack(pady=10)
+    add_to_queue_button = customtkinter.CTkButton(generate_scg_window, text="Get Text", command=retrieve_data)
+    add_to_queue_button.grid(row=9,column=4,padx=5, pady=5)
