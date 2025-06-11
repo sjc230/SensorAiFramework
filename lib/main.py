@@ -537,31 +537,31 @@ tweedie_button = customtkinter.CTkButton(tab_5, text="tweedie", command=open_twe
 tweedie_button.grid(row=3,column=0,padx=10, pady=10)
 
 # Lars / Lasso based models
-lars_cv_button = customtkinter.CTkButton(tab_5, text="lars", command=open_decision_tree_window)
+lars_cv_button = customtkinter.CTkButton(tab_5, text="lars", command=open_lars_window)
 lars_cv_button.grid(row=0,column=1,padx=10, pady=10)
 
-lasso_cv_button = customtkinter.CTkButton(tab_5, text="lasso", command=open_decision_tree_window)
+lasso_cv_button = customtkinter.CTkButton(tab_5, text="lasso", command=open_lasso_window)
 lasso_cv_button.grid(row=1,column=1,padx=10, pady=10)
 
-lasso_lars_cv_button = customtkinter.CTkButton(tab_5, text="lasso-lars", command=open_decision_tree_window)
+lasso_lars_cv_button = customtkinter.CTkButton(tab_5, text="lasso-lars", command=open_lasso_lars_window)
 lasso_lars_cv_button.grid(row=2,column=1,padx=10, pady=10)
 
-lasso_lars_ic_button = customtkinter.CTkButton(tab_5, text="lasso-lars w/ info criteria", command=open_decision_tree_window)
+lasso_lars_ic_button = customtkinter.CTkButton(tab_5, text="lasso-lars w/ info criteria", command=open_lasso_lars_ic_window)
 lasso_lars_ic_button.grid(row=3,column=1,padx=10, pady=10)
 
 # Ridge based models
-ridge_cv_button = customtkinter.CTkButton(tab_5, text="ridge", command=open_decision_tree_window)
+ridge_cv_button = customtkinter.CTkButton(tab_5, text="ridge", command=open_ridge_window)
 ridge_cv_button.grid(row=0,column=2,padx=10, pady=10)
 
-bays_ridge_button = customtkinter.CTkButton(tab_5, text="baesian ridge", command=open_decision_tree_window)
+bays_ridge_button = customtkinter.CTkButton(tab_5, text="baesian ridge", command=open_bayes_ridge_window)
 bays_ridge_button.grid(row=1,column=2,padx=10, pady=10)
 
 # Elastic nets
-enet_cv_button = customtkinter.CTkButton(tab_5, text="elastic net", command=open_decision_tree_window)
+enet_cv_button = customtkinter.CTkButton(tab_5, text="elastic net", command=open_elastic_net_window)
 enet_cv_button.grid(row=0,column=3,padx=10, pady=10)
 
 # Quantile
-quantile_button = customtkinter.CTkButton(tab_5, text="quantile", command=open_decision_tree_window)
+quantile_button = customtkinter.CTkButton(tab_5, text="quantile", command=open_quantile_window)
 quantile_button.grid(row=1,column=3,padx=10, pady=10)
 
 # Support vector based models

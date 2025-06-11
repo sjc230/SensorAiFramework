@@ -126,7 +126,7 @@ def pipeBuild_Ridge(alpha=[1.0],fit_intercept=[True], copy_X=[True],max_iter=[No
 
 # RIDGE CV
 def pipeBuild_RidgeCV(alphas=[(0.1, 1.0, 10.0)],fit_intercept=[True], scoring=[None],cv=[None],
-  gcv_mode=['auto'],store_cv_values=[False],alpha_per_target=[False]):
+  gcv_mode=['auto'],alpha_per_target=[False]):
   regressor = RidgeCV()
   pipeline = Pipeline(steps=[('ridgecv', regressor)])
   params = [{
@@ -134,7 +134,7 @@ def pipeBuild_RidgeCV(alphas=[(0.1, 1.0, 10.0)],fit_intercept=[True], scoring=[N
         'ridgecv__fit_intercept': fit_intercept,
         'ridgecv__scoring': scoring,
         'ridgecv__gcv_mode': gcv_mode,
-        'ridgecv__store_cv_values': store_cv_values,
+        #'ridgecv__store_cv_values': store_cv_values,
         'ridgecv__alpha_per_target': alpha_per_target,
     }]
   return pipeline, params
