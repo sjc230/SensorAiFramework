@@ -524,16 +524,16 @@ detect_gridsearch_button.pack(padx=10, pady=10)
 #############################################################
 
 # Linear models
-linear_button = customtkinter.CTkButton(tab_5, text="linear", command=open_decision_tree_window)
+linear_button = customtkinter.CTkButton(tab_5, text="linear", command=open_linear_window)
 linear_button.grid(row=0,column=0,padx=10, pady=10)
 
-gamma_button = customtkinter.CTkButton(tab_5, text="gamma", command=open_decision_tree_window)
+gamma_button = customtkinter.CTkButton(tab_5, text="gamma", command=open_gamma_window)
 gamma_button.grid(row=1,column=0,padx=10, pady=10)
 
-poisson_button = customtkinter.CTkButton(tab_5, text="poisson", command=open_decision_tree_window)
+poisson_button = customtkinter.CTkButton(tab_5, text="poisson", command=open_poisson_window)
 poisson_button.grid(row=2,column=0,padx=10, pady=10)
 
-tweedie_button = customtkinter.CTkButton(tab_5, text="tweedie", command=open_decision_tree_window)
+tweedie_button = customtkinter.CTkButton(tab_5, text="tweedie", command=open_tweedie_window)
 tweedie_button.grid(row=3,column=0,padx=10, pady=10)
 
 # Lars / Lasso based models
