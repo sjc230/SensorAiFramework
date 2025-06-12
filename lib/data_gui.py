@@ -226,14 +226,14 @@ def generate_scg_window_opener():
         s_rate = sampling_rate_entry.get()
         s_rate = int(s_rate)
 
-        add_rep = add_repository_entry.get()
-        add_rep = bool(add_rep)
+        add_resp = add_respiratory_entry.get()
+        add_resp = bool(add_resp)
 
         resp_rate = respiratory_rate_entry.get()
         resp_rate = parse_text_entry(resp_rate,'int')
         resp_rate = tuple(resp_rate)
 
-        syst = respiratory_rate_entry.get()
+        syst = systolic_entry.get()
         syst = parse_text_entry(syst,'int')
         syst = tuple(syst)
 
@@ -288,9 +288,13 @@ def generate_scg_window_opener():
 
                 
         #name = "K Means"
-        scg_data = scg_simulate()
+        scg_data = scg_simulate(num_rows=n_rows, duration=dur, sampling_rate=s_rate, add_respritory=add_resp, respiratory_rate=resp_rate,
+                                systolic=syst, diastolic=dias, pulse_type=pulse_t, noise_type=noise_t, noise_shape=noise_s,
+                                noise_amplitude=noise_a, noise_frequency=noise_f, power_line_amplitude=pl_a, power_line_frequency=pl_f,
+                                artifacts_amplitude=art_a, artifacts_frequency=art_f, artifacts_number=art_n, artifacts_shape=art_s,
+                                n_echo=n_e, attenuation_factor=att_f, delay_factor=del_f, random_state=rs, silent=sil)
         #add_to_clust_queue(name,kmeans)
-        print("K Means Model Created")
+        print("SCG Data Created")
 
     generate_scg_window = customtkinter.CTkToplevel()
     generate_scg_window.title("Generate SCG Data")
