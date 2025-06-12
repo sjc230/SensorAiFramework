@@ -29,6 +29,7 @@ from PyEMD import EEMD, EMD, CEEMDAN
 #from pyemd import EEMD, EMD, CEEMDAN
 from vmdpy import VMD
 from utils import save_numpy_array
+import pandas as pd
 from pylab import (arange, flipud, linspace, cos, pi, log, hanning,
                    ceil, log2, floor, empty_like, fft, ifft, fabs, exp, roll, convolve)
 warnings.filterwarnings('ignore')
@@ -36,6 +37,7 @@ with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     from fastsst import SingularSpectrumTransformation
 plt.rcParams['figure.figsize'] = [8, 3] # figsize for signal
+
 
 
 # ==============================================================================
@@ -1074,25 +1076,31 @@ def scg_simulate(**kwargs):
 
     simulated_data = np.asarray(simulated_data)
     print("Selected Label: ",args['label_data'])
-    
+
+    scg_data = pd.DataFrame(simulated_data)
+
     if args['save_data'] == True:
         if args['label_data'] == 'heart rate':
-            labels = simulated_data[:, -4:]
+            labels = simulated_data[:, -4]
+            labels = labels.reshape(-1, 1)
             simulated_data = simulated_data[:, :-4]
-            simulated_data = np.concatenate((simulated_data,labels),axis=1)
+            simulated_data = np.concatenate((simulated_data,labels),axis=1)            
             save_numpy_array(simulated_data)
         elif args['label_data'] == 'respiratory rate':
-            labels = simulated_data[:, -3:]
+            labels = simulated_data[:, -3]
+            labels = labels.reshape(-1, 1)
             simulated_data = simulated_data[:, :-4]
             simulated_data = np.concatenate((simulated_data,labels),axis=1)
             save_numpy_array(simulated_data)
         elif args['label_data'] == 'systolic pressure':
-            labels = simulated_data[:, -2:]
+            labels = simulated_data[:, -2]
+            labels = labels.reshape(-1, 1)
             simulated_data = simulated_data[:, :-4]
             simulated_data = np.concatenate((simulated_data,labels),axis=1)
             save_numpy_array(simulated_data)
         elif args['label_data'] == 'systolic pressure':
-            labels = simulated_data[:, -1:]
+            labels = simulated_data[:, -1]
+            labels = labels.reshape(-1, 1)
             simulated_data = simulated_data[:, :-4]
             simulated_data = np.concatenate((simulated_data,labels),axis=1)
             save_numpy_array(simulated_data)
