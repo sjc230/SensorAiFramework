@@ -365,3 +365,17 @@ def convert_list_to_string(list):
     """
     formatted_string = "\n".join(str(item) for item in list)
     return formatted_string
+
+# Open Dialog to Save an .npy file.
+def save_numpy_array(array_to_save):
+    """Opens a file dialog to save a NumPy array as a .npy file."""
+    filename = filedialog.asksaveasfilename(
+        defaultextension=".npy",  # Set default file extension
+        filetypes=[("NumPy files", "*.npy"), ("All files", "*.*")]  # Specify file types
+    )
+    if filename:  # Check if a filename was selected (dialog was not canceled)
+        try:
+            np.save(filename, array_to_save)
+            print(f"NumPy array saved successfully to: {filename}")
+        except Exception as e:
+            print(f"Error saving NumPy array: {e}")

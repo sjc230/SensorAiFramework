@@ -28,6 +28,7 @@ import ssqueezepy as sq
 from PyEMD import EEMD, EMD, CEEMDAN
 #from pyemd import EEMD, EMD, CEEMDAN
 from vmdpy import VMD
+from utils import save_numpy_array
 from pylab import (arange, flipud, linspace, cos, pi, log, hanning,
                    ceil, log2, floor, empty_like, fft, ifft, fabs, exp, roll, convolve)
 warnings.filterwarnings('ignore')
@@ -1025,7 +1026,8 @@ def scg_simulate(**kwargs):
         'delay_factor' : [5] * 3,
         'random_state' : None,
         'silent' : False,
-        'data_file' : "./data.npy"
+        'data_file' : "./data.npy",
+        'save_data' : False
     }
 
     args.update(kwargs)
@@ -1070,7 +1072,9 @@ def scg_simulate(**kwargs):
         simulated_data.append(list(data)+[0]+[ind]+[heart_rate]+[respiratory_rate]+[systolic]+[diastolic])
 
     simulated_data = np.asarray(simulated_data)
-    if args['num_rows'] == 1:
+    if args['save_data'] == True:
+        save_numpy_array(simulated_data)
+    elif args['num_rows'] == 1:
         return simulated_data.flatten()
     else:
         np.save(args['data_file'], simulated_data)
