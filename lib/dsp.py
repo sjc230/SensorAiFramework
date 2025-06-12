@@ -1073,6 +1073,8 @@ def scg_simulate(**kwargs):
         simulated_data.append(list(data)+[0]+[ind]+[heart_rate]+[respiratory_rate]+[systolic]+[diastolic])
 
     simulated_data = np.asarray(simulated_data)
+    print("Selected Label: ",args['label_data'])
+    
     if args['save_data'] == True:
         if args['label_data'] == 'heart rate':
             labels = simulated_data[:, -4:]

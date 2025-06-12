@@ -20,3 +20,4 @@ test.py
 lib/youtube_test.py
 lib/__pycache__/utils.cpython-311.pyc
 lib/__pycache__/data_gui.cpython-311.pyc
+data/demo_scg_data.npy
