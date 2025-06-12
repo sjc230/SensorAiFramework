@@ -215,6 +215,11 @@ def generate_scg_window_opener():
     delay_factor = 15
     random_state = 'None'
     silent = 'False'
+    label = "heart rate"
+
+    # Define a callback function to handle selections
+    def label_menu_callback(choice):
+        label = choice
 
     def retrieve_data():
         n_rows = num_rows_entry.get()
@@ -293,8 +298,9 @@ def generate_scg_window_opener():
                                 systolic=syst, diastolic=dias, pulse_type=pulse_t, noise_type=noise_t, noise_shape=noise_s,
                                 noise_amplitude=noise_a, noise_frequency=noise_f, power_line_amplitude=pl_a, power_line_frequency=pl_f,
                                 artifacts_amplitude=art_a, artifacts_frequency=art_f, artifacts_number=art_n, artifacts_shape=art_s,
-                                n_echo=n_e, attenuation_factor=att_f, delay_factor=del_f, random_state=rs, silent=sil,save_data=True)
-        #add_to_clust_queue(name,kmeans)
+                                n_echo=n_e, attenuation_factor=att_f, delay_factor=del_f, random_state=rs, silent=sil,
+                                label_data=label,save_data=True)
+       
         print("SCG Data Created")
 
     generate_scg_window = customtkinter.CTkToplevel()
@@ -485,6 +491,17 @@ def generate_scg_window_opener():
     silent_entry.grid(row=3,column=4,padx=5, pady=5)
     silent_entry.insert(0, silent)
     silent_entry.grid(row=3,column=4,padx=5, pady=5)
+
+    label_label = customtkinter.CTkLabel(generate_scg_window, text="Select Labels")
+    label_label.grid(row=7,column=4,padx=5, pady=5)
+
+    label_menu = customtkinter.CTkOptionMenu(
+        master=generate_scg_window, 
+        values=["heart rate", "respiratory rate", "systolic pressure", "diastolic pressue"],  # List of options
+        command=label_menu_callback,  # Function to call when an option is selected
+    )
+    label_menu.set("heart rate")
+    label_menu.grid(row=8,column=4,padx=5, pady=5)
 
     generate_scg_button = customtkinter.CTkButton(generate_scg_window, text="Generat SCG Data", command=retrieve_data,
                                                   fg_color='red',

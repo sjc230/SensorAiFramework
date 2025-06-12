@@ -1027,6 +1027,7 @@ def scg_simulate(**kwargs):
         'random_state' : None,
         'silent' : False,
         'data_file' : "./data.npy",
+        'label_data' : "heart rate",
         'save_data' : False
     }
 
@@ -1073,7 +1074,29 @@ def scg_simulate(**kwargs):
 
     simulated_data = np.asarray(simulated_data)
     if args['save_data'] == True:
-        save_numpy_array(simulated_data)
+        if args['label_data'] == 'heart rate':
+            labels = simulated_data[:, -4:]
+            simulated_data = simulated_data[:, :-4]
+            simulated_data = np.concatenate((simulated_data,labels),axis=1)
+            save_numpy_array(simulated_data)
+        elif args['label_data'] == 'respiratory rate':
+            labels = simulated_data[:, -3:]
+            simulated_data = simulated_data[:, :-4]
+            simulated_data = np.concatenate((simulated_data,labels),axis=1)
+            save_numpy_array(simulated_data)
+        elif args['label_data'] == 'systolic pressure':
+            labels = simulated_data[:, -2:]
+            simulated_data = simulated_data[:, :-4]
+            simulated_data = np.concatenate((simulated_data,labels),axis=1)
+            save_numpy_array(simulated_data)
+        elif args['label_data'] == 'systolic pressure':
+            labels = simulated_data[:, -1:]
+            simulated_data = simulated_data[:, :-4]
+            simulated_data = np.concatenate((simulated_data,labels),axis=1)
+            save_numpy_array(simulated_data)
+        else:
+            save_numpy_array(simulated_data)
+  
     elif args['num_rows'] == 1:
         return simulated_data.flatten()
     else:
