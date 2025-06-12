@@ -281,7 +281,8 @@ def generate_scg_window_opener():
         del_f = int(del_f)
 
         rs = random_state_entry.get()
-        rs = int(rs)
+        rs = parse_text_entry(rs,'int')
+        rs = rs[0]
 
         sil = silent_entry.get()
         sil = bool(sil)
