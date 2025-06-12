@@ -301,12 +301,191 @@ def generate_scg_window_opener():
     generate_scg_window.grab_set() # Keep focus
     generate_scg_window.lift() # Bring to front
 
+    num_rows_label = customtkinter.CTkLabel(generate_scg_window, text="Number of Samples: single integer")
+    num_rows_label.grid(row=0,column=0,padx=5, pady=5)
+
+    num_rows_entry = customtkinter.CTkEntry(generate_scg_window)
+    num_rows_entry.grid(row=1,column=0,padx=5, pady=5)
+    num_rows_entry.insert(0,num_rows)
+    num_rows_entry.grid(row=1,column=0,padx=5, pady=5)
+
+    duration_label = customtkinter.CTkLabel(generate_scg_window, text="Signal Duration: single integer")
+    duration_label.grid(row=2,column=0,padx=5, pady=5)
+
+    duration_entry = customtkinter.CTkEntry(generate_scg_window)
+    duration_entry.grid(row=3,column=0,padx=5, pady=5)
+    duration_entry.insert(0,duration)
+    duration_entry.grid(row=3,column=0,padx=5, pady=5)
+    
+    sampling_rate_label = customtkinter.CTkLabel(generate_scg_window, text="Sampling Rate: single integer")
+    sampling_rate_label.grid(row=4,column=0,padx=5, pady=5)
+
+    sampling_rate_entry = customtkinter.CTkEntry(generate_scg_window)
+    sampling_rate_entry.grid(row=5,column=0,padx=5, pady=5)
+    sampling_rate_entry.insert(0,sampling_rate)
+    sampling_rate_entry.grid(row=5,column=0,padx=5, pady=5)
+
+    add_respritory_label = customtkinter.CTkLabel(generate_scg_window, text="Add Respirator: True, False")
+    add_respritory_label.grid(row=6,column=0,padx=5, pady=5)
+
+    add_respritory_entry = customtkinter.CTkEntry(generate_scg_window)
+    add_respritory_entry.grid(row=7,column=0,padx=5, pady=5)
+    add_respritory_entry.insert(0,add_respritory)
+    add_respritory_entry.grid(row=7,column=0,padx=5, pady=5)
+
+    respritory_rate_label = customtkinter.CTkLabel(generate_scg_window, text="Respiratory Rate: two integer seperated by a ,")
+    respritory_rate_label.grid(row=8,column=0,padx=5, pady=5)
+
+    respritory_rate_entry = customtkinter.CTkEntry(generate_scg_window)
+    respritory_rate_entry.grid(row=9,column=0,padx=5, pady=5)
+    respritory_rate_entry.insert(0,respiratory_rate)
+    respritory_rate_entry.grid(row=9,column=0,padx=5, pady=5)
+
+    systolic_label = customtkinter.CTkLabel(generate_scg_window, text="Systolic: two integer seperated by a ,")
+    systolic_label.grid(row=0,column=1,padx=5, pady=5)
+
+    systolic_entry = customtkinter.CTkEntry(generate_scg_window)
+    systolic_entry.grid(row=1,column=1,padx=5, pady=5)
+    systolic_entry.insert(0,systolic)
+    systolic_entry.grid(row=1,column=1,padx=5, pady=5)
+
+    diastolic_label = customtkinter.CTkLabel(generate_scg_window, text="Diastolic: two integer seperated by a ,")
+    diastolic_label.grid(row=0,column=1,padx=5, pady=5)
+
+    diastolic_entry = customtkinter.CTkEntry(generate_scg_window)
+    diastolic_entry.grid(row=1,column=1,padx=5, pady=5)
+    diastolic_entry.insert(0,diastolic)
+    diastolic_entry.grid(row=1,column=1,padx=5, pady=5)
+
+    pulse_type_label = customtkinter.CTkLabel(generate_scg_window, text="Pulse Type: db,mor,ricker,sym,coif")
+    pulse_type_label.grid(row=2,column=1,padx=5, pady=5)
+
+    pulse_type_entry = customtkinter.CTkEntry(generate_scg_window)
+    pulse_type_entry.grid(row=3,column=1,padx=5, pady=5)
+    pulse_type_entry.insert(0,pulse_type)
+    pulse_type_entry.grid(row=3,column=1,padx=5, pady=5)
+
+    noise_type_label = customtkinter.CTkLabel(generate_scg_window, text="Noise Type: basic,resonance,powerline,artifacts,linear_drift")
+    noise_type_label.grid(row=4,column=1,padx=5, pady=5)
+
+    noise_type_entry = customtkinter.CTkEntry(generate_scg_window)
+    noise_type_entry.grid(row=5,column=1,padx=5, pady=5)
+    noise_type_entry.insert(0,noise_type)
+    noise_type_entry.grid(row=5,column=1,padx=5, pady=5)
+
+    noise_shape_label = customtkinter.CTkLabel(generate_scg_window, text="Noise Shape: gaussian, laplace,")
+    noise_shape_label.grid(row=6,column=1,padx=5, pady=5)
+
+    noise_shape_entry = customtkinter.CTkEntry(generate_scg_window)
+    noise_shape_entry.grid(row=7,column=1,padx=5, pady=5)
+    noise_shape_entry.insert(0,noise_shape)
+    noise_shape_entry.grid(row=7,column=1,padx=5, pady=5)
+
+    noise_amplitude_label = customtkinter.CTkLabel(generate_scg_window, text="Noise Amplitude: single float")
+    noise_amplitude_label.grid(row=8,column=1,padx=5, pady=5)
+
+    noise_amplitude_entry = customtkinter.CTkEntry(generate_scg_window)
+    noise_amplitude_entry.grid(row=9,column=1,padx=5, pady=5)
+    noise_amplitude_entry.insert(0,noise_amplitude)
+    noise_amplitude_entry.grid(row=9,column=1,padx=5, pady=5)
+
+    noise_frequency_label = customtkinter.CTkLabel(generate_scg_window, text="Noise Frequency: ',' seperated float")
+    noise_frequency_label.grid(row=0,column=2,padx=5, pady=5)
+
+    noise_frequency_entry = customtkinter.CTkEntry(generate_scg_window)
+    noise_frequency_entry.grid(row=1,column=2,padx=5, pady=5)
+    noise_frequency_entry.insert(0,noise_frequency)
+    noise_frequency_entry.grid(row=1,column=2,padx=5, pady=5)
+
+    power_line_amplitude_label = customtkinter.CTkLabel(generate_scg_window, text="Power Line Amplitude: single float")
+    power_line_amplitude_label.grid(row=2,column=2,padx=5, pady=5)
+
+    power_line_amplitude_entry = customtkinter.CTkEntry(generate_scg_window)
+    power_line_amplitude_entry.grid(row=3,column=2,padx=5, pady=5)
+    power_line_amplitude_entry.insert(0,power_line_amplitude)
+    power_line_amplitude_entry.grid(row=3,column=2,padx=5, pady=5)
+
+    power_line_frequency_label = customtkinter.CTkLabel(generate_scg_window, text="Power Line Frequency: single float")
+    power_line_frequency_label.grid(row=4,column=2,padx=5, pady=5)
+
+    power_line_frequency_entry = customtkinter.CTkEntry(generate_scg_window)
+    power_line_frequency_entry.grid(row=5,column=2,padx=5, pady=5)
+    power_line_frequency_entry.insert(0,power_line_frequency)
+    power_line_frequency_entry.grid(row=5,column=2,padx=5, pady=5)
+
+    artifacts_amplitude_label = customtkinter.CTkLabel(generate_scg_window, text="Artifacts Amplitude: single float")
+    artifacts_amplitude_label.grid(row=6,column=2,padx=5, pady=5)
+
+    artifacts_amplitude_entry = customtkinter.CTkEntry(generate_scg_window)
+    artifacts_amplitude_entry.grid(row=7,column=2,padx=5, pady=5)
+    artifacts_amplitude_entry.insert(0,artifacts_amplitude)
+    artifacts_amplitude_entry.grid(row=7,column=2,padx=5, pady=5)
+
+    artifacts_frequency_label = customtkinter.CTkLabel(generate_scg_window, text="Artifacts Frequency: single float")
+    artifacts_frequency_label.grid(row=8,column=2,padx=5, pady=5)
+
+    artifacts_frequency_entry = customtkinter.CTkEntry(generate_scg_window)
+    artifacts_frequency_entry.grid(row=9,column=2,padx=5, pady=5)
+    artifacts_frequency_entry.insert(0,artifacts_frequency)
+    artifacts_frequency_entry.grid(row=9,column=2,padx=5, pady=5)
+
+    artifacts_number_label = customtkinter.CTkLabel(generate_scg_window, text="Artifacts Number: single integer")
+    artifacts_number_label.grid(row=0,column=3,padx=5, pady=5)
+
+    artifacts_number_entry = customtkinter.CTkEntry(generate_scg_window)
+    artifacts_number_entry.grid(row=1,column=3,padx=5, pady=5)
+    artifacts_number_entry.insert(0,artifacts_number)
+    artifacts_number_entry.grid(row=1,column=3,padx=5, pady=5)
+
+    artifacts_shape_label = customtkinter.CTkLabel(generate_scg_window, text="Artifacts Shape: laplace, gaussianr")
+    artifacts_shape_label.grid(row=2,column=3,padx=5, pady=5)
+
+    artifacts_shape_entry = customtkinter.CTkEntry(generate_scg_window)
+    artifacts_shape_entry.grid(row=3,column=3,padx=5, pady=5)
+    artifacts_shape_entry.insert(0,artifacts_shape)
+    artifacts_shape_entry.grid(row=3,column=3,padx=5, pady=5)
+
+    n_echo_label = customtkinter.CTkLabel(generate_scg_window, text="Number of Echos: single integer")
+    n_echo_label.grid(row=4,column=3,padx=5, pady=5)
+
+    n_echo_entry = customtkinter.CTkEntry(generate_scg_window)
+    n_echo_entry.grid(row=5,column=3,padx=5, pady=5)
+    n_echo_entry.insert(0,n_echo)
+    n_echo_entry.grid(row=5,column=3,padx=5, pady=5)
+
+    attenuation_factor_label = customtkinter.CTkLabel(generate_scg_window, text="Attenuation Factor: ',' seperated floats")
+    attenuation_factor_label.grid(row=6,column=3,padx=5, pady=5)
+
+    attenuation_factor_entry = customtkinter.CTkEntry(generate_scg_window)
+    attenuation_factor_entry.grid(row=7,column=3,padx=5, pady=5)
+    attenuation_factor_entry.insert(0,attenuation_factor)
+    attenuation_factor_entry.grid(row=7,column=3,padx=5, pady=5)
+
+    delay_factor_label = customtkinter.CTkLabel(generate_scg_window, text="Delay Factor: single integer")
+    delay_factor_label.grid(row=8,column=3,padx=5, pady=5)
+
+    delay_factor_entry = customtkinter.CTkEntry(generate_scg_window)
+    delay_factor_entry.grid(row=9,column=3,padx=5, pady=5)
+    delay_factor_entry.insert(0,attenuation_factor)
+    delay_factor_entry.grid(row=9,column=3,padx=5, pady=5)
+
     random_label = customtkinter.CTkLabel(generate_scg_window, text="Random State: None or a single integer")
-    random_label.pack(pady=5)
+    random_label.grid(row=0,column=4,padx=5, pady=5)
 
     random_state_entry = customtkinter.CTkEntry(generate_scg_window)
-    random_state_entry.pack(pady=5)
-    #random_state_entry.insert(0, random_state)
+    random_state_entry.grid(row=1,column=4,padx=5, pady=5)
+    random_state_entry.insert(0, random_state)
+    random_state_entry.grid(row=1,column=4,padx=5, pady=5)
 
-    add_to_queue_button = customtkinter.CTkButton(generate_scg_window, text="Get Text", command=retrieve_data)
-    add_to_queue_button.grid(row=9,column=4,padx=5, pady=5)
+    silent_label = customtkinter.CTkLabel(generate_scg_window, text="Silent: True or False")
+    silent_label.grid(row=2,column=4,padx=5, pady=5)
+
+    silent_entry = customtkinter.CTkEntry(generate_scg_window)
+    silent_entry.grid(row=3,column=4,padx=5, pady=5)
+    silent_entry.insert(0, random_state)
+    silent_entry.grid(row=3,column=4,padx=5, pady=5)
+
+    generate_scg_button = customtkinter.CTkButton(generate_scg_window, text="Generat SCG Data", command=retrieve_data,
+                                                  fg_color='red',
+                                                  hover_color='pink')
+    generate_scg_button.grid(row=9,column=4,padx=5, pady=5)
