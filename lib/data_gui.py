@@ -226,10 +226,10 @@ def generate_scg_window_opener():
         s_rate = sampling_rate_entry.get()
         s_rate = int(s_rate)
 
-        add_resp = add_respiratory_entry.get()
+        add_resp = add_respritory_entry.get()
         add_resp = bool(add_resp)
 
-        resp_rate = respiratory_rate_entry.get()
+        resp_rate = respritory_rate_entry.get()
         resp_rate = parse_text_entry(resp_rate,'int')
         resp_rate = tuple(resp_rate)
 
@@ -237,7 +237,7 @@ def generate_scg_window_opener():
         syst = parse_text_entry(syst,'int')
         syst = tuple(syst)
 
-        dias = respiratory_rate_entry.get()
+        dias = diastolic_entry.get()
         dias = parse_text_entry(dias,'int')
         dias = tuple(dias)
 
@@ -466,7 +466,7 @@ def generate_scg_window_opener():
 
     delay_factor_entry = customtkinter.CTkEntry(generate_scg_window)
     delay_factor_entry.grid(row=9,column=3,padx=5, pady=5)
-    delay_factor_entry.insert(0,attenuation_factor)
+    delay_factor_entry.insert(0,delay_factor)
     delay_factor_entry.grid(row=9,column=3,padx=5, pady=5)
 
     random_label = customtkinter.CTkLabel(generate_scg_window, text="Random State: None or a single integer")
@@ -482,7 +482,7 @@ def generate_scg_window_opener():
 
     silent_entry = customtkinter.CTkEntry(generate_scg_window)
     silent_entry.grid(row=3,column=4,padx=5, pady=5)
-    silent_entry.insert(0, random_state)
+    silent_entry.insert(0, silent)
     silent_entry.grid(row=3,column=4,padx=5, pady=5)
 
     generate_scg_button = customtkinter.CTkButton(generate_scg_window, text="Generat SCG Data", command=retrieve_data,
