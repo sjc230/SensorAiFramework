@@ -292,6 +292,8 @@ def generate_scg_window_opener():
         sil = silent_entry.get()
         sil = bool(sil)
 
+        lab = label_menu.get()
+
                 
         #name = "K Means"
         scg_data = scg_simulate(num_rows=n_rows, duration=dur, sampling_rate=s_rate, add_respritory=add_resp, respiratory_rate=resp_rate,
@@ -299,7 +301,7 @@ def generate_scg_window_opener():
                                 noise_amplitude=noise_a, noise_frequency=noise_f, power_line_amplitude=pl_a, power_line_frequency=pl_f,
                                 artifacts_amplitude=art_a, artifacts_frequency=art_f, artifacts_number=art_n, artifacts_shape=art_s,
                                 n_echo=n_e, attenuation_factor=att_f, delay_factor=del_f, random_state=rs, silent=sil,
-                                label_data=label,save_data=True)
+                                label_data=lab,save_data=True)
        
         print("SCG Data Created")
 
