@@ -254,26 +254,41 @@ def generate_scg_window_opener():
         noise_f = noise_frequency_entry.get()
         noise_f = parse_text_entry(noise_f,'float')
 
+        pl_a = power_line_amplitude_entry.get()
+        pl_a = float(pl_a)
+
+        pl_f = power_line_frequency_entry.get()
+        pl_f = float(pl_f)
+
+        art_a = artifacts_amplitude_entry.get()
+        art_a = float(art_a)
+
+        art_f = artifacts_frequency_entry.get()
+        art_f = float(art_f)
+
+        art_n = artifacts_number_entry.get()
+        art_n = int(art_n)
+
+        art_s = artifacts_shape_entry.get()
+
+        n_e = n_echo_entry.get(n_e)
+        n_e = int(n_e)
+
+        att_f = attenuation_factor_entry.get()
+        att_f = parse_text_entry(att_f,'float')
         
+        del_f = delay_factor_entry.get()
+        del_f = int(del_f)
 
         rs = random_state_entry.get()
         rs = int(rs)
 
-        ni = ni.replace('auto', 'None') if 'auto' in ni else ni
+        sil = silent_entry.get()
+        sil = bool(sil)
 
-        n_clusters_list = parse_text_entry(nc,'int')
-        init_list = parse_text_entry(i,'string')
-        n_init_list = parse_text_entry(ni,'int')
-        max_iter_list = parse_text_entry(mi,'int')
-        tol_list = parse_text_entry(t,'float')
-        algo_list = parse_text_entry(a,'string')
-        rand_state_list = parse_text_entry(rs,'int')
-
-        n_init_list = ['auto' if item is None else item for item in n_init_list]
-        
+                
         #name = "K Means"
-        scg_data = scg_simulate(n_clusters=n_clusters_list,init=init_list, n_init=n_init_list,max_iter=max_iter_list,tol=tol_list,
-                     random_state=rand_state_list[0],algorithm=algo_list)
+        scg_data = scg_simulate()
         #add_to_clust_queue(name,kmeans)
         print("K Means Model Created")
 
