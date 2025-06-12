@@ -271,7 +271,7 @@ def generate_scg_window_opener():
 
         art_s = artifacts_shape_entry.get()
 
-        n_e = n_echo_entry.get(n_e)
+        n_e = n_echo_entry.get()
         n_e = int(n_e)
 
         att_f = attenuation_factor_entry.get()
