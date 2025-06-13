@@ -1,10 +1,10 @@
 #from tkinter import Toplevel, Label, Entry, Button
 import customtkinter
-import shutil
+import numpy as np
 from pathlib import Path
 import yaml
 from utils import open_file, update_yaml_variable, data_loader_confg, parse_text_entry
-from dsp import scg_simulate
+from dsp import scg_simulate, generate_anomaly_data, generate_class_data, generate_regression_data, save_numpy_array
 
 current_dir = Path.cwd()
 config_path = current_dir / "config/current_data.yaml"
@@ -177,20 +177,126 @@ def open_data_loader_window():
             load_files_button.configure(state='normal')
         else:
             load_files_button.configure(state='disabled')
-    
+
+# Generate Wave Data Window    
 def generate_wavedata_window_opener():
+    data_type = 'classification'
+    amplitude = 'None'
+    frequency = 'None'
+    noise = 'False'
+    wave_number = 10
+    label_type = 'frequency'
+
+    # Define a callback function to handle selections
+    def selection_menu_callback(choice):
+        data_type = choice
+
+    # Define a callback function to handle selections
+    def label_type_menu_callback(choice):
+        label_type = choice
+
+    def retrieve_data():
+        dt = selection_menu.get()
+
+        a = amplitude_entry.get()
+        if a != 'None':
+            a = float(a)
+        else:
+            a = None
+
+        f = frequency_entry.get()
+        if f != 'None':
+            f = float(a)
+        else:
+            f = None
+
+        n = noise_entry.get()
+        n = bool(n)
+
+        wn = wave_number_entry.get()
+        wn = int(wn)
+
+        lt = label_type_menu.get()
+             
+
+        if dt == 'classification':
+            data, labels = generate_class_data(amplitude=a,frequency=f,noise=n,wave_number=wn,show=True)
+        elif dt == 'anomaly detection':
+            data, labels = generate_anomaly_data(amplitude=a,frequency=f,noise=n,wave_number=wn,show=True)
+        else:
+            data, labels = generate_regression_data(amplitude=a,frequency=f,noise=n,wave_number=wn,label_type=lt,show=True)
+
+        labels = labels.reshape(-1, 1)
+        data_file = np.concatenate((data,labels),axis=1)
+
+        save_numpy_array(data_file)
+
+
     generate_wavedata_window = customtkinter.CTkToplevel()
     generate_wavedata_window.title("Generate Waveform Data")
+    #generate_wavedata_window.geometry()
     generate_wavedata_window.grab_set() # Keep focus
     generate_wavedata_window.lift() # Bring to front
 
-    random_state_entry = customtkinter.CTkEntry(generate_wavedata_window)
-    random_state_entry.pack(pady=10)
-    #random_state_entry.insert(0, random_state)
+    selection_label = customtkinter.CTkLabel(generate_wavedata_window, text="Select Labels")
+    selection_label.pack()
 
-    add_to_queue_button = customtkinter.CTkButton(generate_wavedata_window, text="Get Text", command=retrieve_files)
-    add_to_queue_button.pack(pady=10)
+    selection_menu = customtkinter.CTkOptionMenu(
+        master=generate_wavedata_window, 
+        values=["anomaly detection", "classification", "regression"],  # List of options
+        command=selection_menu_callback,  # Function to call when an option is selected
+    )
+    selection_menu.set("classification")
+    selection_menu.pack(pady=5)
 
+    amplitude_label = customtkinter.CTkLabel(generate_wavedata_window, text="Regularization Parameter: None or floats")
+    amplitude_label.pack()
+
+    amplitude_entry = customtkinter.CTkEntry(generate_wavedata_window)
+    amplitude_entry.pack(pady=5)
+    amplitude_entry.insert(0, amplitude)
+    amplitude_entry.pack(pady=5)
+
+    frequency_label = customtkinter.CTkLabel(generate_wavedata_window, text="Regularization Parameter: None or floats")
+    frequency_label.pack()
+
+    frequency_entry = customtkinter.CTkEntry(generate_wavedata_window)
+    frequency_entry.pack(pady=5)
+    frequency_entry.insert(0, frequency)
+    frequency_entry.pack(pady=5)
+
+    noise_label = customtkinter.CTkLabel(generate_wavedata_window, text="Regularization Parameter: None or floats")
+    noise_label.pack()
+
+    noise_entry = customtkinter.CTkEntry(generate_wavedata_window)
+    noise_entry.pack(pady=5)
+    noise_entry.insert(0, noise)
+    noise_entry.pack(pady=5)
+
+    wave_number_label = customtkinter.CTkLabel(generate_wavedata_window, text="Regularization Parameter: None or floats")
+    wave_number_label.pack()
+
+    wave_number_entry = customtkinter.CTkEntry(generate_wavedata_window)
+    wave_number_entry.pack(pady=5)
+    wave_number_entry.insert(0, wave_number)
+    wave_number_entry.pack(pady=5)
+
+    label_type_label = customtkinter.CTkLabel(generate_wavedata_window, text="Select Labels")
+    label_type_label.pack()
+
+    label_type_menu = customtkinter.CTkOptionMenu(
+        master=generate_wavedata_window, 
+        values=["amplitude", "frequency"],  # List of options
+        command=label_type_menu_callback,  # Function to call when an option is selected
+    )
+    label_type_menu.set("frequency")
+    label_type_menu.pack(pady=5)
+
+    generate_wave_data_button = customtkinter.CTkButton(generate_wavedata_window, text="generate data", command=retrieve_data,
+                                                  fg_color='red', hover_color='pink')
+    generate_wave_data_button.pack(pady=5)
+
+# Generate SGC Window   
 def generate_scg_window_opener():
     num_rows = 1
     duration = 10
