@@ -1,9 +1,6 @@
-import numpy as np
 import streamlit as st
-import pandas as pd
-import matplotlib.pyplot as plt
 
-st.title("Simple Data Dashboard")
+st.title("Data")
 
 uploaded_file = st.file_uploader("Choose an NPY file", type="npy")
 

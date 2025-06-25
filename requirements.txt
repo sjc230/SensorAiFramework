@@ -26,3 +26,5 @@ plotly
 influxdb-client
 paho-mqtt
 customtkinter
+streamlit
+streamlit-option_menu
