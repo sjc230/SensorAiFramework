@@ -2,9 +2,23 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import os
-from lib.utils import data_setup
+import sys
+from pathlib import Path
+
+# Get the path of the current file (file1.py)
+current_file_path = Path(__file__).resolve()
+# Get the parent directory (folder1)
+parent_dir = current_file_path.parent
+# Get the path to the other folder (folder2)
+other_folder_path = parent_dir.parent / "lib"
+# Add the other folder to sys.path so Python can find the module
+sys.path.append(str(other_folder_path))
+# Now you can import from file2.py
+from utils import data_setup
 
 st.title("Data")
+
+sep_labels = False
 
 option = st.selectbox(
     'What data would you like to use?',
@@ -18,6 +32,8 @@ if option == '.csv or .npy file':
 
 if option == '.csv or .npy file' and label_check == False:
     sep_label_check = st.checkbox("Do you have labels in a seperate file? Check for yes")
+    if sep_label_check == True:
+        sep_labels = sep_label_check
 
 if option == '.csv or .npy file':
     split_check = st.checkbox("Select if you will require a train/test split on your data")
@@ -31,7 +47,7 @@ if option == '.csv or .npy file':
     if ready == True:
         uploaded_file = st.file_uploader("Choose a CSV or NPY data file", type=["csv","npy"])
 
-        if sep_label_check == True:
+        if sep_labels == True:
             uploaded_labels = st.file_uploader("Choose a CSV or NPY label file", type=["csv","npy"])
             if uploaded_labels is not None:
                 root, extension = os.path.splitext(uploaded_labels.name)
@@ -51,10 +67,7 @@ if option == '.csv or .npy file':
             root, extension = os.path.splitext(uploaded_file.name)
             if extension.lower() == ".npy":
                 data = np.load(uploaded_file)
-                if header_check == False:            
-                    df = pd.DataFrame(data,header=None)
-                else:
-                    df = pd.DataFrame(data)                
+                df = pd.DataFrame(data)                
             else:
                 if header_check == False:
                     df = pd.read_csv(uploaded_file,header=None)
@@ -73,9 +86,9 @@ if option == '.csv or .npy file':
         else:
             st.write("Waiting on file upload")
     
-        if (uploaded_file is not None) and (uploaded_labels is not None) and (sep_label_check == True):
+        if (uploaded_file is not None) and (sep_labels == True):
             X_train, y_train, X_test, y_test = data_setup(label_bool=label_check,
-                                                          sep_data_bool=sep_label_check,
+                                                          sep_data_bool=sep_labels,
                                                           split_bool=split_check,
                                                           data_file=data,
                                                           split_value=split_value,
@@ -84,9 +97,9 @@ if option == '.csv or .npy file':
             st.session_state["y_train"] = y_train
             st.session_state["X_test"] = X_test
             st.session_state["y_test"] = y_test
-        elif (uploaded_file is not None) and (sep_label_check == False):
+        elif (uploaded_file is not None) and (sep_labels == False):
             X_train, y_train, X_test, y_test = data_setup(label_bool=label_check,
-                                                          sep_data_bool=sep_label_check,
+                                                          sep_data_bool=sep_labels,
                                                           split_bool=split_check,
                                                           data_file=data,
                                                           split_value=split_value,

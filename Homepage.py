@@ -12,8 +12,26 @@ st.title("Sensor AI Framework")
 st.write("Welcome to the Center for Cyber-Physical Systems' artificial intelligence framework for sensor data")
 st.sidebar.success("Select a page above")
 
-if "data_file" not in st.session_state:
-    st.session_state["data_file"] = ""
+if "X_train" not in st.session_state:
+    st.session_state["X_train"] = ""
 
-if "label_file" not in st.session_state:
-    st.session_state["label_file"] = ""
+if "y_train" not in st.session_state:
+    st.session_state["y_train"] = ""
+
+if "X_test" not in st.session_state:
+    st.session_state["X_test"] = ""
+
+if "y_test" not in st.session_state:
+    st.session_state["y_test"] = ""
+
+if st.session_state.get("X_train") != None:
+    st.write("X_train is loaded")
+
+if st.session_state.get("y_train") != None:
+    st.write("y_train is loaded")
+
+if st.session_state.get("X_test") != None:
+    st.write("X_test is loaded")
+
+if st.session_state.get("y_test") != None:
+    st.write("y_test is loaded")
