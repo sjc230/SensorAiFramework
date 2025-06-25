@@ -19,36 +19,57 @@ from utils import data_setup
 st.title("Data")
 
 sep_labels = False
+split = 0.00
 
-option = st.selectbox(
-    'What data would you like to use?',
+if st.button("Clear All Data"):
+    sep_labels = False
+    split = 0.00
+    data = None
+    labels = None
+    st.session_state["X_train"] = ""
+    st.session_state["y_train"] = ""
+    st.session_state["X_test"] = ""
+    st.session_state["y_test"] = ""
+    st.session_state["header check"] = False
+    st.session_state["label check"] = False
+    st.session_state["seperate labels"] = False
+    st.session_state["split data"] = False
+    st.session_state["split value:"] = 0.00
+    st.session_state["ready to load"] = False
+    st.session_state["data loader"] = None
+    st.session_state["label loader"] = None
+
+
+option = st.selectbox('What data would you like to use?',
     ('.csv or .npy file', 'influx download', 'generate waveforms', 'generate scg signals'))
 
 if option == '.csv or .npy file':
-    header_check = st.checkbox("Does your data/label file(s) have headers? Check for yes")
+    header_check = st.checkbox("Does your data/label file(s) have headers? Check for yes",key="header check")
 
 if option == '.csv or .npy file':
-    label_check = st.checkbox("Does your data file contain labels? Check for yes")
+    label_check = st.checkbox("Does your data file contain labels? Check for yes",key="label check")
 
 if option == '.csv or .npy file' and label_check == False:
-    sep_label_check = st.checkbox("Do you have labels in a seperate file? Check for yes")
+    sep_label_check = st.checkbox("Do you have labels in a seperate file? Check for yes",key="seperate labels")
     if sep_label_check == True:
         sep_labels = sep_label_check
 
 if option == '.csv or .npy file':
-    split_check = st.checkbox("Select if you will require a train/test split on your data")
+    split_check = st.checkbox("Select if you will require a train/test split on your data", key = "split data")
 
     if split_check == True:
-        split_value = st.number_input("Enter a float value for you data split:", value=0.0, step=0.01, format="%.2f")
+        split_value = st.number_input("Enter a float value for you data split:", value=0.0, step=0.01, format="%.2f",key="split value")
+        if split_value != 0.00:
+            split = split_value
 
 if option == '.csv or .npy file':
-    ready = st.checkbox("Select when ready to choose your file(s)")
+    ready = st.checkbox("Select when ready to choose your file(s)",key = "ready to load")
 
     if ready == True:
-        uploaded_file = st.file_uploader("Choose a CSV or NPY data file", type=["csv","npy"])
+        uploaded_file = st.file_uploader("Choose a CSV or NPY data file", type=["csv","npy"],key="data loader")
 
         if sep_labels == True:
-            uploaded_labels = st.file_uploader("Choose a CSV or NPY label file", type=["csv","npy"])
+            uploaded_labels = st.file_uploader("Choose a CSV or NPY label file", type=["csv","npy"],key="label loader")
             if uploaded_labels is not None:
                 root, extension = os.path.splitext(uploaded_labels.name)
                 if extension.lower() == ".npy":
@@ -91,7 +112,7 @@ if option == '.csv or .npy file':
                                                           sep_data_bool=sep_labels,
                                                           split_bool=split_check,
                                                           data_file=data,
-                                                          split_value=split_value,
+                                                          split_value=split,
                                                           label_file=labels)
             st.session_state["X_train"] = X_train
             st.session_state["y_train"] = y_train
@@ -102,7 +123,7 @@ if option == '.csv or .npy file':
                                                           sep_data_bool=sep_labels,
                                                           split_bool=split_check,
                                                           data_file=data,
-                                                          split_value=split_value,
+                                                          split_value=split,
                                                           label_file=labels)
             st.session_state["X_train"] = X_train
             st.session_state["y_train"] = y_train
@@ -117,3 +138,5 @@ elif option == 'generate waveforms':
 
 elif option == 'generate scg signals':
     st.write("generate scg signals selected")
+
+    

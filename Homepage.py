@@ -23,15 +23,3 @@ if "X_test" not in st.session_state:
 
 if "y_test" not in st.session_state:
     st.session_state["y_test"] = ""
-
-if st.session_state.get("X_train") != None:
-    st.write("X_train is loaded")
-
-if st.session_state.get("y_train") != None:
-    st.write("y_train is loaded")
-
-if st.session_state.get("X_test") != None:
-    st.write("X_test is loaded")
-
-if st.session_state.get("y_test") != None:
-    st.write("y_test is loaded")
