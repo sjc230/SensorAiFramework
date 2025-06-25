@@ -9,4 +9,5 @@ st.set_page_config(
 )
 
 st.title("Home Page")
+st.write("Welcome to the Sensor AI Framework")
 st.sidebar.success("Select a page above")
