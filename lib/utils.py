@@ -380,3 +380,27 @@ def save_numpy_array(array_to_save):
             print(f"NumPy array saved successfully to: {filename}")
         except Exception as e:
             print(f"Error saving NumPy array: {e}")
+
+def data_setup(label_bool,sep_data_bool,split_bool,data_file,split_value=None,label_file=None):    
+    
+    data =  data_file
+
+    if label_bool == True and sep_data_bool == False:
+        y = data[:, -1]
+        x = data[:, :-1]
+    elif label_bool == True and sep_data_bool == True:
+        x = data
+        y = label_file
+    else:
+        x = data
+        y = None
+    
+    if split_bool == True:
+        X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=float(split_value), random_state=None)
+    else:
+        X_train = None
+        y_train = None
+        X_test = x
+        y_test = y
+
+    return X_train, y_train, X_test, y_test
