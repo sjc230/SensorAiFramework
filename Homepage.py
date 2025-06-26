@@ -12,6 +12,11 @@ st.title("Sensor AI Framework")
 st.write("Welcome to the Center for Cyber-Physical Systems' artificial intelligence framework for sensor data")
 st.sidebar.success("Select a page above")
 
+
+########################################
+# Session Variables Initializations
+########################################
+
 if "X_train" not in st.session_state:
     st.session_state["X_train"] = ""
 
@@ -23,3 +28,27 @@ if "X_test" not in st.session_state:
 
 if "y_test" not in st.session_state:
     st.session_state["y_test"] = ""
+
+if "class_name_queue" not in st.session_state:
+    st.session_state["class_name_queue"] = []
+
+if "class_model_queue" not in st.session_state:
+    st.session_state["class_model_queue"] = []
+
+if "clust_name_queue" not in st.session_state:
+    st.session_state["clust_name_queue"] = []
+
+if "clust_model_queue" not in st.session_state:
+    st.session_state["clust_model_queue"] = []
+
+if "detect_name_queue" not in st.session_state:
+    st.session_state["detect_name_queue"] = []
+
+if "detect_model_queue" not in st.session_state:
+    st.session_state["detect_model_queue"] = []
+
+if "regress_name_queue" not in st.session_state:
+    st.session_state["regress_name_queue"] = []
+
+if "regress_model_queue" not in st.session_state:
+    st.session_state["regress_model_queue"] = []
