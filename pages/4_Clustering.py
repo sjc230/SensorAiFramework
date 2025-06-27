@@ -68,4 +68,3 @@ if st.button("Clear Clustering Model Queue"):
 if st.button("Run Clustering Grid Search"):
     print("Clustering gridsearch started")
     execute_clust_gridsearch()
-    print("Clustering gridsearch completed")

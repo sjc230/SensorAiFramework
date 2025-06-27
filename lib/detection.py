@@ -235,7 +235,7 @@ def gridsearch_outlier_out(names,pipes,X,y,scoring='neg_mean_squared_error',plot
     #"""
 
 # NOVELTY UNSUPERVISED
-def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_number='all',save_best=False): #scoring='rand_score'
+def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_number='all',save_best=False,log=False): #scoring='rand_score'
     n_classes = int(np.amax(y)+1)
     n_inputs = X.shape[1]
 
@@ -243,6 +243,10 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
       time_string = get_timestamp_string()
       path_name = time_string + "_models"
       directory_path = create_directory(path_name)
+    
+    if log == True:
+       with open(path_name + '/output.txt', 'w') as f:
+          f.write("LOG FILE for run " + time_string + '\n' + '\n') 
 
     # iterate over cluterers
     classes=np.unique(y)
@@ -253,7 +257,10 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
         #score = grid_search.score(X, y)
         print("Best parameter (CV score=%0.3f):" % grid_search.best_score_)
         print(grid_search.best_params_)
-        #print("Best "+scoring+"score: ",grid_search.best_score_) ## current change
+        if log == True:
+          with open(path_name + '/output.txt', 'a') as f:
+              f.write("Best parameter (CV score=%0.3f):" % grid_search.best_score_ + '\n')
+              f.write(str(grid_search.best_params_) + '\n') 
         labels = y
         #labels = grid_search.best_estimator_.predict(X)
         #print("Best Model Labels: ",labels)
@@ -326,9 +333,16 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
                 count = 0
         else:
             print("Incorrect plot number value entered")
+            if log == True:
+              with open(path_name + '/output.txt', 'a') as f:
+                  f.write("Incorrect plot number value entered" + '\n')
         fig.update_layout(showlegend=False)
         fig.show()
-      # Confusion Matrix here
+      
+    print("Detection gridsearch completed")
+    if log == True:
+        with open(path_name + '/output.txt', 'a') as f:
+            f.write("Detection gridsearch completed")
     return
 
 

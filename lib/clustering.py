@@ -1681,7 +1681,7 @@ def pipeBuild_HDBSCAN(min_cluster_size=[5], min_samples=[None], cluster_selectio
 #"""
 
 # CLUSTERING GIRD BUILDER
-def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all',save_best=False):
+def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all',save_best=False,log=False):
 
     n_classes = int(np.amax(y+1))
     n_inputs = X.shape[1]
@@ -1690,6 +1690,10 @@ def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all'
       time_string = get_timestamp_string()
       path_name = time_string + "_models"
       directory_path = create_directory(path_name)
+    
+    if log == True:
+       with open(path_name + '/output.txt', 'w') as f:
+          f.write("LOG FILE for run " + time_string + '\n' + '\n')
 
     # iterate over cluterers
     for j in range(len(names)):
@@ -1700,6 +1704,11 @@ def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all'
         print("Best parameter (CV score=%0.3f):" % grid_search.best_score_)
         print(grid_search.best_params_)
         print("Best "+scoring+"score: ",grid_search.best_score_)
+        if log == True:
+            with open(path_name + '/output.txt', 'a') as f:
+                f.write("Best parameter (CV score=%0.3f):" % grid_search.best_score_ + '\n')
+                f.write(str(grid_search.best_params_) + '\n')
+                f.write("Best "+scoring+"score: "+grid_search.best_score_ + '\n')
         labels = grid_search.best_estimator_.steps[0][1].labels_
         #print("Best Model Labels: ",labels)
         noise = np.isin(labels, -1)
@@ -1726,6 +1735,10 @@ def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all'
         y_classes = int(np.amax(y)+1)
         print("# of X's clusters is: ",x_classes)
         print("# of y's clusters is: ",y_classes)
+        if log == True:
+            with open(path_name + '/output.txt', 'a') as f:
+                f.write("# of X's clusters is: " + x_classes + '\n')
+                f.write("# of y's clusters is: " + y_classes + x_classes + '\n')
         if x_classes > y_classes:
             n_classes = x_classes
         else:
@@ -1771,9 +1784,17 @@ def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all'
                 count = 0
         else:
             print("Incorrect plot number value entered")
+            if log == True:
+                with open(path_name + '/output.txt', 'a') as f:
+                    f.write("Incorrect plot number value entered" + '\n')
         fig.update_layout(title_text= model_name + ' Clusters')
         fig.update_layout(showlegend=False)
         fig.show()
+
+    print("Clustering gridsearch completed")
+    if log == True:
+        with open(path_name + '/output.txt', 'a') as f:
+            f.write("Clustering gridsearch completed")
     return
 
 """

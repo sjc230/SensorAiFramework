@@ -68,4 +68,3 @@ if st.button("Clear Detection Model Queue"):
 if st.button("Run Detection Grid Search"):
     print("Detection gridsearch started")
     execute_detect_gridsearch()
-    print("Detection gridsearch completed")

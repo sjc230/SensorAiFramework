@@ -671,7 +671,7 @@ def pipeBuild_OrthogonalMatchingPursuitCV(copy=[True], fit_intercept=[True],
   return pipeline, params
 
 # REGRESSOR GRID BUILDER
-def gridsearch_regressor(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_mean_squared_error',save_best=False):
+def gridsearch_regressor(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_mean_squared_error',save_best=False,log=False):
     n_classes = int(np.amax(y_train)+1)
     n_inputs = X_train.shape[1]
 
@@ -679,6 +679,10 @@ def gridsearch_regressor(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_
       time_string = get_timestamp_string()
       path_name = time_string + "_models"
       directory_path = create_directory(path_name)
+
+    if log == True:
+       with open(path_name + '/output.txt', 'w') as f:
+          f.write("LOG FILE for run " + time_string + '\n' + '\n') 
 
     # iterate over regressors
     for j in range(len(names)):
@@ -688,6 +692,10 @@ def gridsearch_regressor(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_
         score = grid_search.score(X_test, y_test)
         print("Best parameter (CV score=%0.3f):" % grid_search.best_score_)
         print(grid_search.best_params_)
+        if log == True:
+          with open(path_name + '/output.txt', 'w') as f:
+              f.write("Best parameter (CV score=%0.3f):" % grid_search.best_score_ + '\n')
+              f.write(str(grid_search.best_params_) + '\n') 
         y_pred = grid_search.predict(X_test)
 
         if save_best == True:
@@ -710,8 +718,14 @@ def gridsearch_regressor(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_
         plt.title(best_title)
 
         plt.show()
+    
+    print("Regression gridsearch completed")
+    if log == True:
+        with open(path_name + '/output.txt', 'a') as f:
+            f.write("Regression gridsearch completed")
     return
 
+"""
 if __name__ == '__main__':
   p = Path('.')
   datapath = p / "test_data/"
@@ -915,3 +929,4 @@ if __name__ == '__main__':
       
   plt.tight_layout()
   plt.show()
+  #"""

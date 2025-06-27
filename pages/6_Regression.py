@@ -69,4 +69,3 @@ if st.button("Clear Regression Model Queue"):
 if st.button("Run Regression Grid Search"):
     print("Regression gridsearch started")
     execute_regress_gridsearch()
-    print("Regression gridsearch completed")

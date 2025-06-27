@@ -69,4 +69,3 @@ if st.button("Clear Classifier Model Queue"):
 if st.button("Run Classifier Grid Search"):
     print("Classifier gridsearch started")
     execute_class_gridsearch()
-    print("Classifier gridsearch completed")

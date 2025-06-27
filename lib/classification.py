@@ -3680,8 +3680,7 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
     
     if log == True:
        with open(path_name + '/output.txt', 'w') as f:
-          f.write("LOG FILE for run " + time_string + '\n' + '\n')
-          
+          f.write("LOG FILE for run " + time_string + '\n' + '\n')          
       
     # iterate over classifiers
     classes=np.unique(y_train)
@@ -3769,10 +3768,17 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
                 count = 0
         else:
             print("Incorrect plot number value entered")
+            if log == True:
+                with open(path_name + '/output.txt', 'a') as f:
+                    f.write("Incorrect plot number value entered" + '\n')
         fig.update_layout(title_text= model_name + ' Classes')
         fig.update_layout(showlegend=False)
-        fig.show()        
-
+        fig.show() 
+        
+    print("Classifier gridsearch completed")
+    if log == True:
+        with open(path_name + '/output.txt', 'a') as f:
+            f.write("Classifier gridsearch completed")
     return
 
 """
