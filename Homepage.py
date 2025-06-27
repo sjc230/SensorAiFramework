@@ -52,3 +52,15 @@ if "regress_name_queue" not in st.session_state:
 
 if "regress_model_queue" not in st.session_state:
     st.session_state["regress_model_queue"] = []
+
+if 'show_class_log' not in st.session_state:
+    st.session_state['show_class_log'] = False
+
+if 'show_clust_log' not in st.session_state:
+    st.session_state['show_clust_log'] = False
+
+if 'show_detect_log' not in st.session_state:
+    st.session_state['show_detect_log'] = False
+
+if 'show_regress_log' not in st.session_state:
+    st.session_state['show_regress_log'] = False

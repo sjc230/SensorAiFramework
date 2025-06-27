@@ -4,6 +4,7 @@ import numpy as np
 import os
 import sys
 from pathlib import Path
+import time
 
 # Get the path of the current file (file1.py)
 current_file_path = Path(__file__).resolve()
@@ -14,7 +15,7 @@ other_folder_path = parent_dir.parent / "lib"
 # Add the other folder to sys.path so Python can find the module
 sys.path.append(str(other_folder_path))
 # Now you can import from file2.py
-from utils import parse_text_entry
+from utils import parse_text_entry, display_log_updates
 from classification import *
 
 def add_to_class_queue(name,model):
@@ -31,6 +32,8 @@ def execute_class_gridsearch():
     gridsearch_classifier(names=st.session_state['class_name_queue'],pipes=st.session_state['class_model_queue'],
                               X_train=X_train,X_test=X_test,y_train=y_train,y_test=y_test,
                               plot_number=3,scoring="neg_mean_squared_error",save_best=True,log=True)
+    
+
 
 st.title("Classification")
 
@@ -65,7 +68,23 @@ if st.button("Show Classifier Model Queue"):
 if st.button("Clear Classifier Model Queue"):
     st.session_state['class_name_queue'] = []
     st.session_state['class_model_queue'] = []
+    st.session_state["class log loader"] = None
+    st.session_state['show_class_log'] = False
 
 if st.button("Run Classifier Grid Search"):
     print("Classifier gridsearch started")
+    st.session_state['show_class_log'] = True
     execute_class_gridsearch()
+
+if st.session_state['show_class_log'] == True:
+    log_file = st.file_uploader("Choose a txt file", type="txt",key="class log loader")
+    if log_file is not None:
+        root, extension = os.path.splitext(log_file.name)
+        if extension.lower() == ".txt":
+            bytes_data = log_file.getvalue()  
+            string_data = bytes_data.decode('utf-8') 
+            # Display the content
+            st.write("File Content:")
+            st.code(string_data, language="text") # Use st.code for displaying raw text            
+        else:
+            st.write("You have selected an incorrect file type")

@@ -65,7 +65,23 @@ if st.button("Show Regression Model Queue"):
 if st.button("Clear Regression Model Queue"):
     st.session_state['regress_name_queue'] = []
     st.session_state['regress_model_queue'] = []
+    st.session_state["regress log loader"] = None
+    st.session_state['show_regress_log'] = False
 
 if st.button("Run Regression Grid Search"):
     print("Regression gridsearch started")
+    st.session_state['show_regress_log'] = True
     execute_regress_gridsearch()
+
+if st.session_state['show_regress_log'] == True:
+    log_file = st.file_uploader("Choose a txt file", type="txt",key="regress log loader")
+    if log_file is not None:
+        root, extension = os.path.splitext(log_file.name)
+        if extension.lower() == ".txt":
+            bytes_data = log_file.getvalue()  
+            string_data = bytes_data.decode('utf-8') 
+            # Display the content
+            st.write("File Content:")
+            st.code(string_data, language="text") # Use st.code for displaying raw text            
+        else:
+            st.write("You have selected an incorrect file type")

@@ -434,3 +434,12 @@ def data_setup(label_bool,sep_data_bool,split_bool,data_file,split_value=None,la
         y_test = y
 
     return X_train, y_train, X_test, y_test
+
+def display_log_updates(filename,log_container):
+    """Reads the log file and displays its content."""
+    try:
+        with open(filename, 'r') as f:
+            log_content = f.read()
+            log_container.code(log_content, language='text') # Display as code block for formatting
+    except FileNotFoundError:
+        log_container.warning("Log file " + filename + " not found.")
