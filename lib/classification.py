@@ -3679,10 +3679,8 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
       directory_path = create_directory(path_name)
     
     if log == True:
-       original_stdout = sys.stdout
        with open(path_name + '/output.txt', 'w') as f:
-        # Redirect stdout to the file
-        sys.stdout = f
+          f.write("LOG FILE for run " + time_string + '\n' + '\n')
           
       
     # iterate over classifiers
@@ -3693,7 +3691,11 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
         grid_search.fit(X_train, y_train)
         score = grid_search.score(X_test, y_test)
         print("Best parameter (CV score=%0.3f):" % grid_search.best_score_)
-        print(grid_search.best_params_)        
+        print(grid_search.best_params_)
+        if log == True:
+            with open(path_name + '/output.txt', 'a') as f:
+                f.write("Best parameter (CV score=%0.3f):" % grid_search.best_score_ + '\n')  
+                f.write(str(grid_search.best_params_) + '\n')      
         y_pred = grid_search.predict(X_test)
         #Check for -1 in predictions and change -1 to new value
         noise = np.isin(y_pred, -1) # changes anomaly scores 1 -> 0 and -1 -> 1
@@ -3701,7 +3703,9 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
             y_pred = np.where(y_pred == 1, 0, y_pred)
             y_pred = np.where(y_pred == -1, 1, y_pred)
         print(classification_report(y_test, y_pred))
-        #ConfusionMatrixDisplay.from_estimator(grid_search, X_test, y_test, xticks_rotation="vertical")
+        if log == True:
+            with open(path_name + '/output.txt', 'a') as f:
+                f.write(classification_report(y_test, y_pred) + '\n')
         plot_confusion_matrix(y_test,y_pred,classes,f"{names[j]} Confusion Matrix")
 
         if save_best == True:
@@ -3712,6 +3716,10 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
           print("Best Name: ",best_name)
           yaml_name = 'Best_' + model_name + '.yaml'
           print("Yaml Name ",yaml_name)
+          if log == True:
+            with open(path_name + '/output.txt', 'a') as f:
+                f.write("Best Name: " + best_name + ' \n')
+                f.write("Yaml Name " + yaml_name + ' \n')
           save_model(model=best_model,filename=best_name)
           create_model_yaml(yaml_name=yaml_name,
                             model_name='Best_' + model_name + '.pkl',
@@ -3765,8 +3773,6 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
         fig.update_layout(showlegend=False)
         fig.show()        
 
-    if log == True:
-       sys.stdout = original_stdout
     return
 
 """
