@@ -30,7 +30,7 @@ def execute_class_gridsearch():
 
     gridsearch_classifier(names=st.session_state['class_name_queue'],pipes=st.session_state['class_model_queue'],
                               X_train=X_train,X_test=X_test,y_train=y_train,y_test=y_test,
-                              plot_number=3,scoring="neg_mean_squared_error",save_best=True)
+                              plot_number=3,scoring="neg_mean_squared_error",save_best=True,log=False)
 
 st.title("Classification")
 

@@ -1771,6 +1771,7 @@ def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all'
                 count = 0
         else:
             print("Incorrect plot number value entered")
+        fig.update_layout(title_text= model_name + ' Clusters')
         fig.update_layout(showlegend=False)
         fig.show()
     return

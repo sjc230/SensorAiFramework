@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import plotly.express as px
 import pickle
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
@@ -150,7 +151,7 @@ def plot_averaging_center(center, pieces):
     plt.legend()
     plt.show()
 
-def plot_confusion_matrix(y_true, y_pred, classes, title='Confusion Matrix', cmap='Blues'):
+def plot_confusion_matrix_old(y_true, y_pred, classes, title='Confusion Matrix', cmap='Blues'):
     """
     Plots the confusion matrix.
 
@@ -169,6 +170,35 @@ def plot_confusion_matrix(y_true, y_pred, classes, title='Confusion Matrix', cma
     plt.ylabel('True Label')
     plt.show()
 
+def plot_confusion_matrix(y_true, y_pred, labels=None, title="Confusion Matrix"):
+    """
+    Plots an interactive confusion matrix using Plotly.
+
+    Args:
+        y_true (array-like): True labels.
+        y_pred (array-like): Predicted labels.
+        labels (list, optional): List of class labels for display. Defaults to unique values in y_true.
+        title (str, optional): Title of the plot. Defaults to "Confusion Matrix".
+    """
+    cm = confusion_matrix(y_true, y_pred, labels=labels)
+
+    if labels is None:
+        labels = np.unique(y_true).astype(str) # Convert to string for display
+
+    fig = px.imshow(cm,
+                    x=labels,
+                    y=labels,
+                    color_continuous_scale='Blues', # Choose a color scale
+                    aspect="auto",
+                    text_auto=True) # Automatically add text annotations
+
+    fig.update_layout(title=title,
+                      xaxis_title='Predicted Label',
+                      yaxis_title='True Label',
+                      xaxis_nticks=len(labels), # Ensure all x-axis labels are shown
+                      yaxis_nticks=len(labels)) # Ensure all y-axis labels are shown
+
+    fig.show()
 
 # Load the model from a pickle file
 def load_model(filename):

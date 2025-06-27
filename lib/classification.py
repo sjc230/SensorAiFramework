@@ -10,6 +10,7 @@ import plotly.graph_objects as go
 import re
 import pytz
 from datetime import datetime
+from contextlib import redirect_stdout
 
 import enum
 from matplotlib.colors import ListedColormap
@@ -3667,7 +3668,7 @@ def pipeBuild_TimeSeriesSVC(C=[1.0],kernel=['gak'],degree=[3],gamma=['auto'],coe
   return pipeline, params
 
 # CLASSIFICATON GRID BUILDER
-def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_mean_squared_error',plot_number=10,save_best=False):
+def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_mean_squared_error',plot_number=10,save_best=False,log=False):
     
     n_classes = int(np.amax(y_train)+1)
     n_inputs = X_train.shape[1]
@@ -3676,6 +3677,13 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
       time_string = get_timestamp_string()
       path_name = time_string + "_models"
       directory_path = create_directory(path_name)
+    
+    if log == True:
+       original_stdout = sys.stdout
+       with open(path_name + '/output.txt', 'w') as f:
+        # Redirect stdout to the file
+        sys.stdout = f
+          
       
     # iterate over classifiers
     classes=np.unique(y_train)
@@ -3753,9 +3761,12 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
                 count = 0
         else:
             print("Incorrect plot number value entered")
+        fig.update_layout(title_text= model_name + ' Classes')
         fig.update_layout(showlegend=False)
         fig.show()        
 
+    if log == True:
+       sys.stdout = original_stdout
     return
 
 """
