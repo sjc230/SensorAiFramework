@@ -265,7 +265,7 @@ elif option == 'generate scg signals':
                                 systolic=syst_list, diastolic=dias_list, pulse_type=pulse_t, noise_type=noise_t, noise_shape=noise_s,
                                 noise_amplitude=noise_a, noise_frequency=noise_f_list, power_line_amplitude=pl_a, power_line_frequency=pl_f,
                                 artifacts_amplitude=art_a, artifacts_frequency=art_f, artifacts_number=art_n, artifacts_shape=art_s,
-                                n_echo=n_e, attenuation_factor=att_f_list, delay_factor=del_f, random_state=rs[0], silent=sil,
+                                n_echo=n_e, attenuation_factor=att_f_list, delay_factor=del_f, random_state=rs_list[0], silent=sil,
                                 label_data=lab,save_data=True)
        
         print("SCG Data Created")
