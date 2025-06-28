@@ -67,7 +67,7 @@ if option == '.csv or .npy file':
 # Generate Wavefor Data Options
 elif option == 'generate waveforms':
     wav_cat = st.text_input("Category: classification, detection, or regression", value='classification', key="category")
-    wav_amp = st.number_input("Amplitude: float, 0.00 for None", value=0.00, step=0.01, format="%.2f" key="wave amp")
+    wav_amp = st.number_input("Amplitude: float, 0.00 for None", value=0.00, step=0.01, format="%.2f", key="wave amp")
     wav_freq = st.number_input("Frequency: float, 0.00 for None", value=0.00, step=0.01, format="%.2f", key="wave freq")
     wav_noise = st.checkbox("Check to add Noise", key="wave noise box")
     wav_num = st.number_input("Wave Number: integer", value='10', min_value='int', key="wave num")
