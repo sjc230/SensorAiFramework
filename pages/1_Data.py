@@ -15,7 +15,7 @@ other_folder_path = parent_dir.parent / "lib"
 sys.path.append(str(other_folder_path))
 # Now you can import from file2.py
 from utils import data_setup, parse_text_entry, save_numpy_array
-from dsp import generate_class_data, generate_anomaly_data, generate_regression_data
+from dsp import generate_class_data, generate_anomaly_data, generate_regression_data, scg_simulate
 
 st.title("Data")
 
@@ -140,21 +140,19 @@ elif option == 'generate waveforms':
 
     if st.button("Clear All Wavefor Inputs"):
         st.session_state["category"] = 'classification'
-        st.session_state["wav amp"] = 0.00
-        st.session_state["wav freq"] = 0.00
-        st.session_state["wav noise box"] = False
-        st.session_state["wav num"] = 10
-        st.session_state["wav labels"] = 'frequency'
+        st.session_state.wave_amp = 0.00
+        st.session_state.wave_freq = 0.00
+        st.session_state.wave_noise_box = False
+        st.session_state.wave_num = 10
+        st.session_state["wav_labels"] = 'frequency'
         st.rerun()
 
-    #wav_cat = st.text_input("Category: classification, detection, or regression", value='classification', key="category")
     wav_cat = st.selectbox('Category:', ('classification', 'regression'),key="category")
-    wav_amp = st.number_input("Amplitude: float, 0.00 for None", value=0.00, step=0.01, format="%.2f", key="wave amp")
-    wav_freq = st.number_input("Frequency: float, 0.00 for None", value=0.00, step=0.01, format="%.2f", key="wave freq")
-    wav_noise = st.checkbox("Check to add Noise", key="wave noise box")
-    wav_num = st.number_input("Wave Number: integer", value=10, step=1, key="wave num")
-    #wav_label = st.text_input("Labels: amplitude or frequency", value='frequency', key="wave labels")
-    wav_label = st.selectbox('Labels:', ('frequency', 'amplitude'),key='wav labels')
+    wav_amp = st.number_input("Amplitude: float, 0.00 for None", value=0.00, step=0.01, format="%.2f", key="wave_amp")
+    wav_freq = st.number_input("Frequency: float, 0.00 for None", value=0.00, step=0.01, format="%.2f", key="wave_freq")
+    wav_noise = st.checkbox("Check to add Noise", key="wave_noise_box")
+    wav_num = st.number_input("Wave Number: integer", value=10, step=1, key="wave_num")
+    wav_label = st.selectbox('Labels:', ('frequency', 'amplitude'),key='wav_labels')
 
    
     if st.button("Generate the Wave Data"):
@@ -181,33 +179,93 @@ elif option == 'generate waveforms':
         save_numpy_array(data_file)
 
 elif option == 'generate scg signals':
-    wav_cat = st.text_input("Category: classification, detection, or regression", value='classification', key="category")
-    wav_amp = st.number_input("Amplitude: float, 0.00 for None", value=0.00, step=0.01, format="%.2f", key="wave amp")
-    wav_freq = st.number_input("Frequency: float, 0.00 for None", value=0.00, step=0.01, format="%.2f", key="wave freq")
-    wav_noise = st.checkbox("Check to add Noise", key="wave noise box")
-    wav_num = st.number_input("Wave Number: integer", value=10, step=1, key="wave num")
-    wav_label = st.text_input("Labels: amplitude or frequency", value='frequency', key="wave labels")
+    if st.button("Clear All Wavefor Inputs"):
+        st.session_state.num_rows = 1
+        st.session_state.duration = 10
+        st.session_state.sampling_rate = 100
+        st.session_state["add_respiratory"] = True
+        st.session_state['repiratory_rate'] = '10,30'
+        st.session_state["systolic"] = '90,140'
+        st.session_state["diastolic"] = '80,100'
+        st.session_state["pulse_type"] = 'db'
+        st.session_state["noise_type"] = 'basic'
+        st.session_state["noise_shape"] = 'laplace'
+        st.session_state.noise_amplitude = 0.1
+        st.session_state["noise_frequency"] = '5,10,100'
+        st.session_state.power_line_amplitude = 0.0
+        st.session_state.power_line_frequency = 100
+        st.session_state.artifacts_amplitude = 0.0
+        st.session_state.artifacts_frequency = 100.0
+        st.session_state.artifacts_number = 5
+        st.session_state["artifacts_shape"] = 'laplace'
+        st.session_state.n_echo = 3
+        st.session_state["attenuation_factor"] = '0.1,0.05,0.02'
+        st.session_state.delay_factor = 15
+        st.session_state["random_state"] = 'None'
+        st.session_state.silent = False
+        st.session_state["scg_labels"] = 'heart rate'
+        st.rerun()
 
-   
-    if st.button("Generate the Wave Data"):
-        if wav_amp == 0.0:
-            new_amp = None
-        else:
-            new_amp = wav_amp
+    n_row = st.number_input("Wave Number: integer", value=1, step=1, key="num_rows")
+    
+    dur = st.number_input("Wave Number: integer", value=10, step=1, key="duration")
 
-        if wav_freq == 0.0:
-            new_freq = None
-        else:
-            new_freq = wav_freq
-        
-        if wav_cat == 'classification':
-            data, labels = generate_class_data(amplitude=new_amp,frequency=new_freq,noise=wav_noise,wave_number=wav_num,show=True)
-        elif wav_cat == 'detection':
-            data, labels = generate_anomaly_data(amplitude=new_amp,frequency=new_freq,noise=wav_noise,wave_number=wav_num,show=True)
-        else:
-            data, labels = generate_regression_data(amplitude=new_amp,frequency=new_freq,noise=wav_noise,wave_number=wav_num,label_type=wav_label,show=True)
+    s_rate = st.number_input("Wave Number: integer", value=100, step=1, key="sampling_rate")
 
-        labels = labels.reshape(-1, 1)
-        data_file = np.concatenate((data,labels),axis=1)
+    add_resp = st.checkbox("Check to add Noise", value=True, key="add_respiratory")
 
-        save_numpy_array(data_file)
+    resp_rate = st.text_input("Respiratory Rate: comma seperated floats", value='10,30',key="respiratory_rate")
+    resp_rate_list = parse_text_entry(resp_rate,'float')
+
+    syst = st.text_input("Systolic Pressure: comma seperated floats", value='90,140',key="systolic")
+    syst_list = parse_text_entry(syst,'float')
+
+    dias = st.text_input("Diastolic Pressure: comma seperated floats", value='90,140',key="diastolic")
+    dias_list = parse_text_entry(dias,'float')
+
+    pulse_t = st.selectbox('Pulse Type:', ('db','mor','ricker','sym','coif'),key="pulse_type")
+
+    noise_t = st.selectbox('Noise Type:', ('basic','resonance','powerline','artifacts','linear_drift'),key="noise_type")
+
+    noise_s = st.selectbox('Noise Shape:', ('laplace', 'gaussian'),key="noise_shape")
+
+    noise_a = st.number_input("Noise Amplitude: float", value=0.10, step=0.01, format="%.2f", key="noise_amplitude")
+
+    noise_f = st.text_input("Noise Frequency: comma seperated floats", value='5,10,100',key="noise_frequency")
+    noise_f_list = parse_text_entry(noise_f,'float')
+
+    pl_a = st.number_input("Power Line Amplitude: float", value=0.00, step=0.01, format="%.2f", key="power_line_amplitude")
+
+    pl_f = st.number_input("Power Line Frequency: float", value=50.00, step=0.01, format="%.2f", key="power_line_frequency")
+
+    art_a = st.number_input("Artifacts Amplitude: float", value=0.00, step=0.01, format="%.2f", key="artifacts_amplitude")
+
+    art_f = st.number_input("Artifacts Frequency: float", value=100.00, step=0.01, format="%.2f", key="artifacts_frequency")
+
+    art_n = st.number_input("Artifacts Number: integer", value=5, step=1, key="art_number")
+
+    art_s = st.selectbox('Artifacts Shape:', ('laplace', 'gaussian'),key="artifacts_shape")
+
+    n_e = st.number_input("Echo Number: integer", value=3, step=1, key="n_echo")
+
+    att_f = st.text_input("Attenuation Factor: comma seperated floats", value='0.1,0.05,0.02',key="attenuation_factor")
+    att_f_list = parse_text_entry(noise_f,'float')
+
+    del_f = st.number_input("Delay Factor: float", value=15.00, step=0.01, format="%.2f", key="delay_factor")
+
+    rs = st.text_input("Random State: a single float or None", value='None',key="random_state")
+    rs_list = parse_text_entry(noise_f,'int')
+
+    sil = st.checkbox("Silent", key="silent")
+
+    lab = st.selectbox('SCG Labels:', ("heart rate", "respiratory rate", "systolic pressure", "diastolic pressue"),key="scg_labels")
+
+    if st.button("Generate the SCG Data"):
+        scg_data = scg_simulate(num_rows=n_row, duration=dur, sampling_rate=s_rate, add_respritory=add_resp, respiratory_rate=resp_rate_list,
+                                systolic=syst_list, diastolic=dias_list, pulse_type=pulse_t, noise_type=noise_t, noise_shape=noise_s,
+                                noise_amplitude=noise_a, noise_frequency=noise_f_list, power_line_amplitude=pl_a, power_line_frequency=pl_f,
+                                artifacts_amplitude=art_a, artifacts_frequency=art_f, artifacts_number=art_n, artifacts_shape=art_s,
+                                n_echo=n_e, attenuation_factor=att_f_list, delay_factor=del_f, random_state=rs[0], silent=sil,
+                                label_data=lab,save_data=True)
+       
+        print("SCG Data Created")
