@@ -4237,9 +4237,9 @@ def generate_class_data(amplitude=None,frequency=None,noise=False,wave_number=10
 
   if show == True:
     plot = go.Figure()
-    plot.add_trace(go.Scatter(x=X_axis,y=X[0,0:len(X[0])]))
-    plot.add_trace(go.Scatter(x=X_axis,y=X[1,0:len(X[1])]))
-    plot.add_trace(go.Scatter(x=X_axis,y=X[2,0:len(X[2])]))
+    plot.add_trace(go.Scatter(x=X_axis,y=X[0,0:len(X[0])],line_color='blue'))
+    plot.add_trace(go.Scatter(x=X_axis,y=X[1,0:len(X[1])],line_color='red'))
+    plot.add_trace(go.Scatter(x=X_axis,y=X[2,0:len(X[2])],line_color='green'))
     plot.update_layout(title="Data: 1st sample of each waveform type")
     plot.show()
 
@@ -4282,8 +4282,8 @@ def generate_anomaly_data(amplitude=None,frequency=None,noise=False,wave_number=
 
   if show == True:
     plot = go.Figure()
-    plot.add_trace(go.Scatter(x=X_axis,y=X[0,0:len(X[0])]))
-    plot.add_trace(go.Scatter(x=X_axis,y=X[1,0:len(X[1])]))
+    plot.add_trace(go.Scatter(x=X_axis,y=X[0,0:len(X[0])],line_color='blue'))
+    plot.add_trace(go.Scatter(x=X_axis,y=X[1,0:len(X[1])],line_color='red'))
     plot.update_layout(title="Data: 1st sample of each waveform type")
     plot.show()
 
@@ -4346,9 +4346,9 @@ def generate_regression_data(amplitude=None,frequency=None,noise=False,wave_numb
 
   if show == True:
     plot = go.Figure()
-    plot.add_trace(go.Scatter(x=X_axis,y=X[0,0:len(X[0])]))
-    plot.add_trace(go.Scatter(x=X_axis,y=X[1,0:len(X[1])]))
-    plot.add_trace(go.Scatter(x=X_axis,y=X[2,0:len(X[2])]))
+    plot.add_trace(go.Scatter(x=X_axis,y=X[0,0:len(X[0])],line_color='blue'))
+    plot.add_trace(go.Scatter(x=X_axis,y=X[1,0:len(X[1])],line_color='red'))
+    plot.add_trace(go.Scatter(x=X_axis,y=X[2,0:len(X[2])],line_color='green'))
     plot.update_layout(title="Data: 1st sample of each waveform type")
     plot.show()
 
