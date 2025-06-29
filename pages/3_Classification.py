@@ -125,6 +125,23 @@ if model_box == 'gradient boosting':
         gradient_boosting = pipeBuild_GradientBoostingClassifier(n_estimators=gb_ne_list,criterion=gb_crit_list,min_samples_split=gb_ms_split_list,min_samples_leaf=gb_ms_leaf_list,max_depth=gb_max_d_list,random_state=gb_rand_list[0])
         add_to_class_queue(name,gradient_boosting)
 
+# K Nearest Neighbors
+if model_box == 'k nearest neighbors':
+    knn_nn = st.text_input("Number of Neighbors: integers only", value='5', key="knn_n_neighbors")
+    knn_weight = st.text_input("Weights: uniform, distance", value='uniform', key="knn_weights")
+    knn_algo = st.text_input("Algorithm: auto, ball_tree, kd_tree, brute", value='auto', key="knn_algoritm")
+    knn_ls = st.text_input("Leaf Size: integers only", value='30', key="knn_leaf_size")
+
+if model_box == 'k nearest neighbors':
+    if st.button("Add K Nearest Neighbors to Classifier Queue"):
+        knn_nn_list = parse_text_entry(knn_nn,'int')    
+        knn_weight_list = parse_text_entry(knn_weight,'string')
+        knn_algo_list = parse_text_entry(knn_algo,'string')
+        knn_ls_list = parse_text_entry(knn_ls,'int')
+        name = "K Nearest Neighbors"
+        knn = pipeBuild_KNeighborsClassifier(n_neighbors=knn_nn,weights=knn_weight_list,algorithm=knn_algo_list,leaf_size=knn_ls)
+        add_to_class_queue(name,knn)
+
 ########################################################
 # End Model Variable Entries
 ########################################################
