@@ -19,7 +19,7 @@ from detection import *
 
 def add_to_detect_queue(name,model):
     st.session_state['detect_name_queue'].append(name)
-    st.session_state['cdetect_model_queue'].append(model)
+    st.session_state['detect_model_queue'].append(model)
     print("Queue: ", st.session_state['detect_name_queue'])
 
 def execute_detect_gridsearch():
@@ -29,33 +29,35 @@ def execute_detect_gridsearch():
     y_test = st.session_state['y_test']
 
     gridsearch_outlier(names=st.session_state['detect_name_queue'],pipes=st.session_state['detect_model_queue'],
-                          X=X_test,y=y_test, plot_number=3,save_best=True)
+                          X=X_test,y=y_test, plot_number=3,save_best=True,log=True)
 
 st.title("Anomaly Detection")
 
-detect_model_tuple = ('decision tree', 'extra trees', 'random forest', 'gradien boosting',
-               'k nearest neighbors', 'nearest centroid', 'radius nearest neighbors',
-               'support vector', 'nu support vector', 'time series svc')
+detect_model_tuple = ('local outlier factor', 'isolation forest')
 
 detect_model_box = st.selectbox('**Select the model(s) you like to use.**', detect_model_tuple)
 
-if detect_model_box == 'decision tree':
-    dec_crit = st.text_input("Criterion: gini, entropy, or log_los", value='gini', key="dec crit")
-    dec_split = st.text_input("Splitter: best, random", value='best', key="dec split")
-    dec_max_d = st.text_input("Maximum Tree Depth: integers", value='None', key="dec max depth")
-    dec_rand = st.text_input("Random State: None or a single integer", value='None', key="dec random state")
-
+if detect_model_box == 'local outlier factor':
+    lof_nn = st.text_input("Number of Neighbors: integers only", value='20', key="lof_n_neighbors")
+    lof_algo = st.text_input("Algorithm: auto, ball_tree, kd_tree, brute", value='auto', key="lof_algorithm")
+    lof_leaf = st.text_input("Leaf Size: integers only", value='30', key="lof_leaf_size")
+    lof_power = st.text_input("Power: intergers only", value='2', key="lof_metri")
+    lof_met = st.text_input("Distance Metric: euclidean, manhattan, chebyshev, minkowski", value='minkowski', key="low_p")
+    lof_nov = st.text_input("Novelty: True or False", value='False', key="lof_novelty")
 
 
 if st.button("Add Model to Detection Queue"):
-    if detect_model_box == 'decision tree':
-        criterion_list = parse_text_entry(dec_crit,'string')
-        splitter_list = parse_text_entry(dec_split,'string')
-        max_depth_list = parse_text_entry(dec_max_d,'int')
-        random_state_list = parse_text_entry(dec_rand,'int')
-        name = "Decision Tree"
-        decision_tree = pipeBuild_DecisionTreeClassifier(criterion=criterion_list,splitter=splitter_list,max_depth=max_depth_list,random_state=random_state_list[0])
-        add_to_detect_queue(name,decision_tree)
+    if detect_model_box == 'local outlier factor':
+        nn_list = parse_text_entry(lof_nn,'int')
+        algo_list = parse_text_entry(lof_algo,'string')
+        leaf_list = parse_text_entry(lof_leaf,'int')
+        power_list = parse_text_entry(lof_power,'int')
+        metric_list = parse_text_entry(lof_met,'string')
+        novelty_list = parse_text_entry(lof_nov,'bool')
+        
+        name = "Local Outlier Factor"
+        local_outlier_factor = pipeBuild_LocalOutlierFactor(n_neighbors=nn_list,algorithm=algo_list,leaf_size=leaf_list,p=power_list,metric=metric_list,novelty=novelty_list)
+        add_to_detect_queue(name,local_outlier_factor)
 
 
 if st.button("Show Detection Model Queue"):

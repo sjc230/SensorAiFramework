@@ -29,7 +29,7 @@ def execute_clust_gridsearch():
     y_test = st.session_state['y_test']
 
     gridsearch_clustering(names=st.session_state['clust_name_queue'],pipes=st.session_state['clust_model_queue'],
-                          X=X_test,y=y_test,plot_number=3,save_best=Tru)
+                          X=X_test,y=y_test,plot_number=3,save_best=True,log=True)
 
 st.title("Clustering")
 
