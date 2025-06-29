@@ -82,9 +82,38 @@ if clust_model_box == 'dbscan':
         dbscan_p_list = parse_text_entry(dbscan_p,'float')
         
         name = "DBSCAN"
-        dbscan = dbscan = pipeBuild_DBSCAN(eps=dbscan_eps_list, min_samples=dbscan_min_samp_list, metric=dbscan_metric_list, 
+        dbscan = pipeBuild_DBSCAN(eps=dbscan_eps_list, min_samples=dbscan_min_samp_list, metric=dbscan_metric_list, 
                                            algorithm=dbscan_algo_list, leaf_size=dbscan_ls_list, p=dbscan_p_list)
         add_to_clust_queue(name,dbscan)
+
+# OPTICS
+if clust_model_box == 'optics':
+    optics_method = st.text_input("Cluster Method: dbscan, xi", value='xi', key="optics_method")
+    optics_xi = st.text_input("Xi: floats between 0 and 1", value='0.05', key="optics_xi")
+    optics_eps = st.text_input("Eps: floats", value='0.5', key="optics_eps")
+    optics_min_samp = st.text_input("Minimum Samples: integers", value='5', key="optics_min_samples")
+    optics_metric = st.text_input("Distance Metric: euclidean, manhattan, chebyshev, minkowski", value='euclidean', key="optics_metric")
+    optics_algo = st.text_input("Algorithm: auto, ball_tree, kd_tree, brute", value='auto', key="optics_algorithm")
+    optics_ls = st.text_input("Leaf Size: integers", value='30', key="optics_leaf_size")
+    optics_p = st.text_input("Minkowski Parameter: 1 or 2 only", value='2', key="optics_p")
+
+
+if clust_model_box == 'optics':
+    if st.button("Add OPTICS to Clustering Queue"):
+        optics_method_list = parse_text_entry(optics_method,'string')
+        optics_xi_list = parse_text_entry(optics_xi,'float')    
+        optics_eps_list = parse_text_entry(optics_eps,'float')
+        optics_min_samp_list = parse_text_entry(optics_min_samp,'int')
+        optics_metric_list = parse_text_entry(optics_metric,'string')
+        optics_algo_list = parse_text_entry(optics_algo,'string')
+        optics_ls_list = parse_text_entry(optics_ls,'int')
+        optics_p_list = parse_text_entry(optics_p,'float')
+        
+        name = "OPTICS"
+        optics = pipeBuild_OPTICS(cluster_method=optics_method_list, xi=optics_xi_list, eps=optics_eps_list, 
+                                  min_samples=optics_min_samp_list, metric=optics_metric_list, 
+                                  algorithm=optics_algo_list, leaf_size=optics_ls_list, p=optics_p_list)
+        add_to_clust_queue(name,optics)
 
 ########################################################
 # End Model Variable Entries
