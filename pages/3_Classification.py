@@ -183,6 +183,28 @@ if model_box == 'radius nearest neighbors':
                                                         p=rnn_p_list, metric=rnn_metric_list)
         add_to_class_queue(name,radius_nn)
 
+# Support Vector Classifier
+if model_box == 'support vector':
+    svc_c = st.text_input("Regularization Parameter: floats only", value='1.0', key="svc_c")
+    svc_kernel = st.text_input("Kernel: linear, poly, rbf, sigmoid", value='rbf', key="svc_kernel")
+    svc_degree = st.text_input("Degree (for poly kernel): integers only", value='3', key="svc_degree")
+    svc_gamma = st.text_input("Gamma: scale, auto", value='scale', key="svc_gamma")
+    svc_tol = st.text_input("Tolerance: floats only", value='0.001', key="svc_tol")
+
+
+if model_box == 'support vector':
+    if st.button("Add Suppor Vector to Classifier Queue"):
+        svc_c_list = parse_text_entry(svc_c,'float')    
+        svc_kernel_list = parse_text_entry(svc_kernel,'string')
+        svc_degree_list = parse_text_entry(svc_degree,'int')
+        svc_gamma_list = parse_text_entry(svc_gamma,'string')
+        svc_tol_list = parse_text_entry(svc_tol,'float')
+
+        name = "Support Vector Classifier"
+        radius_nn = pipeBuild_SVC(C=svc_c_list, kernel=svc_kernel_list, degree=svc_degree_list,
+                                  gamma=svc_gamma_list, tol=svc_tol_list)
+        add_to_class_queue(name,radius_nn)
+
 ########################################################
 # End Model Variable Entries
 ########################################################
