@@ -31,7 +31,7 @@ def execute_detect_gridsearch():
     gridsearch_outlier(names=st.session_state['detect_name_queue'],pipes=st.session_state['detect_model_queue'],
                           X=X_test,y=y_test, plot_number=3,save_best=True,log=True)
 
-st.title("Anomaly Detection")
+st.title("Novelty Detection")
 
 detect_model_tuple = ('local outlier factor', 'isolation forest')
 
@@ -48,7 +48,7 @@ if detect_model_box == 'local outlier factor':
     lof_leaf = st.text_input("Leaf Size: integers only", value='30', key="lof_leaf_size")
     lof_power = st.text_input("Power: intergers only", value='2', key="lof_metri")
     lof_met = st.text_input("Distance Metric: euclidean, manhattan, chebyshev, minkowski", value='minkowski', key="low_p")
-    lof_nov = st.text_input("Novelty: True or False", value='False', key="lof_novelty")
+    #lof_nov = st.text_input("Novelty: True or False", value='False', key="lof_novelty")
 
 if detect_model_box == 'local outlier factor':
     if st.button("Add LOF to Detection Queue"):    
@@ -57,10 +57,10 @@ if detect_model_box == 'local outlier factor':
         leaf_list = parse_text_entry(lof_leaf,'int')
         power_list = parse_text_entry(lof_power,'int')
         metric_list = parse_text_entry(lof_met,'string')
-        novelty_list = parse_text_entry(lof_nov,'bool')
+        #novelty_list = parse_text_entry(lof_nov,'bool')
         
         name = "Local Outlier Factor"
-        local_outlier_factor = pipeBuild_LocalOutlierFactor(n_neighbors=nn_list,algorithm=algo_list,leaf_size=leaf_list,p=power_list,metric=metric_list,novelty=novelty_list)
+        local_outlier_factor = pipeBuild_LocalOutlierFactor(n_neighbors=nn_list,algorithm=algo_list,leaf_size=leaf_list,p=power_list,metric=metric_list,novelty=[True])
         add_to_detect_queue(name,local_outlier_factor)
 
 # Isolation Forest
