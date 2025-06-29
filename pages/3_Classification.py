@@ -193,7 +193,7 @@ if model_box == 'support vector':
 
 
 if model_box == 'support vector':
-    if st.button("Add Suppor Vector to Classifier Queue"):
+    if st.button("Add Support Vector to Classifier Queue"):
         svc_c_list = parse_text_entry(svc_c,'float')    
         svc_kernel_list = parse_text_entry(svc_kernel,'string')
         svc_degree_list = parse_text_entry(svc_degree,'int')
@@ -201,9 +201,32 @@ if model_box == 'support vector':
         svc_tol_list = parse_text_entry(svc_tol,'float')
 
         name = "Support Vector Classifier"
-        radius_nn = pipeBuild_SVC(C=svc_c_list, kernel=svc_kernel_list, degree=svc_degree_list,
+        svc = pipeBuild_SVC(C=svc_c_list, kernel=svc_kernel_list, degree=svc_degree_list,
                                   gamma=svc_gamma_list, tol=svc_tol_list)
-        add_to_class_queue(name,radius_nn)
+        add_to_class_queue(name,svc)
+
+# Nu Support Vector Classifier
+if model_box == 'nu support vector':
+    nusvc_nu = st.text_input("Regularization Parameter: floats only", value='0.5', key="nusvc_nu")
+    nusvc_kernel = st.text_input("Kernel: linear, poly, rbf, sigmoid", value='rbf', key="nusvc_kernel")
+    nusvc_degree = st.text_input("Degree (for poly kernel): integers only", value='3', key="nusvc_degree")
+    nusvc_gamma = st.text_input("Gamma: scale, auto", value='scale', key="nusvc_gamma")
+    nusvc_tol = st.text_input("Tolerance: floats only", value='0.001', key="nusvc_tol")
+
+
+if model_box == 'nu support vector':
+    if st.button("Add Nu Support Vector to Classifier Queue"):
+        nusvc_nu_list = parse_text_entry(nusvc_nu,'float')    
+        nusvc_kernel_list = parse_text_entry(nusvc_kernel,'string')
+        nusvc_degree_list = parse_text_entry(nusvc_degree,'int')
+        nusvc_gamma_list = parse_text_entry(nusvc_gamma,'string')
+        nusvc_tol_list = parse_text_entry(nusvc_tol,'float')
+
+        name = "Nu Support Vector Classifier"
+        nusvc = pipeBuild_NuSVC(nu=nusvc_nu_list, kernel=nusvc_kernel_list, degree=nusvc_degree_list, 
+                                gamma=nusvc_gamma_list, tol=nusvc_tol_list)
+        add_to_class_queue(name,nusvc)
+
 
 ########################################################
 # End Model Variable Entries
