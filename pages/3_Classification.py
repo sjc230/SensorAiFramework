@@ -139,7 +139,8 @@ if model_box == 'k nearest neighbors':
         knn_algo_list = parse_text_entry(knn_algo,'string')
         knn_ls_list = parse_text_entry(knn_ls,'int')
         name = "K Nearest Neighbors"
-        knn = pipeBuild_KNeighborsClassifier(n_neighbors=knn_nn,weights=knn_weight_list,algorithm=knn_algo_list,leaf_size=knn_ls)
+        knn = pipeBuild_KNeighborsClassifier(n_neighbors=knn_nn_list, weights=knn_weight_list, 
+                                             algorithm=knn_algo_list, leaf_size=knn_ls_list)
         add_to_class_queue(name,knn)
 
 ########################################################
