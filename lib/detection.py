@@ -265,12 +265,12 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
 
         
         labels = grid_search.best_estimator_.predict(X)
-        labels = [0 if item == -1 else item for item in labels]
+        #labels = [0 if item == -1 else item for item in labels]
         #print("Best Model Labels: ",labels)
-        #noise = np.isin(labels, -1)
-        #if np.any(noise)==True:
-        #    labels = np.where(labels == 1, 0, labels)
-        #    labels = np.where(labels == -1, 1, labels)
+        noise = np.isin(labels, -1)
+        if np.any(noise)==True:
+            labels = np.where(labels == 1, 0, labels)
+            labels = np.where(labels == -1, 1, labels)
         plot_confusion_matrix(y,labels,classes,f"{names[j]} Confusion Matrix")
 
         if save_best == True:

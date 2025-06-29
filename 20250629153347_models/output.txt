@@ -1,0 +1,5 @@
+LOG FILE for run 20250629153347
+
+Best parameter (CV score=-1.500):
+{'isofrst__bootstrap': False, 'isofrst__contamination': 'auto', 'isofrst__max_features': 1.0, 'isofrst__max_samples': 'auto', 'isofrst__n_estimators': 100, 'isofrst__n_jobs': None, 'isofrst__verbose': 0, 'isofrst__warm_start': False}
+Detection gridsearch completed

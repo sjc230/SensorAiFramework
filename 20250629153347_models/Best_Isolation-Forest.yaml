@@ -1,0 +1,5 @@
+inputs: 1000
+model_path: C:\Users\steph\OneDrive\Documents\GitHub\SensorAiFramework\20250629153347_models
+model_type: detection
+name: Best_Isolation-Forest.pkl
+outputs: 2
