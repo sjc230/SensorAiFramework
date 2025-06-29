@@ -61,6 +61,7 @@ if st.button("Add Model to Regression Queue"):
 
 if st.button("Show Regression Model Queue"):
     print(st.session_state['regress_name_queue'])
+    st.write(str(st.session_state['regress_name_queue']))
 
 if st.button("Clear Regression Model Queue"):
     st.session_state['regress_name_queue'] = []

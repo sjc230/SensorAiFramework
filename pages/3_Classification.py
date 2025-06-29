@@ -51,8 +51,8 @@ if model_box == 'decision tree':
 
 
 
-if st.button("Add Model to Classifier Queue"):
-    if model_box == 'decision tree':
+if model_box == 'decision tree':
+    if st.button("Add Model to Classifier Queue"):    
         criterion_list = parse_text_entry(dec_crit,'string')
         splitter_list = parse_text_entry(dec_split,'string')
         max_depth_list = parse_text_entry(dec_max_d,'int')
@@ -64,6 +64,7 @@ if st.button("Add Model to Classifier Queue"):
 
 if st.button("Show Classifier Model Queue"):
     print(st.session_state['class_name_queue'])
+    st.write(str(st.session_state['class_name_queue']))
 
 if st.button("Clear Classifier Model Queue"):
     st.session_state['class_name_queue'] = []

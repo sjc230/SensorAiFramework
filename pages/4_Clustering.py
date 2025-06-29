@@ -60,6 +60,7 @@ if st.button("Add Model to Clustering Queue"):
 
 if st.button("Show Clustering Model Queue"):
     print(st.session_state['clust_name_queue'])
+    st.write(str(st.session_state['clust_name_queue']))
 
 if st.button("Clear Clustering Model Queue"):
     st.session_state['clust_name_queue'] = []

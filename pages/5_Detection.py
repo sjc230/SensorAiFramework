@@ -37,6 +37,11 @@ detect_model_tuple = ('local outlier factor', 'isolation forest')
 
 detect_model_box = st.selectbox('**Select the model(s) you like to use.**', detect_model_tuple)
 
+########################################################
+# Model Variable Entries
+########################################################
+
+# Local Outlier Factor
 if detect_model_box == 'local outlier factor':
     lof_nn = st.text_input("Number of Neighbors: integers only", value='20', key="lof_n_neighbors")
     lof_algo = st.text_input("Algorithm: auto, ball_tree, kd_tree, brute", value='auto', key="lof_algorithm")
@@ -45,9 +50,8 @@ if detect_model_box == 'local outlier factor':
     lof_met = st.text_input("Distance Metric: euclidean, manhattan, chebyshev, minkowski", value='minkowski', key="low_p")
     lof_nov = st.text_input("Novelty: True or False", value='False', key="lof_novelty")
 
-
-if st.button("Add Model to Detection Queue"):
-    if detect_model_box == 'local outlier factor':
+if detect_model_box == 'local outlier factor':
+    if st.button("Add LOF to Detection Queue"):    
         nn_list = parse_text_entry(lof_nn,'int')
         algo_list = parse_text_entry(lof_algo,'string')
         leaf_list = parse_text_entry(lof_leaf,'int')
@@ -59,9 +63,28 @@ if st.button("Add Model to Detection Queue"):
         local_outlier_factor = pipeBuild_LocalOutlierFactor(n_neighbors=nn_list,algorithm=algo_list,leaf_size=leaf_list,p=power_list,metric=metric_list,novelty=novelty_list)
         add_to_detect_queue(name,local_outlier_factor)
 
+# Isolation Forest
+if detect_model_box == 'isolation forest':
+    iso_ne = st.text_input("Number of Estimators: integers", value='100', key="iso_n_estimators")
+    iso_ms = st.text_input("Maximum Samples: None or floats", value='None', key="iso_max_samples")
+
+
+if detect_model_box == 'isolation forest':
+    if st.button("Add Iso Forest to Detection Queue"):    
+        ne_list = parse_text_entry(iso_ne,'int')
+        ms_list = parse_text_entry(iso_ms,'float')
+        
+        name = "Isolation Forest"
+        isolation_forest = pipeBuild_IsolationForest(n_estimators=ne_list,max_samples=ms_list)
+        add_to_detect_queue(name,isolation_forest)
+
+########################################################
+# End Model Variable Entries
+########################################################
 
 if st.button("Show Detection Model Queue"):
     print(st.session_state['detect_name_queue'])
+    st.write(str(st.session_state['detect_name_queue']))
 
 if st.button("Clear Detection Model Queue"):
     st.session_state['detect_name_queue'] = []
