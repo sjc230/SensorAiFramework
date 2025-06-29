@@ -43,6 +43,7 @@ clust_model_box = st.selectbox('**Select the model(s) you like to use.**', clust
 # Model Variable Entries
 ########################################################
 
+# Affinity Propagation
 if clust_model_box == 'affinity propagation':
     ap_damp = st.text_input("Dampening: floats", value='0.5', key="aff_prop_dampening")
     ap_max_it = st.text_input("Max Iterations: None or integers", value='200', key="aff_prop_max_iterations")
@@ -60,6 +61,30 @@ if clust_model_box == 'affinity propagation':
         aff_prop = pipeBuild_AffinityPropagation(damping=ap_dampening_list, max_iter=ap_max_iter_list, 
                                                  verbose=ap_verbose_list, random_state=ap_random_state_list[0])
         add_to_clust_queue(name,aff_prop)
+
+# DBSCAN
+if clust_model_box == 'dbscan':
+    dbscan_eps = st.text_input("Eps: floats", value='0.5', key="dbscan_eps")
+    dbscan_min_samp = st.text_input("Minimum Samples: integers", value='5', key="dbscan_min_samples")
+    dbscan_metric = st.text_input("Distance Metric: euclidean, manhattan, chebyshev, minkowski", value='euclidean', key="dbscan_metric")
+    dbscan_algo = st.text_input("Algorithm: auto, ball_tree, kd_tree, brute", value='auto', key="dbscan_algorithm")
+    dbscan_ls = st.text_input("Leaf Size: integers", value='30', key="dbscan_leaf_size")
+    dbscan_p = st.text_input("Power: floats", value='None', key="dbscan_p")
+
+
+if clust_model_box == 'dbscan':
+    if st.button("Add DBSCAN to Clustering Queue"):    
+        dbscan_eps_list = parse_text_entry(dbscan_eps,'float')
+        dbscan_min_samp_list = parse_text_entry(dbscan_min_samp,'int')
+        dbscan_metric_list = parse_text_entry(dbscan_metric,'string')
+        dbscan_algo_list = parse_text_entry(dbscan_algo,'string')
+        dbscan_ls_list = parse_text_entry(dbscan_ls,'int')
+        dbscan_p_list = parse_text_entry(dbscan_p,'float')
+        
+        name = "DBSCAN"
+        dbscan = dbscan = pipeBuild_DBSCAN(eps=dbscan_eps_list, min_samples=dbscan_min_samp_list, metric=dbscan_metric_list, 
+                                           algorithm=dbscan_algo_list, leaf_size=dbscan_ls_list, p=dbscan_p_list)
+        add_to_clust_queue(name,dbscan)
 
 ########################################################
 # End Model Variable Entries
