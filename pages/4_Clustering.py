@@ -33,30 +33,37 @@ def execute_clust_gridsearch():
 
 st.title("Clustering")
 
-clust_model_tuple = ('decision tree', 'extra trees', 'random forest', 'gradien boosting',
-               'k nearest neighbors', 'nearest centroid', 'radius nearest neighbors',
-               'support vector', 'nu support vector', 'time series svc')
+clust_model_tuple = ('affinity propagation', 'dbscan', 'optics', 'k means',
+               'bisecting k means', 'mini-batch k means', 'time series k means',
+               'spectral clustering')
 
 clust_model_box = st.selectbox('**Select the model(s) you like to use.**', clust_model_tuple)
 
-if clust_model_box == 'decision tree':
-    dec_crit = st.text_input("Criterion: gini, entropy, or log_los", value='gini', key="dec crit")
-    dec_split = st.text_input("Splitter: best, random", value='best', key="dec split")
-    dec_max_d = st.text_input("Maximum Tree Depth: integers", value='None', key="dec max depth")
-    dec_rand = st.text_input("Random State: None or a single integer", value='None', key="dec random state")
+########################################################
+# Model Variable Entries
+########################################################
+
+if clust_model_box == 'affinity propagation':
+    ap_damp = st.text_input("Dampening: floats", value='0.5', key="aff_prop_dampening")
+    ap_max_it = st.text_input("Max Iterations: None or integers", value='200', key="aff_prop_max_iterations")
+    ap_verb = st.text_input("Verbose: True, False", value='False', key="aff_prop_verbose")
+    ap_rand = st.text_input("Random State: None or a single integer", value='None', key="aff_prop_random_state")
 
 
+if clust_model_box == 'affinity propagation':
+    if st.button("Add Affinity Propagation to Clustering Queue"):    
+        ap_dampening_list = parse_text_entry(ap_damp,'float')
+        ap_max_iter_list = parse_text_entry(ap_max_it,'int')
+        ap_verbose_list = parse_text_entry(ap_verb,'bool')
+        ap_random_state_list = parse_text_entry(ap_rand,'int')
+        name = "Affinity Propagation"
+        aff_prop = pipeBuild_AffinityPropagation(damping=ap_dampening_list, max_iter=ap_max_iter_list, 
+                                                 verbose=ap_verbose_list, random_state=ap_random_state_list[0])
+        add_to_clust_queue(name,aff_prop)
 
-if st.button("Add Model to Clustering Queue"):
-    if clust_model_box == 'decision tree':
-        criterion_list = parse_text_entry(dec_crit,'string')
-        splitter_list = parse_text_entry(dec_split,'string')
-        max_depth_list = parse_text_entry(dec_max_d,'int')
-        random_state_list = parse_text_entry(dec_rand,'int')
-        name = "Decision Tree"
-        decision_tree = pipeBuild_DecisionTreeClassifier(criterion=criterion_list,splitter=splitter_list,max_depth=max_depth_list,random_state=random_state_list[0])
-        add_to_clust_queue(name,decision_tree)
-
+########################################################
+# End Model Variable Entries
+########################################################
 
 if st.button("Show Clustering Model Queue"):
     print(st.session_state['clust_name_queue'])

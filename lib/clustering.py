@@ -1703,12 +1703,12 @@ def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all'
         #score = grid_search.score(X, y)
         print("Best parameter (CV score=%0.3f):" % grid_search.best_score_)
         print(grid_search.best_params_)
-        print("Best "+scoring+"score: ",grid_search.best_score_)
+        print("Best " + scoring + "score: ",grid_search.best_score_)
         if log == True:
             with open(path_name + '/output.txt', 'a') as f:
                 f.write("Best parameter (CV score=%0.3f):" % grid_search.best_score_ + '\n')
                 f.write(str(grid_search.best_params_) + '\n')
-                f.write("Best "+scoring+"score: "+grid_search.best_score_ + '\n')
+                f.write("Best " + str(scoring) +"score: "+grid_search.best_score_ + '\n')
         labels = grid_search.best_estimator_.steps[0][1].labels_
         #print("Best Model Labels: ",labels)
         noise = np.isin(labels, -1)
@@ -1737,8 +1737,8 @@ def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all'
         print("# of y's clusters is: ",y_classes)
         if log == True:
             with open(path_name + '/output.txt', 'a') as f:
-                f.write("# of X's clusters is: " + x_classes + '\n')
-                f.write("# of y's clusters is: " + y_classes + x_classes + '\n')
+                f.write("# of X's clusters is: " + str(x_classes) + '\n')
+                f.write("# of y's clusters is: " + str(y_classes) + '\n')
         if x_classes > y_classes:
             n_classes = x_classes
         else:
