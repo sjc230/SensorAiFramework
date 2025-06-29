@@ -55,7 +55,7 @@ if model_box == 'decision tree':
     dec_rand = st.text_input("Random State: None or a single integer", value='None', key="dec random state")
 
 if model_box == 'decision tree':
-    if st.button("Add Dec Tree to Classifier Queue"):    
+    if st.button("Add Decision Tree to Classifier Queue"):    
         criterion_list = parse_text_entry(dec_crit,'string')
         splitter_list = parse_text_entry(dec_split,'string')
         max_depth_list = parse_text_entry(dec_max_d,'int')
@@ -85,6 +85,23 @@ if model_box == 'extra trees':
         name = "Extra Trees"
         extra_trees = pipeBuild_ExtraTreesClassifier(n_estimators=extra_ne_list,criterion=extra_crit_list,max_depth=extra_max_d_list,min_samples_split=extra_ms_split_list,min_samples_leaf=extra_ms_leaf_list,random_state=extra_rand_list[0])
         add_to_class_queue(name,extra_trees)
+
+# Random Forest
+if model_box == 'random forest':
+    rfor_ne = st.text_input("Number of Estimators: integers", value='100', key="forest_n_estimators")
+    rfor_crit = st.text_input("Criterion: gini, entropy, or log_loss", value='gini', key="forest_criterion")
+    rfor_max_d = st.text_input("Maximum Tree Depth: integers", value='None', key="forest_max_depth")
+    rfor_rand = st.text_input("Random State: None or a single integer", value='None', key="forest_random_state")
+
+if model_box == 'random forest':
+    if st.button("Add Random Forest to Classifier Queue"):
+        rfor_ne_list = parse_text_entry(rfor_ne,'int')    
+        rfor_crit_list = parse_text_entry(rfor_crit,'string')
+        rfor_max_d_list = parse_text_entry(rfor_max_d,'int')
+        rfor_rand_list = parse_text_entry(rfor_rand,'int')
+        name = "Random Forest"
+        random_forest = pipeBuild_RandomForestClassifier(n_estimators=rfor_ne_list,criterion=rfor_crit_list,max_depth=rfor_max_d_list,random_state=rfor_rand_list[0])
+        add_to_class_queue(name,random_forest)
 
 ########################################################
 # End Model Variable Entries
