@@ -147,7 +147,7 @@ elif option == 'generate waveforms':
         st.session_state["wav_labels"] = 'frequency'
         st.rerun()
 
-    wav_cat = st.selectbox('Category:', ('classification', 'regression'),key="category")
+    wav_cat = st.selectbox('Category:', ('classification', 'detection', 'regression'),key="category")
     wav_amp = st.number_input("Amplitude: float, 0.00 for None", value=0.00, step=0.01, format="%.2f", key="wave_amp")
     wav_freq = st.number_input("Frequency: float, 0.00 for None", value=0.00, step=0.01, format="%.2f", key="wave_freq")
     wav_noise = st.checkbox("Check to add Noise", key="wave_noise_box")

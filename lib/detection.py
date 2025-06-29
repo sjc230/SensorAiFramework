@@ -261,7 +261,9 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
           with open(path_name + '/output.txt', 'a') as f:
               f.write("Best parameter (CV score=%0.3f):" % grid_search.best_score_ + '\n')
               f.write(str(grid_search.best_params_) + '\n') 
-        labels = y
+        #labels = y
+
+        labels = [0 if item == -1 else item for item in y]
         #labels = grid_search.best_estimator_.predict(X)
         #print("Best Model Labels: ",labels)
         noise = np.isin(labels, -1)

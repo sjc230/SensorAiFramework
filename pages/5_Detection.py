@@ -66,13 +66,15 @@ if detect_model_box == 'local outlier factor':
 # Isolation Forest
 if detect_model_box == 'isolation forest':
     iso_ne = st.text_input("Number of Estimators: integers", value='100', key="iso_n_estimators")
-    iso_ms = st.text_input("Maximum Samples: None or floats", value='None', key="iso_max_samples")
+    iso_ms = st.text_input("Maximum Samples: auto or integers", value='auto', key="iso_max_samples")
 
 
 if detect_model_box == 'isolation forest':
     if st.button("Add Iso Forest to Detection Queue"):    
         ne_list = parse_text_entry(iso_ne,'int')
-        ms_list = parse_text_entry(iso_ms,'float')
+        new_string = iso_ms.replace("auto", "None")
+        ms_list = parse_text_entry(new_string,'float')
+        ms_list = ['auto' if item == None else item for item in ms_list]
         
         name = "Isolation Forest"
         isolation_forest = pipeBuild_IsolationForest(n_estimators=ne_list,max_samples=ms_list)
