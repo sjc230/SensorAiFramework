@@ -122,7 +122,10 @@ if model_box == 'gradient boosting':
         gb_ms_split_list = parse_text_entry(gb_ms_split,'int')
         gb_ms_leaf_list = parse_text_entry(gb_ms_leaf,'int')
         name = "Gradient Boosting"
-        gradient_boosting = pipeBuild_GradientBoostingClassifier(n_estimators=gb_ne_list,criterion=gb_crit_list,min_samples_split=gb_ms_split_list,min_samples_leaf=gb_ms_leaf_list,max_depth=gb_max_d_list,random_state=gb_rand_list[0])
+        gradient_boosting = pipeBuild_GradientBoostingClassifier(n_estimators=gb_ne_list, criterion=gb_crit_list,
+                                                                 min_samples_split=gb_ms_split_list, 
+                                                                 min_samples_leaf=gb_ms_leaf_list, max_depth=gb_max_d_list,
+                                                                 random_state=gb_rand_list[0])
         add_to_class_queue(name,gradient_boosting)
 
 # K Nearest Neighbors
@@ -142,6 +145,43 @@ if model_box == 'k nearest neighbors':
         knn = pipeBuild_KNeighborsClassifier(n_neighbors=knn_nn_list, weights=knn_weight_list, 
                                              algorithm=knn_algo_list, leaf_size=knn_ls_list)
         add_to_class_queue(name,knn)
+
+# Nearest Centroid
+if model_box == 'nearest centroid':
+    nc_metric = st.text_input("Distance Metric: euclidean, manhattan, chebyshev, minkowski", value='euclidean', key="ncent_metric")
+    nc_shrink = st.text_input("Shrink Threshold: None and floaty", value='None', key="ncent_shrink")
+
+if model_box == 'nearest centroid':
+    if st.button("Add Nearest Centroid to Classifier Queue"):
+        nc_metric_list = parse_text_entry(nc_metric,'string')
+        nc_shrink_list = parse_text_entry(nc_shrink,'float')
+        name = "Nearest Centroid"
+        nearest_centroid = pipeBuild_NearestCentroid(metric=nc_metric_list, shrink_threshold=nc_shrink_list)
+        add_to_class_queue(name,nearest_centroid)
+
+
+# Radiaus Nearest Neighbors
+if model_box == 'radius nearest neighbors':
+    rnn_rad = st.text_input("Radius: floats only", value='1.0', key="radius_nn_n_neighbors")
+    rnn_weight = st.text_input("Weights: uniform, distance", value='uniform', key="radius_nn_weights")
+    rnn_algo = st.text_input("Algorithm: auto, ball_tree, kd_tree, brute", value='auto', key="radius_nn_algoritm")
+    rnn_ls = st.text_input("Leaf Size: integers only", value='30', key="radius_nn_leaf_size")
+    rnn_p = st.text_input("Power: integers only", value='2', key="radius_nn_p")
+    rnn_metric = st.text_input("Distance Metric: euclidean, manhattan, chebyshev, minkowski", value='minkowski', key="radius_nn_metric")
+
+if model_box == 'radius nearest neighbors':
+    if st.button("Add Radius Nearest Neighbors to Classifier Queue"):
+        rnn_rad_list = parse_text_entry(rnn_rad,'float')    
+        rnn_weight_list = parse_text_entry(rnn_weight,'string')
+        rnn_algo_list = parse_text_entry(rnn_algo,'string')
+        rnn_ls_list = parse_text_entry(rnn_ls,'int')
+        rnn_p_list = parse_text_entry(rnn_p,'int')
+        rnn_metric_list = parse_text_entry(rnn_metric,'string')
+        name = "Radius Nearest Neighbors"
+        radius_nn = pipeBuild_RadiusNeighborsClassifier(radius=rnn_rad_list, weights=rnn_weight_list,
+                                                        algorithm=rnn_algo_list, leaf_size=rnn_ls_list,
+                                                        p=rnn_p_list, metric=rnn_metric_list)
+        add_to_class_queue(name,radius_nn)
 
 ########################################################
 # End Model Variable Entries
