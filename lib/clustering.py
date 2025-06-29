@@ -1708,7 +1708,7 @@ def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all'
             with open(path_name + '/output.txt', 'a') as f:
                 f.write("Best parameter (CV score=%0.3f):" % grid_search.best_score_ + '\n')
                 f.write(str(grid_search.best_params_) + '\n')
-                f.write("Best " + str(scoring) +"score: "+grid_search.best_score_ + '\n')
+                f.write("Best " + str(scoring) +"score: "+ str(grid_search.best_score_) + '\n')
         labels = grid_search.best_estimator_.steps[0][1].labels_
         #print("Best Model Labels: ",labels)
         noise = np.isin(labels, -1)
