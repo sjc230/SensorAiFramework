@@ -37,7 +37,7 @@ def execute_class_gridsearch():
 
 st.title("Classification")
 
-model_tuple = ('decision tree', 'extra trees', 'random forest', 'gradien boosting',
+model_tuple = ('decision tree', 'extra trees', 'random forest', 'gradient boosting',
                'k nearest neighbors', 'nearest centroid', 'radius nearest neighbors',
                'support vector', 'nu support vector', 'time series svc')
 
@@ -92,16 +92,38 @@ if model_box == 'random forest':
     rfor_crit = st.text_input("Criterion: gini, entropy, or log_loss", value='gini', key="forest_criterion")
     rfor_max_d = st.text_input("Maximum Tree Depth: integers", value='None', key="forest_max_depth")
     rfor_rand = st.text_input("Random State: None or a single integer", value='None', key="forest_random_state")
+    
 
 if model_box == 'random forest':
     if st.button("Add Random Forest to Classifier Queue"):
         rfor_ne_list = parse_text_entry(rfor_ne,'int')    
         rfor_crit_list = parse_text_entry(rfor_crit,'string')
         rfor_max_d_list = parse_text_entry(rfor_max_d,'int')
-        rfor_rand_list = parse_text_entry(rfor_rand,'int')
+        rfor_rand_list = parse_text_entry(rfor_rand,'int')        
         name = "Random Forest"
         random_forest = pipeBuild_RandomForestClassifier(n_estimators=rfor_ne_list,criterion=rfor_crit_list,max_depth=rfor_max_d_list,random_state=rfor_rand_list[0])
         add_to_class_queue(name,random_forest)
+
+# Gradient Boosting
+if model_box == 'gradient boosting':
+    gb_ne = st.text_input("Number of Estimators: integers", value='100', key="gradient_n_estimators")
+    gb_crit = st.text_input("Criterion: friedman_mse, squared_error", value='friedman_mse', key="gradient_criterion")
+    gb_max_d = st.text_input("Maximum Tree Depth: integers", value='3', key="gradient_max_depth")
+    gb_rand = st.text_input("Random State: None or a single integer", value='None', key="gradient_random_state")
+    gb_ms_split = st.text_input("Minimum Sample # for Node Splits: integers", value='2', key="gradient_min_samples_split")
+    gb_ms_leaf = st.text_input("Minimum Sample # Required for a Leaf: integers", value='1', key="gradient_min_samples_leaf")
+
+if model_box == 'gradient boosting':
+    if st.button("Add Gradient Boosting to Classifier Queue"):
+        gb_ne_list = parse_text_entry(gb_ne,'int')    
+        gb_crit_list = parse_text_entry(gb_crit,'string')
+        gb_max_d_list = parse_text_entry(gb_max_d,'int')
+        gb_rand_list = parse_text_entry(gb_rand,'int')
+        gb_ms_split_list = parse_text_entry(gb_ms_split,'int')
+        gb_ms_leaf_list = parse_text_entry(gb_ms_leaf,'int')
+        name = "Gradient Boosting"
+        gradient_boosting = pipeBuild_GradientBoostingClassifier(n_estimators=gb_ne_list,criterion=gb_crit_list,min_samples_split=gb_ms_split_list,min_samples_leaf=gb_ms_leaf_list,max_depth=gb_max_d_list,random_state=gb_rand_list[0])
+        add_to_class_queue(name,gradient_boosting)
 
 ########################################################
 # End Model Variable Entries
