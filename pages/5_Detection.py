@@ -72,9 +72,9 @@ if detect_model_box == 'isolation forest':
 if detect_model_box == 'isolation forest':
     if st.button("Add Iso Forest to Detection Queue"):    
         ne_list = parse_text_entry(iso_ne,'int')
-        new_string = iso_ms.replace("auto", "None")
-        ms_list = parse_text_entry(new_string,'float')
-        ms_list = ['auto' if item == None else item for item in ms_list]
+        new_string = iso_ms.replace("auto", "None") # replace 'auto' in string with 'None' before using parse
+        ms_list = parse_text_entry(new_string,'float') # parse will not work with 'auto', but will work with 'None'
+        ms_list = ['auto' if item == None else item for item in ms_list] # replace None in list with 'auto' after parse
         
         name = "Isolation Forest"
         isolation_forest = pipeBuild_IsolationForest(n_estimators=ne_list,max_samples=ms_list)

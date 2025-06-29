@@ -244,6 +244,30 @@ if model_box == 'nu support vector':
         add_to_class_queue(name,nusvc)
 
 
+# Time Series Support Vector Classifier
+if model_box == 'time series svc':
+    tssvc_c = st.text_input("Regularization Parameter: floats only", value='1.0', key="tssvc_c")
+    tssvc_kernel = st.text_input("Kernel: gak, linear, poly, rbf, sigmoid", value='gak', key="tssvc_kernel")
+    tssvc_degree = st.text_input("Degree (for poly kernel): integers only", value='3', key="tssvc_degree")
+    tssvc_gamma = st.text_input("Gamma: auto or floats", value='None', key="tssvc_gamma")
+    tssvc_tol = st.text_input("Tolerance: floats only", value='0.001', key="tssvc_tol")
+
+
+if model_box == 'time series svc':
+    if st.button("Add Time Series SVC to Classifier Queue"):
+        tssvc_c_list = parse_text_entry(tssvc_c,'float')    
+        tssvc_kernel_list = parse_text_entry(tssvc_kernel,'string')
+        tssvc_degree_list = parse_text_entry(tssvc_degree,'int')
+        new_string = tssvc_gamma.replace("auto", "None") # replace 'auto' in stringwith 'None' before using parse
+        tssvc_gamma_list = parse_text_entry(new_string,'float') # parse will not work with 'auto', but will work with 'None'
+        tssvc_gamma_list = ['auto' if item == None else item for item in tssvc_gamma_list] # replace None in list with 'auto' after parse
+        tssvc_tol_list = parse_text_entry(tssvc_tol,'float')
+
+        name = "Time Series SVC"
+        tssvc = pipeBuild_TimeSeriesSVC(C=tssvc_c_list, kernel=tssvc_kernel_list, degree=tssvc_degree_list,
+                                  gamma=tssvc_gamma_list, tol=tssvc_tol_list)
+        add_to_class_queue(name,tssvc)
+
 ########################################################
 # End Model Variable Entries
 ########################################################
