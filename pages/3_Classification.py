@@ -39,7 +39,7 @@ st.title("Classification")
 
 model_tuple = ('decision tree', 'extra trees', 'random forest', 'gradient boosting',
                'k nearest neighbors', 'nearest centroid', 'radius nearest neighbors',
-               'support vector', 'nu support vector', 'time series svc')
+               'time series knn','support vector', 'nu support vector', 'time series svc')
 
 model_box = st.selectbox('**Select the model(s) you like to use.**', model_tuple)
 
@@ -182,6 +182,22 @@ if model_box == 'radius nearest neighbors':
                                                         algorithm=rnn_algo_list, leaf_size=rnn_ls_list,
                                                         p=rnn_p_list, metric=rnn_metric_list)
         add_to_class_queue(name,radius_nn)
+
+# Time Series K Nearest Neighbors
+if model_box == 'time series knn':
+    tsknn_nn = st.text_input("Number of Neighbors: integers only", value='5', key="tsknn_n_neighbors")
+    tsknn_weight = st.text_input("Weights: uniform, distance", value='uniform', key="tsknn_weights")
+    tsknn_metric = st.text_input("Distance Metric: dtw, softdtw, ctw, sqeuclidean, sax", value='dtw', key="tsknn_metric")
+
+if model_box == 'time series knn':
+    if st.button("Add Time Series KNN to Classifier Queue"):
+        tsknn_nn_list = parse_text_entry(tsknn_nn,'int')    
+        tsknn_weight_list = parse_text_entry(tsknn_weight,'string')
+        tsknn_metric_list = parse_text_entry(tsknn_metric,'string')
+        name = "Time Series KNN"
+        tsknn = pipeBuild_KNeighborsTimeSeriesClassifier(n_neighbors=tsknn_nn_list, weights=tsknn_weight_list, 
+                                                         metric=tsknn_metric_list)
+        add_to_class_queue(name,tsknn)
 
 # Support Vector Classifier
 if model_box == 'support vector':
