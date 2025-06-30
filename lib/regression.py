@@ -714,12 +714,12 @@ def gridsearch_regressor(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_
                             n_inputs=n_inputs,
                             n_outputs=n_classes)
         
-        plt = utils.plot_2vectors(label=y_test, pred=y_pred, name=names[j], size=10)
+        fig = utils.plot_2vectors(label=y_test, pred=y_pred, name=names[j], size=10)
         #PredictionErrorDisplay.from_estimator(grid_search, X_test, y_test)
         best_title = 'Best Model: ' + names[j]
-        plt.title(best_title)
-        fig_plotly = tls.mpl_to_plotly(plt)
-        py.iplot(fig_plotly)
+        #plt.title(best_title)
+        fig.update_layout(title_text=best_title)
+        fig.show()
         #plt.show()
     
     print("Regression gridsearch completed")

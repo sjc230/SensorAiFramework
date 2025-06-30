@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import plotly.express as px
+import pandas as pd
 import pickle
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
@@ -26,7 +27,7 @@ config_path = current_dir / "config/current_data.yaml"
 def calc_mae(gt, pred):
     return np.mean(abs(np.array(gt) - np.array(pred)))
 
-def plot_2vectors(label, pred, save=False, name=None, path=None, size=1):
+def plot_2vectors_old(label, pred, save=False, name=None, path=None, size=1):
     """lsit1: label, list2: prediction"""
 
     list1 = label
@@ -53,6 +54,56 @@ def plot_2vectors(label, pred, save=False, name=None, path=None, size=1):
     #plt.show()
     return plt
 
+
+def plot_2vectors(label, pred, save=False, name="", path=None, size=5):
+    """label: ground truth values, pred: predicted values"""
+
+    list1 = np.array(label)
+    list2 = np.array(pred)
+
+    # Compute MAE
+    if list2.ndim == 2:
+        mae = calc_mae(list1, list2[:, 0])
+        list2 = list2[:, 0]
+    else:
+        mae = calc_mae(list1, list2)
+
+    # Sort by label values
+    sorted_id = sorted(range(len(list1)), key=lambda k: list1[k])
+    sorted_x = np.arange(len(list1))
+
+    # Create DataFrame for Plotly Express
+    df = pd.DataFrame({
+        'Index': list(sorted_x) * 2,
+        'Value': np.concatenate([list2[sorted_id], list1[sorted_id]]),
+        'Type': [f'{name} prediction'] * len(list1) + [f'{name} label'] * len(list1)
+    })
+
+    # Plot
+    fig = px.scatter(
+        df,
+        x='Index',
+        y='Value',
+        color='Type',
+        opacity=0.5,
+        size_max=size,
+        title=f"Label vs Prediction (MAE={mae:.4f})"
+    )
+
+    # Update layout
+    fig.update_layout(
+        legend=dict(x=0.85, y=0.05),
+        template='simple_white'
+    )
+
+    # Save plot if requested
+    if save:
+        if path is None:
+            raise ValueError("If save is True, 'path' argument must be provided.")
+        fig.write_image(f"{path}.jpg", scale=3)
+        print(f"Saved plot to {path}.jpg")
+
+    return fig
 
 def ls2pkl(filepath, data):
     with open(filepath, 'wb') as f:
