@@ -33,7 +33,7 @@ def execute_clust_gridsearch():
 
 st.title("Clustering")
 
-clust_model_tuple = ('affinity propagation', 'dbscan', 'optics', 'k means',
+clust_model_tuple = ('affinity propagation', 'dbscan', 'optics', 'mean shift', 'k means',
                'bisecting k means', 'mini-batch k means', 'time series k means',
                'spectral clustering')
 
@@ -114,6 +114,30 @@ if clust_model_box == 'optics':
                                   min_samples=optics_min_samp_list, metric=optics_metric_list, 
                                   algorithm=optics_algo_list, leaf_size=optics_ls_list, p=optics_p_list)
         add_to_clust_queue(name,optics)
+
+
+# Mean Shift
+if clust_model_box == 'mean shift':
+    ms_bw = st.text_input("Bandwidth: None or floats", value='None', key="mean_shift_bandwidth")
+    ms_bs = st.text_input("Bin Seeding: True, False", value='True', key="mean_shift_bin_seeding")
+    ms_mbf = st.text_input("Minimum Bin Frequency: integers", value='1', key="mean_shift_min_bin_freq")
+    ms_ca = st.text_input("Cluster All: True, False", value='True', key="mean_shift_cluster_all")
+    ms_max_it = st.text_input("Max Iterations: integers", value='300', key="mean_shift_max_iter")
+
+
+if clust_model_box == 'mean shift':
+    if st.button("Add Mean Shift to Clustering Queue"):    
+        ms_bandwidth_list = parse_text_entry(ms_bw,'float')
+        ms_bin_list = parse_text_entry(ms_bs,'bool')
+        ms_min_freq_list = parse_text_entry(ms_mbf,'int')
+        ms_cluster_list = parse_text_entry(ms_ca,'bool')
+        ms_max_iter_list = parse_text_entry(ms_max_it,'int')
+
+        name = "Mean Shift"
+        mean_shift = pipeBuild_MeanShift(bandwidth=ms_bandwidth_list, bin_seeding=ms_bin_list, 
+                                         min_bin_freq=ms_min_freq_list, cluster_all=ms_cluster_list, 
+                                         max_iter=ms_max_iter_list)
+        add_to_clust_queue(name,mean_shift)
 
 ########################################################
 # End Model Variable Entries
