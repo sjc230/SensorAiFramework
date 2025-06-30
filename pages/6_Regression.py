@@ -34,30 +34,32 @@ def execute_regress_gridsearch():
 
 st.title("Regression")
 
-model_tuple = ('decision tree', 'extra trees', 'random forest', 'gradien boosting',
-               'k nearest neighbors', 'nearest centroid', 'radius nearest neighbors',
-               'support vector', 'nu support vector', 'time series svc')
+regress_model_tuple = ('linear', 'gamma', 'poisson', 'tweedie',
+               'lars', 'lasso', 'lasso-lars', 'lasso-lars ic',
+               'ridge', 'bayesian ridge', 'elastic net', 'quantile',
+               'support vector', 'linear svr', 'nu svr', 'time series svr')
 
-model_box = st.selectbox('**Select the model(s) you like to use.**', model_tuple)
+regress_model_box = st.selectbox('**Select the model(s) you like to use.**', regress_model_tuple)
 
-if model_box == 'decision tree':
-    dec_crit = st.text_input("Criterion: gini, entropy, or log_los", value='gini', key="dec crit")
-    dec_split = st.text_input("Splitter: best, random", value='best', key="dec split")
-    dec_max_d = st.text_input("Maximum Tree Depth: integers", value='None', key="dec max depth")
-    dec_rand = st.text_input("Random State: None or a single integer", value='None', key="dec random state")
+########################################################
+# Model Variable Entries
+########################################################
+
+if regress_model_box == 'linear':
+    lin_fi = st.text_input("Fit Intercept: True, False", value='True', key="linear_fit_intercept")
 
 
+if regress_model_box == 'linear':
+    if st.button("Add Linear to Regression Queue"):    
+        lin_fit_list = parse_text_entry(lin_fi,'bool')
 
-if st.button("Add Model to Regression Queue"):
-    if model_box == 'decision tree':
-        criterion_list = parse_text_entry(dec_crit,'string')
-        splitter_list = parse_text_entry(dec_split,'string')
-        max_depth_list = parse_text_entry(dec_max_d,'int')
-        random_state_list = parse_text_entry(dec_rand,'int')
-        name = "Decision Tree"
-        decision_tree = pipeBuild_DecisionTreeClassifier(criterion=criterion_list,splitter=splitter_list,max_depth=max_depth_list,random_state=random_state_list[0])
-        add_to_regress_queue(name,decision_tree)
+        name = "Linear"
+        linear = pipeBuild_LinearRegression(fit_intercept=lin_fit_list)
+        add_to_regress_queue(name,linear)
 
+########################################################
+# End Model Variable Entries
+########################################################
 
 if st.button("Show Regression Model Queue"):
     print(st.session_state['regress_name_queue'])
