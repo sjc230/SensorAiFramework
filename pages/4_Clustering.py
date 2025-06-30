@@ -153,8 +153,12 @@ if clust_model_box == 'k means':
 if clust_model_box == 'k means':
     if st.button("Add K Means to Clustering Queue"):
         km_n_clusters_list = parse_text_entry(km_nc,'int')
-        km_init_list = parse_text_entry(km_init,'string')    
-        km_n_init_list = parse_text_entry(km_n_init,'int')
+        km_init_list = parse_text_entry(km_init,'string')
+
+        new_string = km_n_init.replace("auto", "None") # replace 'auto' in string with 'None' before using parse   
+        km_n_init_list = parse_text_entry(km_n_init,'int') # parse will not work with 'auto', but will work with 'None'
+        km_n_init_list = ['auto' if item == None else item for item in km_n_init_list] # replace None in list with 'auto' after parse
+
         km_max_iter_list = parse_text_entry(km_mi,'int')
         km_tol_list = parse_text_entry(km_tol,'float')        
         km_algo_list = parse_text_entry(km_algo,'string')
@@ -171,7 +175,7 @@ if clust_model_box == 'k means':
 if clust_model_box == 'bisecting k means':
     bskm_nc = st.text_input("Number of Clusters: integers", value='8', key="bi_kmeans_n_clusters")
     bskm_init = st.text_input("Initial Cluster Centroids: k-means++ , random", value='k-means++', key="bi_kmeans_init")
-    bskm_n_init = st.text_input("Number of Initializations: auto or integers", value='10', key="bi_kmeans_n_init")
+    bskm_n_init = st.text_input("Number of Initializations: integers", value='1', key="bi_kmeans_n_init")
     bskm_mi = st.text_input("Max Iterations: integers", value='300', key="bi_kmeans_max_iter")
     bskm_tol = st.text_input("Tolerance: floats only", value='0.0001', key="bi_kmeans_tol")
     bskm_algo = st.text_input("Algorithm: auto, lloyd, elkan, full", value='lloyd', key="bi_kmeans_algorithm")
@@ -197,6 +201,35 @@ if clust_model_box == 'bisecting k means':
         add_to_clust_queue(name,bsk_means)
 
 
+# Mini-Batch K Means
+if clust_model_box == 'mini-batch k means':
+    mbkm_nc = st.text_input("Number of Clusters: integers", value='8', key="mini_kmeans_n_clusters")
+    mbkm_init = st.text_input("Initial Cluster Centroids: k-means++ , random", value='k-means++', key="mini_kmeans_init")
+    mbkm_n_init = st.text_input("Number of Initializations: integers", value='10', key="mini_kmeans_n_init")
+    mbkm_mi = st.text_input("Max Iterations: integers", value='100', key="mini_kmeans_max_iter")
+    mbkm_tol = st.text_input("Tolerance: floats only", value='0.0', key="mini_kmeans_tol")
+    mbkm_bs = st.text_input("Batch Size: integers", value='1024', key="mini_kmeans_batch_size")
+    mbkm_rand = st.text_input("Random State: None or a single integer", value='None', key="mini_kmeans_random_state")    
+
+if clust_model_box == 'mini-batch k means':
+    if st.button("Add Mini-Batch K Means to Clustering Queue"):
+        mbkm_n_clusters_list = parse_text_entry(mbkm_nc,'int')
+        mbkm_init_list = parse_text_entry(mbkm_init,'string')
+
+        new_string = mbkm_n_init.replace("auto", "None") # replace 'auto' in string with 'None' before using parse   
+        mbkm_n_init_list = parse_text_entry(mbkm_n_init,'int') # parse will not work with 'auto', but will work with 'None'
+        mbkm_n_init_list = ['auto' if item == None else item for item in mbkm_n_init_list] # replace None in list with 'auto' after parse
+
+        mbkm_max_iter_list = parse_text_entry(mbkm_mi,'int')
+        mbkm_tol_list = parse_text_entry(mbkm_tol,'float')
+        mbkm_rand_state_list = parse_text_entry(mbkm_rand,'int')
+        mbkm_batch_size_list = parse_text_entry(mbkm_bs,'int')
+                
+        name = "Mini-Batch K Means"
+        mbk_means = pipeBuild_MiniBatchKMeans(n_clusters=mbkm_n_clusters_list, init=mbkm_init_list, 
+                                              n_init=mbkm_n_init_list, max_iter=mbkm_max_iter_list, tol=mbkm_tol_list,
+                                              random_state=mbkm_rand_state_list[0], batch_size=mbkm_batch_size_list)
+        add_to_clust_queue(name,mbk_means)
 
 ########################################################
 # End Model Variable Entries
