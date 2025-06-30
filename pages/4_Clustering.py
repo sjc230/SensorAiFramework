@@ -231,6 +231,34 @@ if clust_model_box == 'mini-batch k means':
                                               random_state=mbkm_rand_state_list[0], batch_size=mbkm_batch_size_list)
         add_to_clust_queue(name,mbk_means)
 
+
+
+# K Means
+if clust_model_box == 'time series k means':
+    tskm_nc = st.text_input("Number of Clusters: integers", value='3', key="ts_kmeans_n_clusters")
+    tskm_init = st.text_input("Initial Cluster Centroids: k-means++ , random", value='k-means++', key="ts_kmeans_init")
+    tskm_n_init = st.text_input("Number of Initializations: integers", value='1', key="ts_kmeans_n_init")
+    tskm_mi = st.text_input("Max Iterations: integers", value='50', key="ts_kmeans_max_iter")
+    tskm_tol = st.text_input("Tolerance: floats only", value='0.000001', key="ts_kmeans_tol")
+    tskm_metric = st.text_input("Distance Metric: euclidean, dtw, softdtw", value='dtw', key="ts_kmeans_metric")
+    tskm_rand = st.text_input("Random State: None or a single integer", value='None', key="ts_kmeans_random_state")
+
+if clust_model_box == 'time series k means':
+    if st.button("Add Time Series K Means to Clustering Queue"):
+        tskm_n_clusters_list = parse_text_entry(tskm_nc,'int')
+        tskm_init_list = parse_text_entry(tskm_init,'string')
+        tskm_n_init_list = parse_text_entry(tskm_n_init,'int')
+        tskm_max_iter_list = parse_text_entry(tskm_mi,'int')
+        tskm_tol_list = parse_text_entry(tskm_tol,'float')        
+        tskm_metric_list = parse_text_entry(tskm_metric,'string')
+        tskm_rand_state_list = parse_text_entry(tskm_rand,'int')
+                
+        name = "Time Series K Means"
+        tsk_means = pipeBuild_TimeSeriesKMeans(n_clusters=tskm_n_clusters_list, init=tskm_init_list, n_init=tskm_n_init_list,
+                                               max_iter=tskm_max_iter_list, tol=tskm_tol_list,
+                                               random_state=tskm_rand_state_list[0], metric=tskm_metric_list)
+        add_to_clust_queue(name,tsk_means)
+
 ########################################################
 # End Model Variable Entries
 ########################################################
