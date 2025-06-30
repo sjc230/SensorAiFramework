@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 from plotly.subplots import make_subplots
+import plotly.offline as py
+import plotly.tools as tls
 import chart_studio.plotly as py
 import plotly.graph_objects as go
 
@@ -716,8 +718,9 @@ def gridsearch_regressor(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_
         #PredictionErrorDisplay.from_estimator(grid_search, X_test, y_test)
         best_title = 'Best Model: ' + names[j]
         plt.title(best_title)
-
-        plt.show()
+        fig_plotly = tls.mpl_to_plotly(plt)
+        py.iplot(fig_plotly)
+        #plt.show()
     
     print("Regression gridsearch completed")
     if log == True:
