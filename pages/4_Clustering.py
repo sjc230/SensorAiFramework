@@ -233,7 +233,7 @@ if clust_model_box == 'mini-batch k means':
 
 
 
-# K Means
+# Time Series K Means
 if clust_model_box == 'time series k means':
     tskm_nc = st.text_input("Number of Clusters: integers", value='3', key="ts_kmeans_n_clusters")
     tskm_init = st.text_input("Initial Cluster Centroids: k-means++ , random", value='k-means++', key="ts_kmeans_init")
@@ -258,6 +258,28 @@ if clust_model_box == 'time series k means':
                                                max_iter=tskm_max_iter_list, tol=tskm_tol_list,
                                                random_state=tskm_rand_state_list[0], metric=tskm_metric_list)
         add_to_clust_queue(name,tsk_means)
+
+
+# Spectral Clustering
+if clust_model_box == 'spectral clustering':
+    spec_n_c = st.text_input("Number of Clusters: integers", value='8', key="spectral_n_clusters")
+    spec_es = st.text_input("Eigen Solver: None, arpack, lobpcg, amg", value='None', key="spectral_eigen_solver")
+    spec_ni = st.text_input("Number of Initializations: integers", value='10', key="spectral_n_init")
+    spec_rand = st.text_input("Random State: None or a single integer", value='None', key="spectral_random_state")
+
+
+if clust_model_box == 'spectral clustering':
+    if st.button("Add Spectral Clustering to Clustering Queue"):    
+        spec_n_clusters_list = parse_text_entry(spec_n_c,'int')
+        spec_eigen_solver_list = parse_text_entry(spec_es,'string')
+        spec_n_init_list = parse_text_entry(spec_ni,'int')
+        spec_rand_state_list = parse_text_entry(spec_rand,'int')
+
+        name = "Spectral Clustering"
+        spectral = pipeBuild_SpectralClustering(n_clusters=spec_n_clusters_list, eigen_solver=spec_eigen_solver_list, 
+                                                random_state=spec_rand_state_list[0], n_init=spec_n_init_list)
+        add_to_clust_queue(name,spectral)
+
 
 ########################################################
 # End Model Variable Entries
