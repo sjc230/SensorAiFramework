@@ -139,6 +139,33 @@ if clust_model_box == 'mean shift':
                                          max_iter=ms_max_iter_list)
         add_to_clust_queue(name,mean_shift)
 
+
+# K Means
+if clust_model_box == 'k means':
+    km_nc = st.text_input("Number of Clusters: integers", value='8', key="kmeans_n_clusters")
+    km_init = st.text_input("Initial Cluster Centroids: k-means++ , random", value='k-means++', key="kmeans_init")
+    km_n_init = st.text_input("Number of Initializations: auto or integers", value='10', key="kmeans_n_init")
+    km_mi = st.text_input("Max Iterations: integers", value='300', key="kmeans_max_iter")
+    km_tol = st.text_input("Tolerance: floats only", value='0.0001', key="kmeans_tol")
+    km_algo = st.text_input("Algorithm: auto, lloyd, elkan, full", value='lloyd', key="kmeans_algorithm")
+    km_rand = st.text_input("Random State: None or a single integer", value='None', key="kmeans_randome_state")
+
+if clust_model_box == 'k means':
+    if st.button("Add K Means to Clustering Queue"):
+        km_n_clusters_list = parse_text_entry(km_nc,'int')
+        km_init_list = parse_text_entry(km_init,'string')    
+        km_n_init_list = parse_text_entry(km_n_init,'int')
+        km_max_iter_list = parse_text_entry(km_mi,'int')
+        km_tol_list = parse_text_entry(km_tol,'float')        
+        km_algo_list = parse_text_entry(km_algo,'string')
+        km_rand_state_list = parse_text_entry(km_rand,'int')
+                
+        name = "K Means"
+        k_means = pipeBuild_KMeans(n_clusters=km_n_clusters_list, init=km_init_list, n_init=km_n_init_list,
+                                   max_iter=km_max_iter_list, tol=km_tol_list, 
+                                   random_state=km_rand_state_list[0],algorithm=km_algo_list)
+        add_to_clust_queue(name,k_means)
+
 ########################################################
 # End Model Variable Entries
 ########################################################
