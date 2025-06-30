@@ -148,7 +148,7 @@ if clust_model_box == 'k means':
     km_mi = st.text_input("Max Iterations: integers", value='300', key="kmeans_max_iter")
     km_tol = st.text_input("Tolerance: floats only", value='0.0001', key="kmeans_tol")
     km_algo = st.text_input("Algorithm: auto, lloyd, elkan, full", value='lloyd', key="kmeans_algorithm")
-    km_rand = st.text_input("Random State: None or a single integer", value='None', key="kmeans_randome_state")
+    km_rand = st.text_input("Random State: None or a single integer", value='None', key="kmeans_random_state")
 
 if clust_model_box == 'k means':
     if st.button("Add K Means to Clustering Queue"):
@@ -165,6 +165,38 @@ if clust_model_box == 'k means':
                                    max_iter=km_max_iter_list, tol=km_tol_list, 
                                    random_state=km_rand_state_list[0],algorithm=km_algo_list)
         add_to_clust_queue(name,k_means)
+
+
+# Bisecting K Means
+if clust_model_box == 'bisecting k means':
+    bskm_nc = st.text_input("Number of Clusters: integers", value='8', key="bi_kmeans_n_clusters")
+    bskm_init = st.text_input("Initial Cluster Centroids: k-means++ , random", value='k-means++', key="bi_kmeans_init")
+    bskm_n_init = st.text_input("Number of Initializations: auto or integers", value='10', key="bi_kmeans_n_init")
+    bskm_mi = st.text_input("Max Iterations: integers", value='300', key="bi_kmeans_max_iter")
+    bskm_tol = st.text_input("Tolerance: floats only", value='0.0001', key="bi_kmeans_tol")
+    bskm_algo = st.text_input("Algorithm: auto, lloyd, elkan, full", value='lloyd', key="bi_kmeans_algorithm")
+    bskm_rand = st.text_input("Random State: None or a single integer", value='None', key="bi_kmeans_random_state")
+    bskm_strat = st.text_input("Bisecting Strategy: biggest_inertia, largest_cluster", value='biggest_inertia', key="bi_kmeans_bisecting_strategy")
+
+if clust_model_box == 'bisecting k means':
+    if st.button("Add Bisecting K Means to Clustering Queue"):
+        bskm_n_clusters_list = parse_text_entry(bskm_nc,'int')
+        bskm_init_list = parse_text_entry(bskm_init,'string')    
+        bskm_n_init_list = parse_text_entry(bskm_n_init,'int')
+        bskm_max_iter_list = parse_text_entry(bskm_mi,'int')
+        bskm_tol_list = parse_text_entry(bskm_tol,'float')        
+        bskm_algo_list = parse_text_entry(bskm_algo,'string')
+        bskm_rand_state_list = parse_text_entry(bskm_rand,'int')
+        bskm_strategy_list = parse_text_entry(bskm_strat,'string')
+                
+        name = "Bisecting K Means"
+        bsk_means = pipeBuild_BisectingKMeans(n_clusters=bskm_n_clusters_list, init=bskm_init_list, 
+                                              n_init=bskm_n_init_list, max_iter=bskm_max_iter_list, tol=bskm_tol_list,
+                                              random_state=bskm_rand_state_list[0], algorithm=bskm_algo_list,
+                                              bisecting_strategy=bskm_strategy_list)
+        add_to_clust_queue(name,bsk_means)
+
+
 
 ########################################################
 # End Model Variable Entries
