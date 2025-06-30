@@ -45,6 +45,7 @@ regress_model_box = st.selectbox('**Select the model(s) you like to use.**', reg
 # Model Variable Entries
 ########################################################
 
+# Linear Regression
 if regress_model_box == 'linear':
     lin_fi = st.text_input("Fit Intercept: True, False", value='True', key="linear_fit_intercept")
 
@@ -56,6 +57,29 @@ if regress_model_box == 'linear':
         name = "Linear"
         linear = pipeBuild_LinearRegression(fit_intercept=lin_fit_list)
         add_to_regress_queue(name,linear)
+
+
+# Gamma Regression
+if regress_model_box == 'gamma':
+    gam_a = st.text_input("Alpha: positive integers", value='1', key="gamma_alpha")
+    gam_fi = st.text_input("Fit Intercept: True, False", value='True', key="gamma_fit_intercept")
+    gam_s = st.text_input("Solver: lbfgs, newton-cholesky", value='lbfgs', key="gamma_solver")
+    gam_mi = st.text_input("Max Iterations: integers", value='100', key="gamma_max_iter")
+    gam_t = st.text_input("Tolerance: floats only", value='0.0001', key="gamma_fit_tol")
+
+
+if regress_model_box == 'gamma':
+    if st.button("Add Gamma to Regression Queue"):    
+        gam_alpha_list = parse_text_entry(gam_a,'int')
+        gam_fit_list = parse_text_entry(gam_fi,'bool')
+        gam_solver_list = parse_text_entry(gam_s,'string')
+        gam_max_iter_list = parse_text_entry(gam_mi,'int')
+        gam_tol_list = parse_text_entry(gam_t,'float')
+
+        name = "Gamma"
+        gamma = pipeBuild_GammaRegressor(alpha=gam_alpha_list, fit_intercept=gam_fit_list, 
+                                         solver=gam_solver_list, max_iter=gam_max_iter_list, tol=gam_tol_list)
+        add_to_regress_queue(name,gamma)
 
 ########################################################
 # End Model Variable Entries
