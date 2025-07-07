@@ -264,7 +264,6 @@ if regress_model_box == 'support vector':
     svr_gamma = st.text_input("Gamma: scale, auto", value='scale', key="svr_gamma")
     svr_tol = st.text_input("Tolerance: floats only", value='0.001', key="svr_tol")
 
-
 if regress_model_box == 'support vector':
     if st.button("Add Support Vector to Regressor Queue"):
         svr_c_list = parse_text_entry(svr_c,'float')    
@@ -277,6 +276,25 @@ if regress_model_box == 'support vector':
         svr = pipeBuild_SVR(C=svr_c_list, kernel=svr_kernel_list, degree=svr_degree_list,
                                   gamma=svr_gamma_list, tol=svr_tol_list)
         add_to_regress_queue(name,svr)
+
+
+# Linear Support Vector Regressor
+if regress_model_box == 'linear svr':
+    lsvr_c = st.text_input("Regularization Parameter: floats only", value='1.0', key="lsvr_c")
+    lsvr_loss = st.text_input("Loss: epsilon_insensitive, squared_epsilon_insensitive", value='epsilon_insensitive', key="lsvr_loss")
+    lsvr_fi = st.text_input("Fit Intercept: True, False", value='True', key="lsvr_fit_inetercept")
+    lsvr_tol = st.text_input("Tolerance: floats only", value='0.001', key="lsvr_tol")
+
+if regress_model_box == 'linear svr':
+    if st.button("Add Linear SVR to Regressor Queue"):
+        lsvr_c_list = parse_text_entry(lsvr_c,'float')    
+        lsvr_loss_list = parse_text_entry(lsvr_loss,'string')
+        lsvr_fit_list = parse_text_entry(lsvr_fi,'bool')
+        lsvr_tol_list = parse_text_entry(lsvr_tol,'float')
+
+        name = "Linear SVR"
+        linear_svr = pipeBuild_LinearSVR(C=lsvr_c_list,loss=lsvr_loss_list,fit_intercept=lsvr_fit_list,tol=lsvr_tol_list)
+        add_to_regress_queue(name,linear_svr)
 
 
 
