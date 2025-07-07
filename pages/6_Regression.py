@@ -81,6 +81,28 @@ if regress_model_box == 'gamma':
                                          solver=gam_solver_list, max_iter=gam_max_iter_list, tol=gam_tol_list)
         add_to_regress_queue(name,gamma)
 
+# Poisson Regression
+if regress_model_box == 'gamma':
+    poi_a = st.text_input("Alpha: positive integers", value='1', key="poisson_alpha")
+    poi_fi = st.text_input("Fit Intercept: True, False", value='True', key="poisson_fit_intercept")
+    poi_s = st.text_input("Solver: lbfgs, newton-cholesky", value='lbfgs', key="poisson_solver")
+    poi_mi = st.text_input("Max Iterations: integers", value='100', key="poisson_max_iter")
+    poi_t = st.text_input("Tolerance: floats only", value='0.0001', key="poisson_fit_tol")
+
+
+if regress_model_box == 'gamma':
+    if st.button("Add Gamma to Regression Queue"):    
+        poi_alpha_list = parse_text_entry(poi_a,'int')
+        poi_fit_list = parse_text_entry(poi_fi,'bool')
+        poi_solver_list = parse_text_entry(poi_s,'string')
+        poi_max_iter_list = parse_text_entry(poi_mi,'int')
+        poi_tol_list = parse_text_entry(poi_t,'float')
+
+        name = "Poisson"
+        poisson = pipeBuild_PoissonRegressor(alpha=poi_alpha_list, fit_intercept=poi_fit_list, 
+                                         solver=poi_solver_list, max_iter=poi_max_iter_list, tol=poi_tol_list)
+        add_to_regress_queue(name,poisson)
+
 ########################################################
 # End Model Variable Entries
 ########################################################
