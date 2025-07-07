@@ -82,7 +82,7 @@ if regress_model_box == 'gamma':
         add_to_regress_queue(name,gamma)
 
 # Poisson Regression
-if regress_model_box == 'gamma':
+if regress_model_box == 'poisson':
     poi_a = st.text_input("Alpha: positive integers", value='1', key="poisson_alpha")
     poi_fi = st.text_input("Fit Intercept: True, False", value='True', key="poisson_fit_intercept")
     poi_s = st.text_input("Solver: lbfgs, newton-cholesky", value='lbfgs', key="poisson_solver")
@@ -90,8 +90,8 @@ if regress_model_box == 'gamma':
     poi_t = st.text_input("Tolerance: floats only", value='0.0001', key="poisson_fit_tol")
 
 
-if regress_model_box == 'gamma':
-    if st.button("Add Gamma to Regression Queue"):    
+if regress_model_box == 'poisson':
+    if st.button("Add Poisson to Regression Queue"):    
         poi_alpha_list = parse_text_entry(poi_a,'int')
         poi_fit_list = parse_text_entry(poi_fi,'bool')
         poi_solver_list = parse_text_entry(poi_s,'string')
@@ -102,6 +102,33 @@ if regress_model_box == 'gamma':
         poisson = pipeBuild_PoissonRegressor(alpha=poi_alpha_list, fit_intercept=poi_fit_list, 
                                          solver=poi_solver_list, max_iter=poi_max_iter_list, tol=poi_tol_list)
         add_to_regress_queue(name,poisson)
+
+# Tweedie Regression
+if regress_model_box == 'tweedie':
+    twe_p = st.text_input("Power: 0, 1, 2, 3, or float between 1 and 2", value='0', key="tweedie_power")
+    twe_a = st.text_input("Alpha: positive integers", value='1', key="tweedie_alpha")
+    twe_fi = st.text_input("Link Function: auto, identity, log", value='True', key="tweedie_fit_intercept")
+    twe_l = st.text_input("Link: True, False", value='auto', key="tweedie_link")
+    twe_s = st.text_input("Solver: lbfgs, newton-cholesky", value='lbfgs', key="tweedie_solver")
+    twe_mi = st.text_input("Max Iterations: integers", value='100', key="tweedie_max_iter")
+    twe_t = st.text_input("Tolerance: floats only", value='0.0001', key="tweedie_fit_tol")
+
+
+if regress_model_box == 'tweedie':
+    if st.button("Add Tweedie to Regression Queue"):
+        twe_power_list = parse_text_entry(twe_p,'float')
+        twe_alpha_list = parse_text_entry(twe_a,'int')
+        twe_fit_list = parse_text_entry(twe_fi,'bool')
+        twe_link_list = parse_text_entry(twe_l,'string')
+        twe_solver_list = parse_text_entry(twe_s,'string')
+        twe_max_iter_list = parse_text_entry(twe_mi,'int')
+        twe_tol_list = parse_text_entry(twe_t,'float')
+
+        name = "Tweedie"
+        tweedie = pipeBuild_TweedieRegressor(alpha=twe_alpha_list, fit_intercept=twe_fit_list, 
+                                         solver=twe_solver_list, max_iter=twe_max_iter_list, tol=twe_tol_list,
+                                         power=twe_power_list, link=twe_link_list)
+        add_to_regress_queue(name,tweedie)
 
 ########################################################
 # End Model Variable Entries
