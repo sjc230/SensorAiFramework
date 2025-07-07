@@ -130,6 +130,24 @@ if regress_model_box == 'tweedie':
                                          power=twe_power_list, link=twe_link_list)
         add_to_regress_queue(name,tweedie)
 
+
+# LARS Regression
+if regress_model_box == 'lars':
+    lar_fi = st.text_input("Fit Intercept: True, False", value='True', key="lars_fit_intercept")
+    lar_mi = st.text_input("Max Iterations: integers", value='100', key="lars_max_iter")
+    lar_cv = st.text_input("Cross Validation: None or integers", value='5', key="lars_cv")
+
+
+if regress_model_box == 'lars':
+    if st.button("Add LARS to Regression Queue"):    
+        lar_fit_list = parse_text_entry(lar_fi,'bool')
+        lar_max_iter_list = parse_text_entry(lar_mi,'int')
+        lar_cv_list = parse_text_entry(lar_cv,'int')
+
+        name = "LARS"
+        lars = pipeBuild_LarsCV(fit_intercept=lar_fit_list, max_iter=lar_max_iter_list, cv=lar_cv_list)
+        add_to_regress_queue(name,lars)
+
 ########################################################
 # End Model Variable Entries
 ########################################################
