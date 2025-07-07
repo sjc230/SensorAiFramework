@@ -148,6 +148,23 @@ if regress_model_box == 'lars':
         lars = pipeBuild_LarsCV(fit_intercept=lar_fit_list, max_iter=lar_max_iter_list, cv=lar_cv_list)
         add_to_regress_queue(name,lars)
 
+# LASSO Regression
+if regress_model_box == 'lasso':
+    las_fi = st.text_input("Fit Intercept: True, False", value='True', key="lasso_fit_intercept")
+    las_mi = st.text_input("Max Iterations: integers", value='100', key="lasso_max_iter")
+    las_cv = st.text_input("Cross Validation: None or integers", value='5', key="lasso_cv")
+
+
+if regress_model_box == 'lasso':
+    if st.button("Add LASSO to Regression Queue"):    
+        las_fit_list = parse_text_entry(las_fi,'bool')
+        las_max_iter_list = parse_text_entry(las_mi,'int')
+        las_cv_list = parse_text_entry(las_cv,'int')
+
+        name = "LASSO"
+        lasso = pipeBuild_LassoCV(fit_intercept=las_fit_list, max_iter=las_max_iter_list, cv=las_cv_list)
+        add_to_regress_queue(name,lasso)
+
 ########################################################
 # End Model Variable Entries
 ########################################################
