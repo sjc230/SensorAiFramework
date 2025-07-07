@@ -201,6 +201,20 @@ if regress_model_box == 'lasso-lars ic':
         add_to_regress_queue(name,lasso_lars_ic)
 
 
+# Ridge Regression
+if regress_model_box == 'ridge':
+    rid_fi = st.text_input("Fit Intercept: True, False", value='True', key="ridge_fit_intercept")
+    rid_cv = st.text_input("Cross Validation: None or integers", value='None', key="ridge_cv")
+
+
+if regress_model_box == 'ridge':
+    if st.button("Add Ridge to Regression Queue"):    
+        rid_fit_list = parse_text_entry(rid_fi,'bool')
+        rid_cv_list = parse_text_entry(rid_cv,'int')
+
+        name = "Ridge"
+        ridge = pipeBuild_RidgeCV(cv=rid_cv_list,fit_intercept=rid_fit_list)
+        add_to_regress_queue(name,ridge)
 
 ########################################################
 # End Model Variable Entries
