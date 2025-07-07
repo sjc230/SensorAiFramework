@@ -216,6 +216,23 @@ if regress_model_box == 'ridge':
         ridge = pipeBuild_RidgeCV(cv=rid_cv_list,fit_intercept=rid_fit_list)
         add_to_regress_queue(name,ridge)
 
+
+# Bayesian Ridge Regression
+if regress_model_box == 'bayesian ridge':
+    byr_a = st.text_input("Alpha Value: None or integerss", value='None', key="bay_rid_alpha")
+    byr_l = st.text_input("Initial Lambda Value: None or integers", value='None', key="bay_rid_lambda")
+    byr_fi = st.text_input("Fit Intercept: True, False", value='True', key="bay_rid_fit_intercept")
+    
+if regress_model_box == 'bayesian ridge':
+    if st.button("Add Bayesian Ridge to Regression Queue"):
+        byr_alpha_list = parse_text_entry(byr_a,'int')
+        byr_lambda_list = parse_text_entry(byr_l,'int')   
+        byr_fit_list = parse_text_entry(byr_fi,'bool')
+        
+        name = "Bayesian Ridge"
+        bayes_ridge = pipeBuild_BayesianRidge(alpha_init=byr_alpha_list,fit_intercept=byr_fit_list, lambda_init=byr_lambda_list)
+        add_to_regress_queue(name,bayes_ridge)
+
 ########################################################
 # End Model Variable Entries
 ########################################################
