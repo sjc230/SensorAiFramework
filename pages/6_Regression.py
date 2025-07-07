@@ -256,6 +256,30 @@ if regress_model_box == 'quantile':
         add_to_regress_queue(name,quantile)
 
 
+# Support Vector Regressor
+if regress_model_box == 'support vector':
+    svr_c = st.text_input("Regularization Parameter: floats only", value='1.0', key="svr_c")
+    svr_kernel = st.text_input("Kernel: linear, poly, rbf, sigmoid", value='rbf', key="svr_kernel")
+    svr_degree = st.text_input("Degree (for poly kernel): integers only", value='3', key="svr_degree")
+    svr_gamma = st.text_input("Gamma: scale, auto", value='scale', key="svr_gamma")
+    svr_tol = st.text_input("Tolerance: floats only", value='0.001', key="svr_tol")
+
+
+if regress_model_box == 'support vector':
+    if st.button("Add Support Vector to Regressor Queue"):
+        svr_c_list = parse_text_entry(svr_c,'float')    
+        svr_kernel_list = parse_text_entry(svr_kernel,'string')
+        svr_degree_list = parse_text_entry(svr_degree,'int')
+        svr_gamma_list = parse_text_entry(svr_gamma,'string')
+        svr_tol_list = parse_text_entry(svr_tol,'float')
+
+        name = "Support Vector Regressor"
+        svr = pipeBuild_SVR(C=svr_c_list, kernel=svr_kernel_list, degree=svr_degree_list,
+                                  gamma=svr_gamma_list, tol=svr_tol_list)
+        add_to_regress_queue(name,svr)
+
+
+
 ########################################################
 # End Model Variable Entries
 ########################################################
