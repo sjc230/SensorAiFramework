@@ -79,6 +79,8 @@ def plot_2vectors(label, pred, save=False, name="", path=None, size=5):
         'Type': [f'{name} prediction'] * len(list1) + [f'{name} label'] * len(list1)
     })
 
+    trace_colors = ['blue', 'red', 'green', 'purple', 'orange'] 
+
     # Plot
     fig = px.scatter(
         df,
@@ -95,6 +97,11 @@ def plot_2vectors(label, pred, save=False, name="", path=None, size=5):
         legend=dict(x=0.85, y=0.05),
         template='simple_white'
     )
+
+    # Iterate through the traces and update their marker color based on the index
+    for i, trace in enumerate(fig.data):
+        if i < len(trace_colors): # Ensure there's a color for the current trace
+            fig.update_traces(marker_color=trace_colors[i], selector=dict(name=trace.name))
 
     # Save plot if requested
     if save:
