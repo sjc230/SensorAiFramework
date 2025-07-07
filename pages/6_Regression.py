@@ -302,8 +302,8 @@ if regress_model_box == 'nu svr':
     nsvr_nu = st.text_input("Regularization Parameter: floats only", value='1.0', key="nsvr_nu")
     nsvr_kernel = st.text_input("Kernel: linear, poly, rbf, sigmoid", value='rbf', key="nsvr_kernel")
     nsvr_degree = st.text_input("Degree (for poly kernel): integers only", value='3', key="nsvr_degree")
-    nsvr_gamma = st.text_input("Gamma: scale, auto", value='scale', key="svr_gamma")
-    nsvr_tol = st.text_input("Tolerance: floats only", value='0.001', key="svr_tol")
+    nsvr_gamma = st.text_input("Gamma: scale, auto", value='scale', key="nsvr_gamma")
+    nsvr_tol = st.text_input("Tolerance: floats only", value='0.001', key="nsvr_tol")
 
 if regress_model_box == 'nu svr':
     if st.button("Add Nu SVR to Regressor Queue"):
@@ -320,6 +320,26 @@ if regress_model_box == 'nu svr':
         add_to_regress_queue(name,nu_svr)
 
 
+# Time SeriesSupport Vector Regressor
+if regress_model_box == 'time series svr':
+    tssvr_c = st.text_input("Regularization Parameter: floats only", value='1.0', key="ts_svr_c")
+    tssvr_kernel = st.text_input("Kernel: gak, linear, poly, rbf, sigmoid", value='gak', key="ts_svr_kernel")
+    tssvr_degree = st.text_input("Degree (for poly kernel): integers only", value='3', key="ts_svr_degree")
+    tssvr_gamma = st.text_input("Gamma: auto, gak, rbf, poly, sigmoid", value='auto', key="ts_svr_gamma")
+    tssvr_tol = st.text_input("Tolerance: floats only", value='0.001', key="ts_svr_tol")
+
+if regress_model_box == 'time series svr':
+    if st.button("Add Time Series SVR to Regressor Queue"):
+        tssvr_c_list = parse_text_entry(tssvr_c,'float')    
+        tssvr_kernel_list = parse_text_entry(tssvr_kernel,'string')
+        tssvr_degree_list = parse_text_entry(tssvr_degree,'int')
+        tssvr_gamma_list = parse_text_entry(tssvr_gamma,'string')
+        tssvr_tol_list = parse_text_entry(tssvr_tol,'float')
+
+        name = "Time Series SVR"
+        ts_svr = pipeBuild_TimeSeriesSVR(C=tssvr_c_list, kernel=tssvr_kernel_list, degree=tssvr_degree_list,
+                                         gamma=tssvr_gamma_list, tol=tssvr_tol_list)
+        add_to_regress_queue(name,ts_svr)
 
 ########################################################
 # End Model Variable Entries
