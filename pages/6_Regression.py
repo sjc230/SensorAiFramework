@@ -184,6 +184,24 @@ if regress_model_box == 'lasso-lars':
         add_to_regress_queue(name,lasso_lars)
 
 
+# LASSO-LARS with Information Criteria Regression
+if regress_model_box == 'lasso-lars ic':
+    llic_c = st.text_input("Criterion: aic, bic", value='aic', key="lasso-lars-ic_criterion")
+    llic_fi = st.text_input("Fit Intercept: True, False", value='True', key="lasso-lars-ic_fit_intercept")
+    llic_mi = st.text_input("Max Iterations: integers", value='100', key="lasso-lars-ic_max_iter")
+
+if regress_model_box == 'lasso-lars ic':
+    if st.button("Add LASSO-LARS IC to Regression Queue"):
+        llic_crit_list = parse_text_entry(llic_c,'string')  
+        llic_fit_list = parse_text_entry(llic_fi,'bool')
+        llic_max_iter_list = parse_text_entry(llic_mi,'int')
+        
+        name = "LASSO-LARS IC"
+        lasso_lars_ic = pipeBuild_LassoLarsIC(criterion= llic_crit_list,fit_intercept= llic_fit_list, max_iter= llic_max_iter_list)
+        add_to_regress_queue(name,lasso_lars_ic)
+
+
+
 ########################################################
 # End Model Variable Entries
 ########################################################
