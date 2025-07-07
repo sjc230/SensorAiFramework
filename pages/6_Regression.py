@@ -297,6 +297,29 @@ if regress_model_box == 'linear svr':
         add_to_regress_queue(name,linear_svr)
 
 
+# Nu Support Vector Regressor
+if regress_model_box == 'nu svr':
+    nsvr_nu = st.text_input("Regularization Parameter: floats only", value='1.0', key="nsvr_nu")
+    nsvr_kernel = st.text_input("Kernel: linear, poly, rbf, sigmoid", value='rbf', key="nsvr_kernel")
+    nsvr_degree = st.text_input("Degree (for poly kernel): integers only", value='3', key="nsvr_degree")
+    nsvr_gamma = st.text_input("Gamma: scale, auto", value='scale', key="svr_gamma")
+    nsvr_tol = st.text_input("Tolerance: floats only", value='0.001', key="svr_tol")
+
+if regress_model_box == 'nu svr':
+    if st.button("Add Nu SVR to Regressor Queue"):
+        nsvr_nu_list = parse_text_entry(nsvr_nu,'float')    
+        nsvr_kernel_list = parse_text_entry(nsvr_kernel,'string')
+        nsvr_degree_list = parse_text_entry(nsvr_degree,'int')
+        nsvr_gamma_list = parse_text_entry(nsvr_gamma,'string')
+        nsvr_tol_list = parse_text_entry(nsvr_tol,'float')
+
+        name = "Nu SVR"
+        nu_svr = pipeBuild_NuSVR(nu=nsvr_nu_list, kernel=nsvr_kernel_list, 
+                                 degree=nsvr_degree_list, gamma=nsvr_gamma_list, 
+                                 tol=nsvr_tol_list)
+        add_to_regress_queue(name,nu_svr)
+
+
 
 ########################################################
 # End Model Variable Entries
