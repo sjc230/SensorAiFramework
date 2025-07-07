@@ -49,7 +49,6 @@ regress_model_box = st.selectbox('**Select the model(s) you like to use.**', reg
 if regress_model_box == 'linear':
     lin_fi = st.text_input("Fit Intercept: True, False", value='True', key="linear_fit_intercept")
 
-
 if regress_model_box == 'linear':
     if st.button("Add Linear to Regression Queue"):    
         lin_fit_list = parse_text_entry(lin_fi,'bool')
@@ -66,7 +65,6 @@ if regress_model_box == 'gamma':
     gam_s = st.text_input("Solver: lbfgs, newton-cholesky", value='lbfgs', key="gamma_solver")
     gam_mi = st.text_input("Max Iterations: integers", value='100', key="gamma_max_iter")
     gam_t = st.text_input("Tolerance: floats only", value='0.0001', key="gamma_fit_tol")
-
 
 if regress_model_box == 'gamma':
     if st.button("Add Gamma to Regression Queue"):    
@@ -88,7 +86,6 @@ if regress_model_box == 'poisson':
     poi_s = st.text_input("Solver: lbfgs, newton-cholesky", value='lbfgs', key="poisson_solver")
     poi_mi = st.text_input("Max Iterations: integers", value='100', key="poisson_max_iter")
     poi_t = st.text_input("Tolerance: floats only", value='0.0001', key="poisson_fit_tol")
-
 
 if regress_model_box == 'poisson':
     if st.button("Add Poisson to Regression Queue"):    
@@ -113,7 +110,6 @@ if regress_model_box == 'tweedie':
     twe_mi = st.text_input("Max Iterations: integers", value='100', key="tweedie_max_iter")
     twe_t = st.text_input("Tolerance: floats only", value='0.0001', key="tweedie_fit_tol")
 
-
 if regress_model_box == 'tweedie':
     if st.button("Add Tweedie to Regression Queue"):
         twe_power_list = parse_text_entry(twe_p,'float')
@@ -137,7 +133,6 @@ if regress_model_box == 'lars':
     lar_mi = st.text_input("Max Iterations: integers", value='100', key="lars_max_iter")
     lar_cv = st.text_input("Cross Validation: None or integers", value='5', key="lars_cv")
 
-
 if regress_model_box == 'lars':
     if st.button("Add LARS to Regression Queue"):    
         lar_fit_list = parse_text_entry(lar_fi,'bool')
@@ -153,7 +148,6 @@ if regress_model_box == 'lasso':
     las_fi = st.text_input("Fit Intercept: True, False", value='True', key="lasso_fit_intercept")
     las_mi = st.text_input("Max Iterations: integers", value='100', key="lasso_max_iter")
     las_cv = st.text_input("Cross Validation: None or integers", value='5', key="lasso_cv")
-
 
 if regress_model_box == 'lasso':
     if st.button("Add LASSO to Regression Queue"):    
@@ -171,7 +165,6 @@ if regress_model_box == 'lasso-lars':
     ll_fi = st.text_input("Fit Intercept: True, False", value='True', key="lasso-lars_fit_intercept")
     ll_mi = st.text_input("Max Iterations: integers", value='100', key="lasso-lars_max_iter")
     ll_cv = st.text_input("Cross Validation: None or integers", value='5', key="lasso-lars_cv")
-
 
 if regress_model_box == 'lasso-lars':
     if st.button("Add LASSO-LARS to Regression Queue"):    
@@ -206,7 +199,6 @@ if regress_model_box == 'ridge':
     rid_fi = st.text_input("Fit Intercept: True, False", value='True', key="ridge_fit_intercept")
     rid_cv = st.text_input("Cross Validation: None or integers", value='None', key="ridge_cv")
 
-
 if regress_model_box == 'ridge':
     if st.button("Add Ridge to Regression Queue"):    
         rid_fit_list = parse_text_entry(rid_fi,'bool')
@@ -232,6 +224,22 @@ if regress_model_box == 'bayesian ridge':
         name = "Bayesian Ridge"
         bayes_ridge = pipeBuild_BayesianRidge(alpha_init=byr_alpha_list,fit_intercept=byr_fit_list, lambda_init=byr_lambda_list)
         add_to_regress_queue(name,bayes_ridge)
+
+
+# Elastic Net Regression
+if regress_model_box == 'elastic net':
+    enet_c = st.text_input("Selection: cyclic, random", value='cyclic', key="elastic_net_cyclic")
+    enet_fi = st.text_input("Fit Intercept: True, False", value='True', key="elastic_net_intercept")
+
+if regress_model_box == 'elastic net':
+    if st.button("Add Elastic Net to Regression Queue"):
+        enet_selection_list = parse_text_entry(enet_c,'string')
+        enet_fit_list = parse_text_entry(enet_fi,'bool')        
+
+        name = "Elastic Net"
+        elastic_net = pipeBuild_ElasticNetCV(selection=enet_selection_list,fit_intercept=enet_fit_list)
+        add_to_regress_queue(name,elastic_net)
+
 
 ########################################################
 # End Model Variable Entries
