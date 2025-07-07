@@ -241,6 +241,21 @@ if regress_model_box == 'elastic net':
         add_to_regress_queue(name,elastic_net)
 
 
+# Quantile Regression
+if regress_model_box == 'quantile':
+    qnt_a = st.text_input("Alpha: floats", value='0.5', key="quantile_alpha")
+    qnt_fi = st.text_input("Fit Intercept: True, False", value='True', key="quantile_intercept")
+
+if regress_model_box == 'quantile':
+    if st.button("Add Quantile to Regression Queue"):
+        qnt_alpha_list = parse_text_entry(qnt_a,'float')
+        qnt_fit_list = parse_text_entry(qnt_fi,'bool')        
+
+        name = "Quantile"
+        quantile = pipeBuild_QuantileRegressor(alpha=qnt_alpha_list,fit_intercept=qnt_fit_list)
+        add_to_regress_queue(name,quantile)
+
+
 ########################################################
 # End Model Variable Entries
 ########################################################
