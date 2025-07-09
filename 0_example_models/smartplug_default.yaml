@@ -5,6 +5,8 @@ device:
   port: 1883
   broker: sensorserver2.engr.uga.edu
   topics: # Only put the topics you wish to use with your model.  List topics in same order that your model uses them.
+    - Power_Factor
+    - Volt_THD
     - Curr_THD
   window_size: 1
 db_server:

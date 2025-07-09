@@ -149,13 +149,15 @@ def on_message(client, userdata, msg):
             combine_and_process_data()
         else:
             if len(window_data) < window_size:
-                window_data = window_data.append(data)
+                window_data.append(data[0])
+                #print(window_data," window data")
                 if len(window_data) == window_size:
                     process_window_data()
             else:
-                window_data = window_data[1:]
-                window_data = window_data.append(data)
+                del window_data[0]
+                window_data.append(data[0])
                 process_window_data()
+            #print("on connect ",window_data)
     
     except json.JSONDecodeError:
         print(f"Failed to decode message on {msg.topic}")
@@ -186,8 +188,11 @@ def combine_and_process_data():
         # Reset data for next cycle if required
         reset_combined_data()
 
-def process_window_data(data_list):
-    data = np.array(data_list)
+def process_window_data():
+    global window_data
+    list_data = window_data
+    #print("in process ",list_data)
+    data = np.array(list_data)
     data = data.reshape(1, -1) #(-1, 1)
 
     prediction = model.predict(data)
