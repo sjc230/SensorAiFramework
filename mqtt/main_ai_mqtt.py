@@ -9,6 +9,7 @@ from influxdb import InfluxDBClient
 import json
 from tkinter import filedialog as fd
 import warnings
+import time
 
 
 # Ignore warnings
@@ -48,10 +49,12 @@ def device_setup(device_path,model_path):
         global org
         global mac
         global topics
+        global window_size
         # Extract smartplug yaml data
         org = device["device"]["organization"]
         mac = device["device"]["mac"]
         topics = device["device"]["topics"]
+        window_size = device['device']['window_size']
     
     # Set up the Topics dictionary
     global combined_data
@@ -59,6 +62,10 @@ def device_setup(device_path,model_path):
     for top in topics:
         combined_data[f"{top}"] = None
     print(combined_data)
+
+    # Setup window for windowed univariate data input 
+    global window_data
+    window_data = []
     
     # MQTT Configuration
     MQTT_BROKER = device["device"]["broker"] #"sensorserver2.engr.uga.edu"
@@ -126,6 +133,8 @@ def on_connect(client, userdata, flags, rc):
 
 # Define what happens when a message is received
 def on_message(client, userdata, msg):
+    global window_size
+    global window_data
     top = shorten_topic(msg.topic)
     try:   
         mac_addr, timestamp, data_interval, data =  parse_beddot_data(msg)
@@ -136,7 +145,17 @@ def on_message(client, userdata, msg):
             combined_data[f"{top}"] = data
         
         # Combine or process the data (here we print it as an example)
-        combine_and_process_data()
+        if window_size == 1:
+            combine_and_process_data()
+        else:
+            if len(window_data) < window_size:
+                window_data = window_data.append(data)
+                if len(window_data) == window_size:
+                    process_window_data()
+            else:
+                window_data = window_data[1:]
+                window_data = window_data.append(data)
+                process_window_data()
     
     except json.JSONDecodeError:
         print(f"Failed to decode message on {msg.topic}")
@@ -166,6 +185,23 @@ def combine_and_process_data():
         
         # Reset data for next cycle if required
         reset_combined_data()
+
+def process_window_data(data_list):
+    data = np.array(data_list)
+    data = data.reshape(1, -1) #(-1, 1)
+
+    prediction = model.predict(data)
+    print("Model Prediction: ",prediction)
+
+    # Get the current time in nanoseconds since the epoch
+    nanosecond_timestamp = time.time_ns()
+
+    line_data = f"prediction,location={location} value={prediction[0]} {nanosecond_timestamp}"
+    print("TIME IS: ", nanosecond_timestamp)
+    print(line_data)
+
+    # write to influxdb
+    influx_client.write([line_data],params={'db':INFLUXDB_DATABASE},protocol='line')
 
 # Function to reset combined data after processing (if necessary)
 def reset_combined_data():

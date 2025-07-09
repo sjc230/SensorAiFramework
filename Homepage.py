@@ -17,6 +17,9 @@ st.sidebar.success("Select a page above")
 # Session Variables Initializations
 ########################################
 
+if "active_dataset" not in st.session_state:
+    st.session_state["active_dataset"] = ""
+
 if "X_train" not in st.session_state:
     st.session_state["X_train"] = ""
 
