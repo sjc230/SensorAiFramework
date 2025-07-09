@@ -1,0 +1,19 @@
+device:
+  type: smartplug
+  location: 80:65:99:a4:be:1c
+  start_time: 2025-05-29 16:00:00
+  end_time: 2025-05-29 16:01:00
+  topics: # Only put the topics you wish to use with your model.  List topics in same order that your model uses them.
+    - Power_Factor
+    - Volt_THD
+    - Curr_THD
+  window_size: 1
+db_server:
+  host: sensorserver2.engr.uga.edu
+  port: 8086
+  database: waveform
+  user: plug
+  password: smartai@122
+  ssl: True  
+  prediction-location: test2
+

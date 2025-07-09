@@ -65,10 +65,12 @@ def device_setup(device_path,model_path):
         global start_time
         global end_time 
         global topics
+        global window_size
         # Extract smartplug yaml data
         start_time = device["device"]["start_time"]
         end_time = device["device"]["end_time"]
         topics = device["device"]["topics"]
+        window_size = device["device"]["window_size"]
     
     # Set up the Topics dictionary
     global combined_data
@@ -76,6 +78,10 @@ def device_setup(device_path,model_path):
     for top in topics:
         combined_data[f"{top}"] = None
     #print(combined_data)
+        
+    # Setup window for windowed univariate data input 
+    global window_data
+    window_data = []
 
     # InfluxDB Configuration
     global INFLUXDB_DATABASE
@@ -131,41 +137,42 @@ if __name__ == '__main__':
     
     results = influx_client.query(query)
 
-    results_list = []
-    time_list = []
-    t=0
-    for top in topics:        
-        top_data = list(results.get_points(measurement=top))        
-        top_frame = pd.DataFrame(top_data)
-        if t == 0:
-            time_list = top_frame['time'].tolist()
-            #("TIME LIST: ",time_list)
-            #print(type(time_list[0]))
-            for l in range(len(time_list)):
-                time_list[l] = date_to_timestamp(time_list[l])
-        top_list = top_frame['value'].tolist()
-        results_list.append(top_list)
-        t += 1
-    results_array = np.array(results_list)
-    results_array = results_array.transpose()
-    #print("RESULTS TYPE IS: ",type(results_array[0][0]))
+    if window_size == 1:
+        results_list = []
+        time_list = []
+        t=0
+        for top in topics:        
+            top_data = list(results.get_points(measurement=top))        
+            top_frame = pd.DataFrame(top_data)
+            if t == 0:
+                time_list = top_frame['time'].tolist()
+                #("TIME LIST: ",time_list)
+                #print(type(time_list[0]))
+                for l in range(len(time_list)):
+                    time_list[l] = date_to_timestamp(time_list[l])
+            top_list = top_frame['value'].tolist()
+            results_list.append(top_list)
+            t += 1
+        results_array = np.array(results_list)
+        results_array = results_array.transpose()
+        #print("RESULTS TYPE IS: ",type(results_array[0][0]))
 
-    #print("TIME LIST: ",time_list)
-    #print("results array: ",results_array)
+        #print("TIME LIST: ",time_list)
+        #print("results array: ",results_array)
 
-    for i in range(len(time_list)):
-        data = results_array[i].reshape(1, -1) #(-1, 1)
-        prediction = model.predict(data)
-        #print("Predition Type is: ",type(prediction))
-        print("Model Prediction: ",prediction[0])
+        for i in range(len(time_list)):
+            data = results_array[i].reshape(1, -1) #(-1, 1)
+            prediction = model.predict(data)
+            #print("Predition Type is: ",type(prediction))
+            print("Model Prediction: ",prediction[0])
 
-        #print("TIME LIST OBJECT IS: ", type(time_list[i]))
-        line_data = f"prediction,location={prediction_location} value={prediction[0]} {time_list[i]}"
-        print(line_data)
+            #print("TIME LIST OBJECT IS: ", type(time_list[i]))
+            line_data = f"prediction,location={prediction_location} value={prediction[0]} {time_list[i]}"
+            print(line_data)
 
-        temp_time = nanosecond_to_datetime(time_list[i])
-        print("Converted Time Stamp: ", temp_time[0])
+            temp_time = nanosecond_to_datetime(time_list[i])
+            print("Converted Time Stamp: ", temp_time[0])
 
-        # write to influxdb
-        influx_client.write([line_data],params={'db':INFLUXDB_DATABASE},protocol='line')
+            # write to influxdb
+            influx_client.write([line_data],params={'db':INFLUXDB_DATABASE},protocol='line')
     
