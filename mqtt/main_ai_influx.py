@@ -175,4 +175,29 @@ if __name__ == '__main__':
 
             # write to influxdb
             influx_client.write([line_data],params={'db':INFLUXDB_DATABASE},protocol='line')
-    
+    else:
+        for top in topics:        
+            top_data = list(results.get_points(measurement=top)) 
+            top_frame = pd.DataFrame(top_data)
+            value_list = top_frame["value"].tolist()
+            time_list = top_frame["time"].tolist()
+            for l in range(len(time_list)):
+                    time_list[l] = date_to_timestamp(time_list[l])
+
+            for n in range(len(value_list)-(window_size-1)):
+                window_list = value_list[n:n+window_size]
+                window_array = np.array(window_list)
+                data = window_array.reshape(1, -1) #(-1, 1)
+                prediction = model.predict(data)
+                #print("Predition Type is: ",type(prediction))
+                print("Model Prediction: ",prediction[0])
+
+                #print("TIME LIST OBJECT IS: ", type(time_list[i]))
+                line_data = f"prediction,location={prediction_location} value={prediction[0]} {time_list[n]}"
+                print(line_data)
+
+                temp_time = nanosecond_to_datetime(time_list[n])
+                print("Converted Time Stamp: ", temp_time[0])
+
+                # write to influxdb
+                influx_client.write([line_data],params={'db':INFLUXDB_DATABASE},protocol='line')
