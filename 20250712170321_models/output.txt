@@ -1,0 +1,16 @@
+LOG FILE for run 20250712170321
+
+Best parameter (CV score=0.000):
+{'decision__criterion': 'gini', 'decision__max_depth': None, 'decision__splitter': 'best'}
+              precision    recall  f1-score   support
+
+         0.0       1.00      1.00      1.00       113
+         1.0       1.00      1.00      1.00       131
+
+    accuracy                           1.00       244
+   macro avg       1.00      1.00      1.00       244
+weighted avg       1.00      1.00      1.00       244
+
+Best Name: ./20250712170321_models/Best_Decision-Tree.pkl 
+Yaml Name Best_Decision-Tree.yaml 
+Classifier gridsearch completed
