@@ -113,7 +113,7 @@ if option == '.csv or .npy file':
             st.write("Waiting on file upload")
 
         if (uploaded_file is not None) and (sep_labels == True):
-            X_train, y_train, X_test, y_test = data_setup(label_bool=label_check,
+            X_full, y_full, X_train, y_train, X_test, y_test = data_setup(label_bool=label_check,
                                                             sep_data_bool=sep_labels,
                                                             split_bool=split_check,
                                                             data_file=data,
@@ -123,8 +123,10 @@ if option == '.csv or .npy file':
             st.session_state["y_train"] = y_train
             st.session_state["X_test"] = X_test
             st.session_state["y_test"] = y_test
+            st.session_state["active_dataset"] = X_full
+            st.session_state["active_labels"] = y_full
         elif (uploaded_file is not None) and (sep_labels == False):
-            X_train, y_train, X_test, y_test = data_setup(label_bool=label_check,
+            X_full, y_full, X_train, y_train, X_test, y_test = data_setup(label_bool=label_check,
                                                             sep_data_bool=sep_labels,
                                                             split_bool=split_check,
                                                             data_file=data,
@@ -134,6 +136,8 @@ if option == '.csv or .npy file':
             st.session_state["y_train"] = y_train
             st.session_state["X_test"] = X_test
             st.session_state["y_test"] = y_test
+            st.session_state["active_dataset"] = X_full
+            st.session_state["active_labels"] = y_full
 
 # Generate Wavefor Data Options
 elif option == 'generate waveforms':

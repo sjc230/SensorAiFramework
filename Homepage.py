@@ -20,6 +20,9 @@ st.sidebar.success("Select a page above")
 if "active_dataset" not in st.session_state:
     st.session_state["active_dataset"] = ""
 
+if "active_labels" not in st.session_state:
+    st.session_state["active_labels"] = ""
+
 if "X_train" not in st.session_state:
     st.session_state["X_train"] = ""
 

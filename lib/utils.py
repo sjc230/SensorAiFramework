@@ -491,7 +491,10 @@ def data_setup(label_bool,sep_data_bool,split_bool,data_file,split_value=None,la
         X_test = x
         y_test = y
 
-    return X_train, y_train, X_test, y_test
+    X_full = x
+    y_full = y
+    
+    return X_full, y_full, X_train, y_train, X_test, y_test
 
 def display_log_updates(filename,log_container):
     """Reads the log file and displays its content."""
