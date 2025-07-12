@@ -37,6 +37,8 @@ if option == '.csv or .npy file':
         st.session_state["y_train"] = ""
         st.session_state["X_test"] = ""
         st.session_state["y_test"] = ""
+        st.session_state["active_dataset"] = ""
+        st.session_state["active_labels"] = ""
         st.session_state["header check"] = False
         st.session_state["label check"] = False
         st.session_state["seperate labels"] = False
