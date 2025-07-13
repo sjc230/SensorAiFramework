@@ -28,6 +28,9 @@ noise_tuple = ('white', 'impulse', 'burst', 'brown',
 
 white_noise_tuple = ('gaussian', 'laplacian', 'band-limited')
 
+make_active_check = st.checkbox("Would you like to make the results your active data file?",key="make active check")
+save_output_check = st.checkbox("Would you like to save the output as a .npy file?",key="save output check")
+
 dsp_box = st.selectbox('**Select the type of processing to perform.**', dsp_tuple)
 
 if dsp_box == 'noise generation':
@@ -45,7 +48,7 @@ if white_type_box == 'band-limited' and noise_box == 'white' and dsp_box == 'noi
     blw_sr = st.number_input(label='band-limited sampling rate',min_value=0,step=1,value=100)
     blw_or = st.number_input(label='band-limited order',min_value=0,step=1,value=3)
 
-if noise_box == 'white' and dsp_box == 'noise generation' and st.session_state["active_dataset"] != "":
+if not str(st.session_state["active_dataset"]) == "" and noise_box == 'white' and dsp_box == 'noise generation':
     if st.button("Add White Noise to Signal"):
         noisy_signal = st.session_state["active_dataset"].copy()
         wr_count = 0
@@ -66,6 +69,13 @@ if noise_box == 'white' and dsp_box == 'noise generation' and st.session_state["
                                             sampling_rate=blw_sr, order=blw_or, show=show)
                 noisy_signal[wr_count] = noisy_row
             wr_count += 1
+        
+        if make_active_check == True:
+            st.session_state["active_dataset"] = noisy_signal
+            st.write(st.session_state["active_dataset"])
+        if save_output_check == True:
+            save_numpy_array(noisy_signal)
+            st.write("Noisy Data saved to .npy file")
 
 if noise_box == 'impulse' and dsp_box == 'noise generation':
     add_imp_rate = st.checkbox("Add an impulse rate", value=True, key="add_respiratory")
