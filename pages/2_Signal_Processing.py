@@ -59,14 +59,14 @@ if not str(st.session_state["active_dataset"]) == "" and noise_box == 'white' an
                 show = False
 
             if white_type_box == 'gaussian':
-                noisy_row = add_white_noise(signal=row, noise_amplitude=noise_amp, model=0, show=show)
+                noisy_row = add_white_noise(signal=row, noise_amplitude=noise_amp, model=0, show=show, stream=show)
                 noisy_signal[wr_count] = noisy_row
             elif white_type_box == 'laplacian':
-                noisy_row = add_white_noise(signal=row, noise_amplitude=noise_amp, model=1, show=show)
+                noisy_row = add_white_noise(signal=row, noise_amplitude=noise_amp, model=1, show=show, stream=show)
                 noisy_signal[wr_count] = noisy_row
             elif white_type_box == 'band-limited':
                 noisy_row = add_band_limited_white_noise(signal=row, noise_amplitude=noise_amp, lowcut=blw_lc, highcut=blw_lc, 
-                                            sampling_rate=blw_sr, order=blw_or, show=show)
+                                            sampling_rate=blw_sr, order=blw_or, show=show, stream=show)
                 noisy_signal[wr_count] = noisy_row
             wr_count += 1
         
