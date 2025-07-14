@@ -29,7 +29,7 @@ def execute_detect_gridsearch():
     y_test = st.session_state['y_test']
 
     gridsearch_outlier(names=st.session_state['detect_name_queue'],pipes=st.session_state['detect_model_queue'],
-                          X=X_test,y=y_test, plot_number=3,save_best=True,log=True)
+                          X=X_test,y=y_test, plot_number=3,save_best=True,log=True,stream=True)
 
 st.title("Novelty Detection")
 

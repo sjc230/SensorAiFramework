@@ -5,6 +5,7 @@ from pathlib import Path
 
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
+import streamlit as st
 
 import re
 import pytz
@@ -235,7 +236,7 @@ def gridsearch_outlier_out(names,pipes,X,y,scoring='neg_mean_squared_error',plot
     #"""
 
 # NOVELTY UNSUPERVISED
-def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_number='all',save_best=False,log=False): #scoring='rand_score'
+def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_number='all',save_best=False,log=False,stream=False): #scoring='rand_score'
     n_classes = int(np.amax(y)+1)
     n_inputs = X.shape[1]
 
@@ -271,7 +272,10 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
         if np.any(noise)==True:
             labels = np.where(labels == 1, 0, labels)
             labels = np.where(labels == -1, 1, labels)
-        plot_confusion_matrix(y,labels,classes,f"{names[j]} Confusion Matrix")
+        if stream == True:
+          plot_confusion_matrix(y,labels,classes,f"{names[j]} Confusion Matrix",stream=True)
+        else:
+          plot_confusion_matrix(y,labels,classes,f"{names[j]} Confusion Matrix")
 
         if save_best == True:
           best_model = grid_search.best_estimator_
@@ -340,7 +344,10 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
               with open(path_name + '/output.txt', 'a') as f:
                   f.write("Incorrect plot number value entered" + '\n')
         fig.update_layout(showlegend=False)
-        fig.show()
+        if stream == True:
+           st.plotly_chart(fig)
+        else:
+           fig.show()
       
     print("Detection gridsearch completed")
     if log == True:

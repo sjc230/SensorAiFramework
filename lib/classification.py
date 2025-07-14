@@ -3706,7 +3706,10 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
         if log == True:
             with open(path_name + '/output.txt', 'a') as f:
                 f.write(classification_report(y_test, y_pred) + '\n')
-        plot_confusion_matrix(y_test,y_pred,classes,f"{names[j]} Confusion Matrix")
+        if stream == True:
+           plot_confusion_matrix(y_test,y_pred,classes,f"{names[j]} Confusion Matrix", stream=True)
+        else:
+            plot_confusion_matrix(y_test,y_pred,classes,f"{names[j]} Confusion Matrix")
 
         if save_best == True:
           best_model = grid_search.best_estimator_

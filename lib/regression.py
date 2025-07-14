@@ -8,6 +8,7 @@ import plotly.offline as py
 import plotly.tools as tls
 import chart_studio.plotly as py
 import plotly.graph_objects as go
+import streamlit as st
 
 import re
 import pytz
@@ -673,7 +674,7 @@ def pipeBuild_OrthogonalMatchingPursuitCV(copy=[True], fit_intercept=[True],
   return pipeline, params
 
 # REGRESSOR GRID BUILDER
-def gridsearch_regressor(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_mean_squared_error',save_best=False,log=False):
+def gridsearch_regressor(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_mean_squared_error',save_best=False,log=False,stream=False):
     n_classes = int(np.amax(y_train)+1)
     n_inputs = X_train.shape[1]
 
@@ -719,8 +720,10 @@ def gridsearch_regressor(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_
         best_title = 'Best Model: ' + names[j]
         #plt.title(best_title)
         fig.update_layout(title_text=best_title)
-        fig.show()
-        #plt.show()
+        if stream == True:
+           st.plotly_chart(fig)
+        else:
+           fig.show()
     
     print("Regression gridsearch completed")
     if log == True:

@@ -30,7 +30,7 @@ def execute_regress_gridsearch():
 
     gridsearch_regressor(names=st.session_state['regress_name_queue'],pipes=st.session_state['regress_model_queue'],
                               X_train=X_train,X_test=X_test,y_train=y_train,y_test=y_test,
-                              scoring="neg_mean_squared_error",save_best=True,log=True)
+                              scoring="neg_mean_squared_error",save_best=True,log=True,stream=True)
 
 st.title("Regression")
 
