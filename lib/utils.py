@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import plotly.express as px
+import streamlit as st
 import pandas as pd
 import pickle
 from sklearn.metrics import confusion_matrix
@@ -237,6 +238,7 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, title="Confusion Matrix",
         y_pred (array-like): Predicted labels.
         labels (list, optional): List of class labels for display. Defaults to unique values in y_true.
         title (str, optional): Title of the plot. Defaults to "Confusion Matrix".
+        stream (bool): True will plot in a streamlit webpage, False will display in browser
     """
     cm = confusion_matrix(y_true, y_pred, labels=labels)
 
@@ -256,7 +258,10 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, title="Confusion Matrix",
                       xaxis_nticks=len(labels), # Ensure all x-axis labels are shown
                       yaxis_nticks=len(labels)) # Ensure all y-axis labels are shown
 
-    fig.show()
+    if stream == True:
+        st.plotly_chart(fig)
+    else:
+        fig.show()
 
 # Load the model from a pickle file
 def load_model(filename):
