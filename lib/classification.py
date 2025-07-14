@@ -6,6 +6,7 @@ from pathlib import Path
 from plotly.subplots import make_subplots
 import chart_studio.plotly as py
 import plotly.graph_objects as go
+import streamlit as st
 
 import re
 import pytz
@@ -3668,7 +3669,7 @@ def pipeBuild_TimeSeriesSVC(C=[1.0],kernel=['gak'],degree=[3],gamma=['auto'],coe
   return pipeline, params
 
 # CLASSIFICATON GRID BUILDER
-def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_mean_squared_error',plot_number=10,save_best=False,log=False):
+def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_mean_squared_error',plot_number=10,save_best=False,log=False,stream=False):
     
     n_classes = int(np.amax(y_train)+1)
     n_inputs = X_train.shape[1]
@@ -3705,7 +3706,11 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
         if log == True:
             with open(path_name + '/output.txt', 'a') as f:
                 f.write(classification_report(y_test, y_pred) + '\n')
-        plot_confusion_matrix(y_test,y_pred,classes,f"{names[j]} Confusion Matrix")
+        fig1 = plot_confusion_matrix(y_test,y_pred,classes,f"{names[j]} Confusion Matrix")
+        if stream == True:
+           st.plotly_chart(fig1)
+        else:
+           fig1.show()
 
         if save_best == True:
           best_model = grid_search.best_estimator_
@@ -3773,7 +3778,10 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
                     f.write("Incorrect plot number value entered" + '\n')
         fig.update_layout(title_text= model_name + ' Classes')
         fig.update_layout(showlegend=False)
-        fig.show() 
+        if stream == True:
+           st.plotly_chart(fig)
+        else:
+           fig.show() 
         
     print("Classifier gridsearch completed")
     if log == True:

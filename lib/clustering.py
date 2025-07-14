@@ -5,6 +5,7 @@ from pathlib import Path
 
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
+import streamlit as st
 
 import re
 import pytz
@@ -1681,7 +1682,7 @@ def pipeBuild_HDBSCAN(min_cluster_size=[5], min_samples=[None], cluster_selectio
 #"""
 
 # CLUSTERING GIRD BUILDER
-def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all',save_best=False,log=False):
+def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all',save_best=False,log=False,stream=False):
 
     n_classes = int(np.amax(y+1))
     n_inputs = X.shape[1]
@@ -1789,7 +1790,10 @@ def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all'
                     f.write("Incorrect plot number value entered" + '\n')
         fig.update_layout(title_text= model_name + ' Clusters')
         fig.update_layout(showlegend=False)
-        fig.show()
+        if stream == True:
+           st.plotly_chart(fig)
+        else:
+           fig.show()
 
     print("Clustering gridsearch completed")
     if log == True:

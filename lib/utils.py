@@ -228,7 +228,7 @@ def plot_confusion_matrix_old(y_true, y_pred, classes, title='Confusion Matrix',
     plt.ylabel('True Label')
     plt.show()
 
-def plot_confusion_matrix(y_true, y_pred, labels=None, title="Confusion Matrix"):
+def plot_confusion_matrix(y_true, y_pred, labels=None, title="Confusion Matrix",stream=False):
     """
     Plots an interactive confusion matrix using Plotly.
 
