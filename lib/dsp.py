@@ -454,7 +454,7 @@ def add_band_limited_white_noise(
     if show:
         # If requested, plot the original and noisy signals
         if stream == True:
-            plot_noise_signal(signal, noisy_signal, 'Add Band-limited White Noise', steam=True)
+            plot_noise_signal(signal, noisy_signal, 'Add Band-limited White Noise', stream=True)
         else:
             plot_noise_signal(signal, noisy_signal, 'Add Band-limited White Noise')
 
@@ -508,7 +508,7 @@ def add_impulsive_noise(
 
     # Add the impulsive noise to the input signal
     noisy_signal = np.abs(impulsive_noise) + signal
-
+    print ("Show in impulsive is: ", show)
     if show:
         # If requested, plot the original and noisy signals
         if stream == True:
