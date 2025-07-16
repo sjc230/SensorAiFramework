@@ -501,14 +501,16 @@ def add_impulsive_noise(
             pob_rate = 1
         pob = [1 - pob_rate, pob_rate]
     else:
+        if stream == True:
+            st.write("unable to determine probability distribution based on inputs")           
         return None
-
+    
     # Generate impulsive noise events based on the probability distribution
     impulsive_noise = np.random.choice([0, 1], size=num_samples, p=pob) * np.random.normal(0, amp, num_samples)
 
     # Add the impulsive noise to the input signal
     noisy_signal = np.abs(impulsive_noise) + signal
-    print ("Show in impulsive is: ", show)
+    
     if show:
         # If requested, plot the original and noisy signals
         if stream == True:

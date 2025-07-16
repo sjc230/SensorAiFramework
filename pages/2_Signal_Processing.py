@@ -102,14 +102,11 @@ if not str(st.session_state["active_dataset"]) == "" and noise_box == 'impulse' 
         for row in noisy_signal:           
             if ir_count == 0:
                 show = True
-                #print(show)
             else:
                 show = False
             noisy_row = add_impulsive_noise(signal=row, noise_amplitude=noise_amp, rate=imp_rt, 
                                             number=imp_num, show=show, stream=show)
-            print(noisy_row)
             noisy_signal[ir_count] = noisy_row
             ir_count += 1
-
-        print("I'm Here")    
+   
         active_save_verification(noisy_signal)
