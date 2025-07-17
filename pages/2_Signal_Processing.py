@@ -169,3 +169,29 @@ if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'noise gener
                 cr_count += 1
             
             active_save_verification(noisy_signal)
+
+
+if dsp_box == 'noise generation':
+    if noise_box == 'echo':
+        echo_num = st.number_input(label='max number of burst noise events to add',min_value=1,step=1,value=5, key="echo_number")
+        echo_att = st.text_input(label='burst duration: list minimum and maximum, integers',value='1,2', key="echo_attenuation_factor")
+        echo_del = st.text_input(label='echo delay factor: delay for each echoe, must have same number of entries as echo numers',value='1,2', key="burst_duration")  
+
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'noise generation':
+    if noise_box == 'echo':
+        if st.button("Add Impulse Noise to Signal"):
+            brst_dur_list = parse_text_entry(brst_dur,'int') 
+            noisy_signal = st.session_state["active_dataset"].copy()
+            br_count = 0
+            for row in noisy_signal:
+                if br_count == 0:
+                    show = True
+                else:
+                    show = False
+                noisy_row = add_burst_noise(signal=row, noise_amplitude=noise_amp, 
+                                                burst_num_max=brst_num_max, burst_durations=brst_dur_list, 
+                                                show=show, stream=show)
+                noisy_signal[br_count] = noisy_row
+                br_count += 1
+    
+            active_save_verification(noisy_signal)
