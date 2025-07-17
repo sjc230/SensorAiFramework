@@ -32,8 +32,12 @@ st.title("Digital Signal Processing")
 dsp_tuple = ('noise generation', 'filtering', 'time & frequency domain features', 'signal decomposition',
                'wavelet analysis', 'transforms')
 
+##########################################################
+# NOISE GENERATION
+##########################################################
+
 noise_tuple = ('white', 'impulse', 'burst', 'colored', 
-               'echo', 'flicker', 'powerline', 'resonance')
+               'echo', 'flicker', 'powerline')
 
 white_noise_tuple = ('gaussian', 'laplacian', 'band-limited')
 
@@ -44,7 +48,7 @@ save_output_check = st.checkbox("Would you like to save the output as a .npy fil
 
 dsp_box = st.selectbox('**Select the type of processing to perform.**', dsp_tuple)
 
-if dsp_box == 'noise generation':
+if dsp_box == 'noise generation':    
     noise_box = st.selectbox('**Select the type of noise**', noise_tuple)
 
 if dsp_box == 'noise generation':
@@ -56,7 +60,8 @@ if dsp_box == 'noise generation':
         color_box = st.selectbox('**Select the color of noise**', color_noise_tuple,key='color_noise_box')
 
 if dsp_box == 'noise generation':
-    noise_amp = st.number_input(label='noise amplitude',step=0.01,format="%.02f",value=0.3,key='noise_amplitude_box')
+    if noise_box != 'echo':
+        noise_amp = st.number_input(label='noise amplitude',step=0.01,format="%.02f",value=0.3,key='noise_amplitude_box')
 
 if  dsp_box == 'noise generation':
     if noise_box == 'white' and white_type_box == 'band-limited':
@@ -173,25 +178,76 @@ if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'noise gener
 
 if dsp_box == 'noise generation':
     if noise_box == 'echo':
-        echo_num = st.number_input(label='max number of burst noise events to add',min_value=1,step=1,value=5, key="echo_number")
-        echo_att = st.text_input(label='burst duration: list minimum and maximum, integers',value='1,2', key="echo_attenuation_factor")
-        echo_del = st.text_input(label='echo delay factor: delay for each echoe, must have same number of entries as echo numers',value='1,2', key="burst_duration")  
+        echo_num = st.number_input(label='number of echos: single integer',min_value=1,step=1,value=2, key="echo_number")
+        echo_att = st.text_input(label='echo attenuation factors: must have an entry for each echo number',value='0.5,0.4', key="echo_attenuation_factor")
+        echo_del = st.text_input(label='echo delay factor: delay for each echoe, must have same number of entries as echo numers',value='5,5', key="echo_delay_factor")  
 
 if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'noise generation':
     if noise_box == 'echo':
-        if st.button("Add Impulse Noise to Signal"):
-            brst_dur_list = parse_text_entry(brst_dur,'int') 
+        if st.button("Add Echo Noise to Signal"):
+            echo_att_list = parse_text_entry(echo_att,'float')
+            echo_del_list = parse_text_entry(echo_del,'int') 
             noisy_signal = st.session_state["active_dataset"].copy()
-            br_count = 0
+            er_count = 0
             for row in noisy_signal:
-                if br_count == 0:
+                if er_count == 0:
                     show = True
                 else:
                     show = False
-                noisy_row = add_burst_noise(signal=row, noise_amplitude=noise_amp, 
-                                                burst_num_max=brst_num_max, burst_durations=brst_dur_list, 
+                noisy_row = add_echo_noise(signal=row, n_echo=echo_num, 
+                                           attenuation_factor=echo_att_list, delay_factor=echo_del_list,
+                                           show=show, stream=show)
+                noisy_signal[er_count] = noisy_row
+                er_count += 1
+    
+            active_save_verification(noisy_signal)
+
+if dsp_box == 'noise generation':
+    if noise_box == 'flicker':
+        flk_sr = st.number_input(label='flicker sampling rate: float',min_value=1,step=1,value=10, key="flicker_sampling_rate")
+        flk_dur = st.number_input(label='flicker duration: float',min_value=1,step=1,value=2, key="flicker_duration")
+
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'noise generation':
+    if noise_box == 'flicker':
+        if st.button("Add Flicker Noise to Signal"):
+            noisy_signal = st.session_state["active_dataset"].copy()
+            fr_count = 0
+            for row in noisy_signal:
+                if fr_count == 0:
+                    show = True
+                else:
+                    show = False
+                noisy_row = add_flicker_noise(signal=row, noise_amplitude=noise_amp, 
+                                              sampling_rate=flk_sr, duration=flk_dur,
+                                              show=show, stream=show)
+                noisy_signal[fr_count] = noisy_row
+                fr_count += 1
+    
+            active_save_verification(noisy_signal)
+
+
+if dsp_box == 'noise generation':
+    if noise_box == 'powerline':
+        res_num = st.number_input(label='number of echos: single integer',min_value=1,step=1,value=2, key="echo_number")
+        res_att = st.text_input(label='resonance attenuation factors: must have an entry for each echo number',value='0.5,0.4', key="echo_attenuation_factor")
+        res_del = st.text_input(label='resonance delay factor: delay for each echoe, must have same number of entries as echo numers',value='5,5', key="echo_delay_factor")  
+
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'noise generation':
+    if noise_box == 'powerline':
+        if st.button("Add Powerline Noise to Signal"):
+            res_att_list = parse_text_entry(echo_att,'float')
+            res_del_list = parse_text_entry(echo_del,'int') 
+            noisy_signal = st.session_state["active_dataset"].copy()
+            pr_count = 0
+            for row in noisy_signal:
+                if pr_count == 0:
+                    show = True
+                else:
+                    show = False
+                noisy_row = add_powerline_noise(signal=row, sampling_rate=pow_sr, duration=pow_dur,
+                                                powerline_frequency=pow_frq, powerline_amplitude=noise_amp,
                                                 show=show, stream=show)
-                noisy_signal[br_count] = noisy_row
-                br_count += 1
+                noisy_signal[pr_count] = noisy_row
+                pr_count += 1
     
             active_save_verification(noisy_signal)

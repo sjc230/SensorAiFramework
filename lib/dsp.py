@@ -789,11 +789,18 @@ def add_powerline_noise(
 
     # Check if the specified powerline frequency is above the Nyquist frequency
     if powerline_frequency > nyquist:
-        print(
-            f"Skipping requested noise frequency of {powerline_frequency} Hz since it cannot be resolved at "
-            f"the sampling rate of {sampling_rate} Hz. Please increase sampling rate to {sampling_rate * 2.5} Hz or choose "
-            f"frequencies smaller than or equal to {nyquist} Hz."
-        )
+        if stream == True:
+            st.write(
+                f"Skipping requested noise frequency of {powerline_frequency} Hz since it cannot be resolved at "
+                f"the sampling rate of {sampling_rate} Hz. Please increase sampling rate to {sampling_rate * 2.5} Hz or choose "
+                f"frequencies smaller than or equal to {nyquist} Hz."
+            )
+        else:    
+            print(
+                f"Skipping requested noise frequency of {powerline_frequency} Hz since it cannot be resolved at "
+                f"the sampling rate of {sampling_rate} Hz. Please increase sampling rate to {sampling_rate * 2.5} Hz or choose "
+                f"frequencies smaller than or equal to {nyquist} Hz."
+            )
         return np.zeros(len(signal))
 
     # Calculate the standard deviation of the input signal
