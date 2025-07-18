@@ -228,15 +228,13 @@ if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'noise gener
 
 if dsp_box == 'noise generation':
     if noise_box == 'powerline':
-        res_num = st.number_input(label='number of echos: single integer',min_value=1,step=1,value=2, key="echo_number")
-        res_att = st.text_input(label='resonance attenuation factors: must have an entry for each echo number',value='0.5,0.4', key="echo_attenuation_factor")
-        res_del = st.text_input(label='resonance delay factor: delay for each echoe, must have same number of entries as echo numers',value='5,5', key="echo_delay_factor")  
+        pow_sr = st.number_input(label='sampling rate',min_value=1,step=1,value=2, key="powerline_sampling_rate")
+        pow_dur = st.number_input(label='powerline duration',min_value=1,step=1,value=2, key="powerline_duration")
+        pow_frq = st.number_input(label='powerline frequency',min_value=1,step=1,value=50, key="powerline_frequency")
 
 if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'noise generation':
     if noise_box == 'powerline':
         if st.button("Add Powerline Noise to Signal"):
-            res_att_list = parse_text_entry(echo_att,'float')
-            res_del_list = parse_text_entry(echo_del,'int') 
             noisy_signal = st.session_state["active_dataset"].copy()
             pr_count = 0
             for row in noisy_signal:

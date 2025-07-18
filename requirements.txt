@@ -25,6 +25,6 @@ chart_studio
 plotly
 influxdb-client
 paho-mqtt
-customtkinter
+#customtkinter
 streamlit
 streamlit-option_menu
