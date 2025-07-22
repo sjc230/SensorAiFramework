@@ -695,6 +695,9 @@ def gridsearch_regressor(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_
         score = grid_search.score(X_test, y_test)
         print("Best parameter (CV score=%0.3f):" % grid_search.best_score_)
         print(grid_search.best_params_)
+        if stream == True:
+          st.text("Best parameter (CV score=%0.3f):" % grid_search.best_score_)
+          st.text(grid_search.best_params_)
         if log == True:
           with open(path_name + '/output.txt', 'w') as f:
               f.write("Best parameter (CV score=%0.3f):" % grid_search.best_score_ + '\n')
@@ -726,6 +729,8 @@ def gridsearch_regressor(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_
            fig.show()
     
     print("Regression gridsearch completed")
+    if stream == True:
+      st.text("Regression gridsearch completed")
     if log == True:
         with open(path_name + '/output.txt', 'a') as f:
             f.write("Regression gridsearch completed")
