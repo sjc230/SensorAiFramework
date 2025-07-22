@@ -1182,6 +1182,8 @@ def scg_simulate(**kwargs):
     else:
         np.save(args['data_file'], simulated_data)
         print(f"{args['data_file']} is generated and saved!")
+        
+    return simulated_data
 
 def _scg_simulate(**kwargs):
     """

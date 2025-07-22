@@ -110,8 +110,16 @@ if option == '.csv or .npy file':
 
             st.subheader("Data Summary")
             st.write(df.describe())
-            fig = plot_single_row(df.iloc[0].to_numpy())
-            st.pyplot(fig)    
+
+            if st.session_state["label check"] == True:
+                temp = df.to_numpy()
+                temp = temp[:, :-1]
+            else:
+                temp = df.to_numpy()
+                
+            fig = plot_single_row(temp)
+            st.pyplot(fig)
+                
         
         else:
             st.write("Waiting on file upload")
@@ -277,7 +285,8 @@ elif option == 'generate scg signals':
                                 artifacts_amplitude=art_a, artifacts_frequency=art_f, artifacts_number=art_n, artifacts_shape=art_s,
                                 n_echo=n_e, attenuation_factor=att_f_list, delay_factor=del_f, random_state=rs_list[0], silent=sil,
                                 label_data=lab,save_data=True)
-       
+        
+        temp = scg_data.copy()
+        fig = plot_single_row(temp[:, :-1])
+        st.pyplot(fig)
         print("SCG Data Created")
-    fig = plot_single_row(scg_data)
-    st.pyplot(fig)

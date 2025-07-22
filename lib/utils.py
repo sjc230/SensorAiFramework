@@ -517,9 +517,6 @@ def plot_single_row(data):
         # Extract the first row
         first_row = data[0]
 
-        st.subheader("First Row Data:")
-        st.write(first_row)
-
         # Create a Matplotlib figure and plot the first row
         fig, ax = plt.subplots()
         ax.plot(first_row)
@@ -528,7 +525,7 @@ def plot_single_row(data):
         ax.set_ylabel("Value")
 
         # Display the plot in Streamlit
-        st.pyplot(fig)
+        #st.pyplot(fig)
     else:
         st.warning("The uploaded NPY file does not contain a valid first row to plot.")
     return fig
