@@ -509,3 +509,26 @@ def display_log_updates(filename,log_container):
             log_container.code(log_content, language='text') # Display as code block for formatting
     except FileNotFoundError:
         log_container.warning("Log file " + filename + " not found.")
+
+
+def plot_single_row(data):
+    # Check if the data is multi-dimensional and has at least one row
+    if data.ndim > 0 and data.shape[0] > 0:
+        # Extract the first row
+        first_row = data[0]
+
+        st.subheader("First Row Data:")
+        st.write(first_row)
+
+        # Create a Matplotlib figure and plot the first row
+        fig, ax = plt.subplots()
+        ax.plot(first_row)
+        ax.set_title("Plot of the First Row")
+        ax.set_xlabel("Index")
+        ax.set_ylabel("Value")
+
+        # Display the plot in Streamlit
+        st.pyplot(fig)
+    else:
+        st.warning("The uploaded NPY file does not contain a valid first row to plot.")
+    return fig

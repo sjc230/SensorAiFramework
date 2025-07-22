@@ -11,6 +11,7 @@ st.set_page_config(
 st.title("Sensor AI Framework")
 st.write("Welcome to the Center for Cyber-Physical Systems' artificial intelligence framework for sensor data")
 st.sidebar.success("Select a page above")
+#st.sidebar.title("Test")
 
 
 ########################################

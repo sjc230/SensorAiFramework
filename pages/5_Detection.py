@@ -31,11 +31,11 @@ def execute_detect_gridsearch():
     gridsearch_outlier(names=st.session_state['detect_name_queue'],pipes=st.session_state['detect_model_queue'],
                           X=X_test,y=y_test, plot_number=3,save_best=True,log=True,stream=True)
 
-st.title("Novelty Detection")
+st.sidebar.title("Novelty Detection")
 
 detect_model_tuple = ('local outlier factor', 'isolation forest')
 
-detect_model_box = st.selectbox('**Select the model(s) you like to use.**', detect_model_tuple)
+detect_model_box = st.sidebar.selectbox('**Select the model(s) you like to use.**', detect_model_tuple)
 
 ########################################################
 # Model Variable Entries
@@ -43,15 +43,15 @@ detect_model_box = st.selectbox('**Select the model(s) you like to use.**', dete
 
 # Local Outlier Factor
 if detect_model_box == 'local outlier factor':
-    lof_nn = st.text_input("Number of Neighbors: integers only", value='20', key="lof_n_neighbors")
-    lof_algo = st.text_input("Algorithm: auto, ball_tree, kd_tree, brute", value='auto', key="lof_algorithm")
-    lof_leaf = st.text_input("Leaf Size: integers only", value='30', key="lof_leaf_size")
-    lof_power = st.text_input("Power: intergers only", value='2', key="lof_metri")
-    lof_met = st.text_input("Distance Metric: euclidean, manhattan, chebyshev, minkowski", value='minkowski', key="low_p")
+    lof_nn = st.sidebar.text_input("Number of Neighbors: integers only", value='20', key="lof_n_neighbors")
+    lof_algo = st.sidebar.text_input("Algorithm: auto, ball_tree, kd_tree, brute", value='auto', key="lof_algorithm")
+    lof_leaf = st.sidebar.text_input("Leaf Size: integers only", value='30', key="lof_leaf_size")
+    lof_power = st.sidebar.text_input("Power: intergers only", value='2', key="lof_metri")
+    lof_met = st.sidebar.text_input("Distance Metric: euclidean, manhattan, chebyshev, minkowski", value='minkowski', key="low_p")
     #lof_nov = st.text_input("Novelty: True or False", value='False', key="lof_novelty")
 
 if detect_model_box == 'local outlier factor':
-    if st.button("Add LOF to Detection Queue"):    
+    if st.sidebar.button("Add LOF to Detection Queue"):    
         nn_list = parse_text_entry(lof_nn,'int')
         algo_list = parse_text_entry(lof_algo,'string')
         leaf_list = parse_text_entry(lof_leaf,'int')
@@ -65,12 +65,12 @@ if detect_model_box == 'local outlier factor':
 
 # Isolation Forest
 if detect_model_box == 'isolation forest':
-    iso_ne = st.text_input("Number of Estimators: integers", value='100', key="iso_n_estimators")
-    iso_ms = st.text_input("Maximum Samples: auto or integers", value='auto', key="iso_max_samples")
+    iso_ne = st.sidebar.text_input("Number of Estimators: integers", value='100', key="iso_n_estimators")
+    iso_ms = st.sidebar.text_input("Maximum Samples: auto or integers", value='auto', key="iso_max_samples")
 
 
 if detect_model_box == 'isolation forest':
-    if st.button("Add Iso Forest to Detection Queue"):    
+    if st.sidebar.button("Add Iso Forest to Detection Queue"):    
         ne_list = parse_text_entry(iso_ne,'int')
         new_string = iso_ms.replace("auto", "None") # replace 'auto' in string with 'None' before using parse
         ms_list = parse_text_entry(new_string,'float') # parse will not work with 'auto', but will work with 'None'
@@ -84,17 +84,17 @@ if detect_model_box == 'isolation forest':
 # End Model Variable Entries
 ########################################################
 
-if st.button("Show Detection Model Queue"):
+if st.sidebar.button("Show Detection Model Queue"):
     print(st.session_state['detect_name_queue'])
     st.write(str(st.session_state['detect_name_queue']))
 
-if st.button("Clear Detection Model Queue"):
+if st.sidebar.button("Clear Detection Model Queue"):
     st.session_state['detect_name_queue'] = []
     st.session_state['detect_model_queue'] = []
     st.session_state["detect log loader"] = None
     st.session_state['show_detect_log'] = False
 
-if st.button("Run Detection Grid Search"):
+if st.sidebar.button("Run Detection Grid Search"):
     print("Detection gridsearch started")
     st.session_state['show_detect_log'] = True
     execute_detect_gridsearch()
