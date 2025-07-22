@@ -287,15 +287,17 @@ if st.sidebar.button("Run Classifier Grid Search"):
     st.session_state['show_class_log'] = True
     execute_class_gridsearch()
 
-if st.session_state['show_class_log'] == True:
-    log_file = st.file_uploader("Choose a txt file", type="txt",key="class log loader")
-    if log_file is not None:
-        root, extension = os.path.splitext(log_file.name)
-        if extension.lower() == ".txt":
-            bytes_data = log_file.getvalue()  
-            string_data = bytes_data.decode('utf-8') 
-            # Display the content
-            st.write("File Content:")
-            st.code(string_data, language="text") # Use st.code for displaying raw text            
-        else:
-            st.write("You have selected an incorrect file type")
+
+# if st.session_state['show_class_log'] == True:
+#     log_file = st.file_uploader("Choose a txt file", type="txt",key="class log loader")
+#     if log_file is not None:
+#         root, extension = os.path.splitext(log_file.name)
+#         if extension.lower() == ".txt":
+#             bytes_data = log_file.getvalue()  
+#             string_data = bytes_data.decode('utf-8') 
+#             # Display the content
+#             st.write("File Content:")
+#             st.code(string_data, language="text") # Use st.code for displaying raw text            
+#         else:
+#             st.write("You have selected an incorrect file type")
+

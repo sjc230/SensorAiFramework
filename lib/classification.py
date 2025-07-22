@@ -3692,7 +3692,10 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
         score = grid_search.score(X_test, y_test)
         print("Best parameter (CV score=%0.3f):" % grid_search.best_score_)
         print(grid_search.best_params_)
-        if log == True:
+        if stream == True:
+           st.text("Best parameter (CV score=%0.3f):" % grid_search.best_score_)
+           st.text(grid_search.best_params_)
+        if log == True:            
             with open(path_name + '/output.txt', 'a') as f:
                 f.write("Best parameter (CV score=%0.3f):" % grid_search.best_score_ + '\n')  
                 f.write(str(grid_search.best_params_) + '\n')      
@@ -3702,11 +3705,12 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
         if np.any(noise)==True:
             y_pred = np.where(y_pred == 1, 0, y_pred)
             y_pred = np.where(y_pred == -1, 1, y_pred)
-        print(classification_report(y_test, y_pred))
+        print(classification_report(y_test, y_pred))         
         if log == True:
             with open(path_name + '/output.txt', 'a') as f:
                 f.write(classification_report(y_test, y_pred) + '\n')
         if stream == True:
+           st.text(classification_report(y_test, y_pred))
            plot_confusion_matrix(y_test,y_pred,classes,f"{names[j]} Confusion Matrix", stream=True)
         else:
             plot_confusion_matrix(y_test,y_pred,classes,f"{names[j]} Confusion Matrix")
@@ -3718,7 +3722,10 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
           best_name = './' + str(directory_path) + '/Best_' + model_name + '.pkl'
           print("Best Name: ",best_name)
           yaml_name = 'Best_' + model_name + '.yaml'
-          print("Yaml Name ",yaml_name)
+          print("Yaml Name: ",yaml_name)
+          if stream == True:
+             st.text("Model File Name: " + str(best_name))
+             st.text("Yaml File Name: " + str(yaml_name))
           if log == True:
             with open(path_name + '/output.txt', 'a') as f:
                 f.write("Best Name: " + best_name + ' \n')
@@ -3772,6 +3779,8 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
                 count = 0
         else:
             print("Incorrect plot number value entered")
+            if stream == True:
+               st.text("Incorrect plot number value entered")
             if log == True:
                 with open(path_name + '/output.txt', 'a') as f:
                     f.write("Incorrect plot number value entered" + '\n')
@@ -3783,6 +3792,8 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
            fig.show() 
         
     print("Classifier gridsearch completed")
+    if stream == True:
+       st.text("Classifier gridsearch completed")
     if log == True:
         with open(path_name + '/output.txt', 'a') as f:
             f.write("Classifier gridsearch completed")
