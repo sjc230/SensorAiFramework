@@ -1705,6 +1705,10 @@ def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all'
         print("Best parameter (CV score=%0.3f):" % grid_search.best_score_)
         print(grid_search.best_params_)
         print("Best " + scoring + "score: ",grid_search.best_score_)
+        if stream == True:
+           st.text("Best parameter (CV score=%0.3f):" % grid_search.best_score_)
+           st.text(grid_search.best_params_)
+           st.text("Best " + scoring + "score: " + str(grid_search.best_score_))
         if log == True:
             with open(path_name + '/output.txt', 'a') as f:
                 f.write("Best parameter (CV score=%0.3f):" % grid_search.best_score_ + '\n')
@@ -1736,6 +1740,9 @@ def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all'
         y_classes = int(np.amax(y)+1)
         print("# of X's clusters is: ",x_classes)
         print("# of y's clusters is: ",y_classes)
+        if stream == True:
+           st.text("# of X's clusters is: " + str(x_classes))
+           st.text("# of y's clusters is: " + str(y_classes))
         if log == True:
             with open(path_name + '/output.txt', 'a') as f:
                 f.write("# of X's clusters is: " + str(x_classes) + '\n')
@@ -1785,6 +1792,8 @@ def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all'
                 count = 0
         else:
             print("Incorrect plot number value entered")
+            if stream == True:
+               st.text("Incorrect plot number value entered")
             if log == True:
                 with open(path_name + '/output.txt', 'a') as f:
                     f.write("Incorrect plot number value entered" + '\n')
@@ -1796,6 +1805,8 @@ def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all'
            fig.show()
 
     print("Clustering gridsearch completed")
+    if stream == True:
+       st.text("Clustering gridsearch completed")
     if log == True:
         with open(path_name + '/output.txt', 'a') as f:
             f.write("Clustering gridsearch completed")
