@@ -35,13 +35,13 @@ def execute_class_gridsearch():
     
 
 
-st.title("Classification")
+st.sidebar.title("Classification")
 
 model_tuple = ('decision tree', 'extra trees', 'random forest', 'gradient boosting',
                'k nearest neighbors', 'nearest centroid', 'radius nearest neighbors',
                'time series knn','support vector', 'nu support vector', 'time series svc')
 
-model_box = st.selectbox('**Select the model(s) you like to use.**', model_tuple)
+model_box = st.sidebar.selectbox('**Select the model(s) you like to use.**', model_tuple)
 
 ########################################################
 # Model Variable Entries
@@ -49,13 +49,13 @@ model_box = st.selectbox('**Select the model(s) you like to use.**', model_tuple
 
 # Decision Tree
 if model_box == 'decision tree':
-    dec_crit = st.text_input("Criterion: gini, entropy, or log_loss", value='gini', key="dec crit")
-    dec_split = st.text_input("Splitter: best, random", value='best', key="dec split")
-    dec_max_d = st.text_input("Maximum Tree Depth: integers", value='None', key="dec max depth")
-    dec_rand = st.text_input("Random State: None or a single integer", value='None', key="dec random state")
+    dec_crit = st.sidebar.text_input("Criterion: gini, entropy, or log_loss", value='gini', key="dec crit")
+    dec_split = st.sidebar.text_input("Splitter: best, random", value='best', key="dec split")
+    dec_max_d = st.sidebar.text_input("Maximum Tree Depth: integers", value='None', key="dec max depth")
+    dec_rand = st.sidebar.text_input("Random State: None or a single integer", value='None', key="dec random state")
 
 if model_box == 'decision tree':
-    if st.button("Add Decision Tree to Classifier Queue"):    
+    if st.sidebar.button("Add Decision Tree to Classifier Queue"):    
         criterion_list = parse_text_entry(dec_crit,'string')
         splitter_list = parse_text_entry(dec_split,'string')
         max_depth_list = parse_text_entry(dec_max_d,'int')
@@ -67,15 +67,15 @@ if model_box == 'decision tree':
 
 # Extra Trees
 if model_box == 'extra trees':
-    extra_ne = st.text_input("Number of Estimators: integers", value='100', key="extra_n_estimators")
-    extra_crit = st.text_input("Criterion: gini, entropy, or log_loss", value='gini', key="extra_criterion")
-    extra_max_d = st.text_input("Maximum Tree Depth: integers", value='None', key="extra_max_depth")
-    extra_rand = st.text_input("Random State: None or a single integer", value='None', key="extra_random_state")
-    extra_ms_split = st.text_input("Minimum Sample # for Node Splits: integers", value='2', key="extra_min_samples_split")
-    extra_ms_leaf = st.text_input("Minimum Sample # Required for a Leaf: integers", value='1', key="extra_min_samples_leaf")
+    extra_ne = st.sidebar.text_input("Number of Estimators: integers", value='100', key="extra_n_estimators")
+    extra_crit = st.sidebar.text_input("Criterion: gini, entropy, or log_loss", value='gini', key="extra_criterion")
+    extra_max_d = st.sidebar.text_input("Maximum Tree Depth: integers", value='None', key="extra_max_depth")
+    extra_rand = st.sidebar.text_input("Random State: None or a single integer", value='None', key="extra_random_state")
+    extra_ms_split = st.sidebar.text_input("Minimum Sample # for Node Splits: integers", value='2', key="extra_min_samples_split")
+    extra_ms_leaf = st.sidebar.text_input("Minimum Sample # Required for a Leaf: integers", value='1', key="extra_min_samples_leaf")
 
 if model_box == 'extra trees':
-    if st.button("Add Extra Trees to Classifier Queue"): 
+    if st.sidebar.button("Add Extra Trees to Classifier Queue"): 
         extra_ne_list = parse_text_entry(extra_ne,'int')   
         extra_crit_list = parse_text_entry(extra_crit,'string')
         extra_max_d_list = parse_text_entry(extra_max_d,'int')
@@ -88,14 +88,14 @@ if model_box == 'extra trees':
 
 # Random Forest
 if model_box == 'random forest':
-    rfor_ne = st.text_input("Number of Estimators: integers", value='100', key="forest_n_estimators")
-    rfor_crit = st.text_input("Criterion: gini, entropy, or log_loss", value='gini', key="forest_criterion")
-    rfor_max_d = st.text_input("Maximum Tree Depth: integers", value='None', key="forest_max_depth")
-    rfor_rand = st.text_input("Random State: None or a single integer", value='None', key="forest_random_state")
+    rfor_ne = st.sidebar.text_input("Number of Estimators: integers", value='100', key="forest_n_estimators")
+    rfor_crit = st.sidebar.text_input("Criterion: gini, entropy, or log_loss", value='gini', key="forest_criterion")
+    rfor_max_d = st.sidebar.text_input("Maximum Tree Depth: integers", value='None', key="forest_max_depth")
+    rfor_rand = st.sidebar.text_input("Random State: None or a single integer", value='None', key="forest_random_state")
     
 
 if model_box == 'random forest':
-    if st.button("Add Random Forest to Classifier Queue"):
+    if st.sidebar.button("Add Random Forest to Classifier Queue"):
         rfor_ne_list = parse_text_entry(rfor_ne,'int')    
         rfor_crit_list = parse_text_entry(rfor_crit,'string')
         rfor_max_d_list = parse_text_entry(rfor_max_d,'int')
@@ -106,15 +106,15 @@ if model_box == 'random forest':
 
 # Gradient Boosting
 if model_box == 'gradient boosting':
-    gb_ne = st.text_input("Number of Estimators: integers", value='100', key="gradient_n_estimators")
-    gb_crit = st.text_input("Criterion: friedman_mse, squared_error", value='friedman_mse', key="gradient_criterion")
-    gb_max_d = st.text_input("Maximum Tree Depth: integers", value='3', key="gradient_max_depth")
-    gb_rand = st.text_input("Random State: None or a single integer", value='None', key="gradient_random_state")
-    gb_ms_split = st.text_input("Minimum Sample # for Node Splits: integers", value='2', key="gradient_min_samples_split")
-    gb_ms_leaf = st.text_input("Minimum Sample # Required for a Leaf: integers", value='1', key="gradient_min_samples_leaf")
+    gb_ne = st.sidebar.text_input("Number of Estimators: integers", value='100', key="gradient_n_estimators")
+    gb_crit = st.sidebar.text_input("Criterion: friedman_mse, squared_error", value='friedman_mse', key="gradient_criterion")
+    gb_max_d = st.sidebar.text_input("Maximum Tree Depth: integers", value='3', key="gradient_max_depth")
+    gb_rand = st.sidebar.text_input("Random State: None or a single integer", value='None', key="gradient_random_state")
+    gb_ms_split = st.sidebar.text_input("Minimum Sample # for Node Splits: integers", value='2', key="gradient_min_samples_split")
+    gb_ms_leaf = st.sidebar.text_input("Minimum Sample # Required for a Leaf: integers", value='1', key="gradient_min_samples_leaf")
 
 if model_box == 'gradient boosting':
-    if st.button("Add Gradient Boosting to Classifier Queue"):
+    if st.sidebar.button("Add Gradient Boosting to Classifier Queue"):
         gb_ne_list = parse_text_entry(gb_ne,'int')    
         gb_crit_list = parse_text_entry(gb_crit,'string')
         gb_max_d_list = parse_text_entry(gb_max_d,'int')
@@ -130,13 +130,13 @@ if model_box == 'gradient boosting':
 
 # K Nearest Neighbors
 if model_box == 'k nearest neighbors':
-    knn_nn = st.text_input("Number of Neighbors: integers only", value='5', key="knn_n_neighbors")
-    knn_weight = st.text_input("Weights: uniform, distance", value='uniform', key="knn_weights")
-    knn_algo = st.text_input("Algorithm: auto, ball_tree, kd_tree, brute", value='auto', key="knn_algoritm")
-    knn_ls = st.text_input("Leaf Size: integers only", value='30', key="knn_leaf_size")
+    knn_nn = st.sidebar.text_input("Number of Neighbors: integers only", value='5', key="knn_n_neighbors")
+    knn_weight = st.sidebar.text_input("Weights: uniform, distance", value='uniform', key="knn_weights")
+    knn_algo = st.sidebar.text_input("Algorithm: auto, ball_tree, kd_tree, brute", value='auto', key="knn_algoritm")
+    knn_ls = st.sidebar.text_input("Leaf Size: integers only", value='30', key="knn_leaf_size")
 
 if model_box == 'k nearest neighbors':
-    if st.button("Add K Nearest Neighbors to Classifier Queue"):
+    if st.sidebar.button("Add K Nearest Neighbors to Classifier Queue"):
         knn_nn_list = parse_text_entry(knn_nn,'int')    
         knn_weight_list = parse_text_entry(knn_weight,'string')
         knn_algo_list = parse_text_entry(knn_algo,'string')
@@ -148,11 +148,11 @@ if model_box == 'k nearest neighbors':
 
 # Nearest Centroid
 if model_box == 'nearest centroid':
-    nc_metric = st.text_input("Distance Metric: euclidean, manhattan, chebyshev, minkowski", value='euclidean', key="ncent_metric")
-    nc_shrink = st.text_input("Shrink Threshold: None and floaty", value='None', key="ncent_shrink")
+    nc_metric = st.sidebar.text_input("Distance Metric: euclidean, manhattan, chebyshev, minkowski", value='euclidean', key="ncent_metric")
+    nc_shrink = st.sidebar.text_input("Shrink Threshold: None and floaty", value='None', key="ncent_shrink")
 
 if model_box == 'nearest centroid':
-    if st.button("Add Nearest Centroid to Classifier Queue"):
+    if st.sidebar.button("Add Nearest Centroid to Classifier Queue"):
         nc_metric_list = parse_text_entry(nc_metric,'string')
         nc_shrink_list = parse_text_entry(nc_shrink,'float')
         name = "Nearest Centroid"
@@ -162,15 +162,15 @@ if model_box == 'nearest centroid':
 
 # Radiaus Nearest Neighbors
 if model_box == 'radius nearest neighbors':
-    rnn_rad = st.text_input("Radius: floats only", value='1.0', key="radius_nn_n_neighbors")
-    rnn_weight = st.text_input("Weights: uniform, distance", value='uniform', key="radius_nn_weights")
-    rnn_algo = st.text_input("Algorithm: auto, ball_tree, kd_tree, brute", value='auto', key="radius_nn_algoritm")
-    rnn_ls = st.text_input("Leaf Size: integers only", value='30', key="radius_nn_leaf_size")
-    rnn_p = st.text_input("Power: integers only", value='2', key="radius_nn_p")
-    rnn_metric = st.text_input("Distance Metric: euclidean, manhattan, chebyshev, minkowski", value='minkowski', key="radius_nn_metric")
+    rnn_rad = st.sidebar.text_input("Radius: floats only", value='1.0', key="radius_nn_n_neighbors")
+    rnn_weight = st.sidebar.text_input("Weights: uniform, distance", value='uniform', key="radius_nn_weights")
+    rnn_algo = st.sidebar.text_input("Algorithm: auto, ball_tree, kd_tree, brute", value='auto', key="radius_nn_algoritm")
+    rnn_ls = st.sidebar.text_input("Leaf Size: integers only", value='30', key="radius_nn_leaf_size")
+    rnn_p = st.sidebar.text_input("Power: integers only", value='2', key="radius_nn_p")
+    rnn_metric = st.sidebar.text_input("Distance Metric: euclidean, manhattan, chebyshev, minkowski", value='minkowski', key="radius_nn_metric")
 
 if model_box == 'radius nearest neighbors':
-    if st.button("Add Radius Nearest Neighbors to Classifier Queue"):
+    if st.sidebar.button("Add Radius Nearest Neighbors to Classifier Queue"):
         rnn_rad_list = parse_text_entry(rnn_rad,'float')    
         rnn_weight_list = parse_text_entry(rnn_weight,'string')
         rnn_algo_list = parse_text_entry(rnn_algo,'string')
@@ -185,12 +185,12 @@ if model_box == 'radius nearest neighbors':
 
 # Time Series K Nearest Neighbors
 if model_box == 'time series knn':
-    tsknn_nn = st.text_input("Number of Neighbors: integers only", value='5', key="tsknn_n_neighbors")
-    tsknn_weight = st.text_input("Weights: uniform, distance", value='uniform', key="tsknn_weights")
-    tsknn_metric = st.text_input("Distance Metric: dtw, softdtw, ctw, sqeuclidean, sax", value='dtw', key="tsknn_metric")
+    tsknn_nn = st.sidebar.text_input("Number of Neighbors: integers only", value='5', key="tsknn_n_neighbors")
+    tsknn_weight = st.sidebar.text_input("Weights: uniform, distance", value='uniform', key="tsknn_weights")
+    tsknn_metric = st.sidebar.text_input("Distance Metric: dtw, softdtw, ctw, sqeuclidean, sax", value='dtw', key="tsknn_metric")
 
 if model_box == 'time series knn':
-    if st.button("Add Time Series KNN to Classifier Queue"):
+    if st.sidebar.button("Add Time Series KNN to Classifier Queue"):
         tsknn_nn_list = parse_text_entry(tsknn_nn,'int')    
         tsknn_weight_list = parse_text_entry(tsknn_weight,'string')
         tsknn_metric_list = parse_text_entry(tsknn_metric,'string')
@@ -201,15 +201,15 @@ if model_box == 'time series knn':
 
 # Support Vector Classifier
 if model_box == 'support vector':
-    svc_c = st.text_input("Regularization Parameter: floats only", value='1.0', key="svc_c")
-    svc_kernel = st.text_input("Kernel: linear, poly, rbf, sigmoid", value='rbf', key="svc_kernel")
-    svc_degree = st.text_input("Degree (for poly kernel): integers only", value='3', key="svc_degree")
-    svc_gamma = st.text_input("Gamma: scale, auto", value='scale', key="svc_gamma")
-    svc_tol = st.text_input("Tolerance: floats only", value='0.001', key="svc_tol")
+    svc_c = st.sidebar.text_input("Regularization Parameter: floats only", value='1.0', key="svc_c")
+    svc_kernel = st.sidebar.text_input("Kernel: linear, poly, rbf, sigmoid", value='rbf', key="svc_kernel")
+    svc_degree = st.sidebar.text_input("Degree (for poly kernel): integers only", value='3', key="svc_degree")
+    svc_gamma = st.sidebar.text_input("Gamma: scale, auto", value='scale', key="svc_gamma")
+    svc_tol = st.sidebar.text_input("Tolerance: floats only", value='0.001', key="svc_tol")
 
 
 if model_box == 'support vector':
-    if st.button("Add Support Vector to Classifier Queue"):
+    if st.sidebar.button("Add Support Vector to Classifier Queue"):
         svc_c_list = parse_text_entry(svc_c,'float')    
         svc_kernel_list = parse_text_entry(svc_kernel,'string')
         svc_degree_list = parse_text_entry(svc_degree,'int')
@@ -223,15 +223,15 @@ if model_box == 'support vector':
 
 # Nu Support Vector Classifier
 if model_box == 'nu support vector':
-    nusvc_nu = st.text_input("Regularization Parameter: floats only", value='0.5', key="nusvc_nu")
-    nusvc_kernel = st.text_input("Kernel: linear, poly, rbf, sigmoid", value='rbf', key="nusvc_kernel")
-    nusvc_degree = st.text_input("Degree (for poly kernel): integers only", value='3', key="nusvc_degree")
-    nusvc_gamma = st.text_input("Gamma: scale, auto", value='scale', key="nusvc_gamma")
-    nusvc_tol = st.text_input("Tolerance: floats only", value='0.001', key="nusvc_tol")
+    nusvc_nu = st.sidebar.text_input("Regularization Parameter: floats only", value='0.5', key="nusvc_nu")
+    nusvc_kernel = st.sidebar.text_input("Kernel: linear, poly, rbf, sigmoid", value='rbf', key="nusvc_kernel")
+    nusvc_degree = st.sidebar.text_input("Degree (for poly kernel): integers only", value='3', key="nusvc_degree")
+    nusvc_gamma = st.sidebar.text_input("Gamma: scale, auto", value='scale', key="nusvc_gamma")
+    nusvc_tol = st.sidebar.text_input("Tolerance: floats only", value='0.001', key="nusvc_tol")
 
 
 if model_box == 'nu support vector':
-    if st.button("Add Nu Support Vector to Classifier Queue"):
+    if st.sidebar.button("Add Nu Support Vector to Classifier Queue"):
         nusvc_nu_list = parse_text_entry(nusvc_nu,'float')    
         nusvc_kernel_list = parse_text_entry(nusvc_kernel,'string')
         nusvc_degree_list = parse_text_entry(nusvc_degree,'int')
@@ -246,15 +246,15 @@ if model_box == 'nu support vector':
 
 # Time Series Support Vector Classifier
 if model_box == 'time series svc':
-    tssvc_c = st.text_input("Regularization Parameter: floats only", value='1.0', key="tssvc_c")
-    tssvc_kernel = st.text_input("Kernel: gak, linear, poly, rbf, sigmoid", value='gak', key="tssvc_kernel")
-    tssvc_degree = st.text_input("Degree (for poly kernel): integers only", value='3', key="tssvc_degree")
-    tssvc_gamma = st.text_input("Gamma: auto or floats", value='None', key="tssvc_gamma")
-    tssvc_tol = st.text_input("Tolerance: floats only", value='0.001', key="tssvc_tol")
+    tssvc_c = st.sidebar.text_input("Regularization Parameter: floats only", value='1.0', key="tssvc_c")
+    tssvc_kernel = st.sidebar.text_input("Kernel: gak, linear, poly, rbf, sigmoid", value='gak', key="tssvc_kernel")
+    tssvc_degree = st.sidebar.text_input("Degree (for poly kernel): integers only", value='3', key="tssvc_degree")
+    tssvc_gamma = st.sidebar.text_input("Gamma: auto or floats", value='None', key="tssvc_gamma")
+    tssvc_tol = st.sidebar.text_input("Tolerance: floats only", value='0.001', key="tssvc_tol")
 
 
 if model_box == 'time series svc':
-    if st.button("Add Time Series SVC to Classifier Queue"):
+    if st.sidebar.button("Add Time Series SVC to Classifier Queue"):
         tssvc_c_list = parse_text_entry(tssvc_c,'float')    
         tssvc_kernel_list = parse_text_entry(tssvc_kernel,'string')
         tssvc_degree_list = parse_text_entry(tssvc_degree,'int')
@@ -272,17 +272,17 @@ if model_box == 'time series svc':
 # End Model Variable Entries
 ########################################################
 
-if st.button("Show Classifier Model Queue"):
+if st.sidebar.button("Show Classifier Model Queue"):
     print(st.session_state['class_name_queue'])
     st.write(str(st.session_state['class_name_queue']))
 
-if st.button("Clear Classifier Model Queue"):
+if st.sidebar.button("Clear Classifier Model Queue"):
     st.session_state['class_name_queue'] = []
     st.session_state['class_model_queue'] = []
     st.session_state["class log loader"] = None
     st.session_state['show_class_log'] = False
 
-if st.button("Run Classifier Grid Search"):
+if st.sidebar.button("Run Classifier Grid Search"):
     print("Classifier gridsearch started")
     st.session_state['show_class_log'] = True
     execute_class_gridsearch()
