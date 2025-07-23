@@ -4559,7 +4559,7 @@ def generate_regression_data(amplitude=None,frequency=None,noise=False,wave_numb
   return x, y
 
 # KALMAN FILTER
-def kalman_filter(x, x_last=0, p_last=0, Q=0.1, R=0.1):
+def kalman_filter(x, x_last=0, p_last=0, Q=0.1, R=0.1, show=False, stream=False):
     """
     Applies the Kalman filter to a sequence of measurements.
 
@@ -4603,6 +4603,12 @@ def kalman_filter(x, x_last=0, p_last=0, Q=0.1, R=0.1):
     for i in range(len(x)):
         pred, p_last, x_last = kalman(x[i], x_last, p_last, Q, R)
         y.append(pred)
+
+    if show:
+        if stream == True:
+            plot_filtered_signal(y, x, "Kalman Filter", stream=True)
+        else:
+            plot_filtered_signal(y, x, "Kalman Filter")
 
     return y
 
