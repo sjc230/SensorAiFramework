@@ -1,7 +1,7 @@
 device:
   type: smartplug
   organization: smartPP_org_name
-  mac: 806599a4be1c #dcda0c3c5fe8 #dcda0c3c6d40
+  mac: 806599A4BDCC #806599a4be1c #dcda0c3c5fe8 #dcda0c3c6d40
   port: 1883
   broker: sensorserver2.engr.uga.edu
   topics: # Only put the topics you wish to use with your model.  List topics in same order that your model uses them.
