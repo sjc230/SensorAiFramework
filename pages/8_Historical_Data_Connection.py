@@ -7,15 +7,15 @@ import threading
 import tempfile
 from pathlib import Path
 
-# Get the path of the current file (file1.py)
+# Get the path of the current file
 current_file_path = Path(__file__).resolve()
-# Get the parent directory (folder1)
+# Get the parent directory
 parent_dir = current_file_path.parent
-# Get the path to the other folder (folder2)
+# Get the path to the other folder
 other_folder_path = parent_dir.parent / "lib"
 # Add the other folder to sys.path so Python can find the module
 sys.path.append(str(other_folder_path))
-# Now you can import from file2.py
+
 
 from utils import run_script, data_loader_confg, convert_list_to_string
 from dsp import *
