@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 import sys
+from scipy.stats import kurtosis, skew
 from pathlib import Path
 import time
 
@@ -389,11 +390,116 @@ if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'filtering':
 # TIME & FREQUENCY DOMAIN FEATURES
 ##########################################################
             
+time_freq_tuple = ('time domain features', 'peaks & envelopes', 'power spectral density', 'transforms', 'misc')
+
+#td_tuple = ('statistical moments', 'petrosian fractal dimension')
+if dsp_box == 'time & frequency domain features':
+    time_freq_box = st.sidebar.selectbox('**Select the features to extract.**', time_freq_tuple)
+
+if dsp_box == 'time & frequency domain features':
+    if time_freq_box == 'time domain features':
+      
+        pmu_check = st.sidebar.checkbox("PMU (frequency, amplitude, phase angle)",key="pmu check")
+        if pmu_check == True:
+            pmu_sf = st.sidebar.number_input(label='pmu sampling frequency',min_value=1,step=1,value=1, key="pmu_sampline_frequency")
+        mean_check = st.sidebar.checkbox("Mean",key="mean check")
+        var_check = st.sidebar.checkbox("Variance",key="variance check")
+        skew_check = st.sidebar.checkbox("Skewness",key="skewness check")
+        kurt_check = st.sidebar.checkbox("Kurtosis",key="kurtosis check")
+        pfd_check = st.sidebar.checkbox("Petrosian Fractal Dimension",key="pfd check")
+        thd_check = st.sidebar.checkbox("Total Harmonic Distortion",key="thd check")
+        if thd_check == True:
+            thd_fund = st.sidebar.number_input(label='fundamental frequency',min_value=1,step=1,value=1, key="thd_fundamental_frequency")
+            thd_sf = st.sidebar.number_input(label='thd sampling frequency',min_value=2,step=1,value=2, key="thd_sampling_frequency")
+            thd_har = st.sidebar.number_input(label='number of harmonics',min_value=1,step=1,value=5, key="thd_number_harmonics")
+        
+        if pmu_check == True or mean_check == True or var_check == True or skew_check == True or kurt_check == True or pfd_check == True or thd_check == True:
+            any_checked = True
+        else:
+            any_checked = False
+
+        
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'time & frequency domain features' and any_checked == True:
+    if time_freq_box == 'time domain features':
+        if st.sidebar.button("Extract Features"):
+            current_signal = st.session_state["active_dataset"].copy()
+            ex_count = 0
+            extracted_list = []            
+            first_row_info = []
+            for row in current_signal:  
+                current_list = []              
+                if pmu_check == True:
+                    pmu_tuple = extract_pmu(row, pmu_sf)
+                    current_list.append(pmu_tuple[0])
+                    current_list.append(pmu_tuple[1])
+                    current_list.append(pmu_tuple[2])
+                    if ex_count == 0:
+                        freq_txt = "The Frequency is " + str(pmu_tuple[0])
+                        first_row_info.append(freq_txt)
+                        amp_txt = "The Amplitude is " + str(pmu_tuple[1])
+                        first_row_info.append(amp_txt)
+                        phas_txt = "The Phase Angle is " + str(pmu_tuple[2])
+                        first_row_info.append(phas_txt)
+                if mean_check == True:
+                    cur_mean = np.mean(row)
+                    current_list.append(cur_mean)
+                    if ex_count == 0:
+                        mean_txt = "The Mean is " + str(cur_mean)
+                        first_row_info.append(mean_txt)
+                if var_check == True:
+                    cur_var = np.var(row)
+                    current_list.append(cur_var)
+                    if ex_count == 0:
+                        var_txt = "The Variance is " + str(cur_var)
+                        first_row_info.append(var_txt)
+                if skew_check == True:
+                    cur_skew = skew(row)
+                    current_list.append(cur_skew)
+                    if ex_count == 0:
+                        skew_txt = "The Skewness is " + str(cur_skew)
+                        first_row_info.append(skew_txt)
+                if kurt_check == True:
+                    cur_kurt = kurtosis(row)
+                    current_list.append(cur_kurt)
+                    if ex_count == 0:
+                        kurt_txt = "The Kurtosis is " + str(cur_kurt)
+                        first_row_info.append(kurt_txt)
+                if pfd_check == True:
+                    cur_pfd = pfd(row)
+                    current_list.append(cur_pfd)
+                    if ex_count == 0:
+                        pfd_txt = "Petrosian Fractal Dimension " + str(cur_pfd)
+                        first_row_info.append(pfd_txt)
+                if thd_check == True:
+                    cur_thd = calculate_thd(row, thd_fund, thd_sf, thd_har)
+                    current_list.append(cur_thd)
+                    if ex_count == 0:
+                        thd_txt = "The Total Harmonic Distortion is " + str(cur_thd)
+                        first_row_info.append(thd_txt)
+                
+                #current_array = np.array(current_list)
+                if ex_count == 0:
+                    st.write("THE EXTRACTED FEATURES FOR THE FIRST INPUT SIGNAL ARE:")
+                    for item in first_row_info:
+                        st.write(item)
+
+                extracted_list.append(current_list)
+
+                ex_count += 1
+
+            extracted_signal = np.array(extracted_list)
+
+            df = pd.DataFrame(extracted_signal)
+            st.title("Feature Preview")
+            st.dataframe(df.head(5))
+            active_save_verification(extracted_signal)
 
 ##########################################################
 # SIGNAL DECOMPOSITION
 ##########################################################
             
+decomp_tuple = ('')
+
 
 
 ##########################################################
