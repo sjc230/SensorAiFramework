@@ -1721,9 +1721,12 @@ def gridsearch_clustering(names,pipes,X,y,scoring='rand_score',plot_number='all'
             new_noise_label = int(np.amax(labels)+1) # find the max label value
             labels = np.where(labels == -1, new_noise_label, labels)
 
+        best_model = grid_search.best_estimator_
+        model_name = names[j]
+
         if save_best == True:
-          best_model = grid_search.best_estimator_
-          model_name = names[j]
+          #best_model = grid_search.best_estimator_
+          #model_name = names[j]
           model_name = model_name.replace(' ','-')
           best_name = './' + str(directory_path) + '/Best_' + model_name + '.pkl'
           yaml_name = 'Best_' + model_name + '.yaml'
