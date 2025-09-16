@@ -3715,9 +3715,10 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
         else:
             plot_confusion_matrix(y_test,y_pred,classes,f"{names[j]} Confusion Matrix")
 
+        best_model = grid_search.best_estimator_
+        model_name = names[j]
+
         if save_best == True:
-          best_model = grid_search.best_estimator_
-          model_name = names[j]
           model_name = model_name.replace(' ','-')
           best_name = './' + str(directory_path) + '/Best_' + model_name + '.pkl'
           print("Best Name: ",best_name)
