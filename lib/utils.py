@@ -13,12 +13,9 @@ import yaml
 import re
 import subprocess
 import time
-import customtkinter
 import shutil
 from pathlib import Path
 from sklearn.model_selection import train_test_split
-import customtkinter as ctk
-import tkinter.filedialog as filedialog
 
 current_dir = Path.cwd()
 config_path = current_dir / "config/current_data.yaml"
@@ -315,10 +312,6 @@ def create_model_yaml(yaml_name,model_name,model_path,model_type,n_inputs,n_outp
         # Write the data to the YAML file
         yaml.dump(data, file, default_flow_style=False)
     return
-
-def open_file(title='Select a File',filetypes=("All files", "*.*")):
-    filename = customtkinter.filedialog.askopenfilename(title=title,filetypes=filetypes)
-    return filename
 
 # GUI RELATED METHODS
 
