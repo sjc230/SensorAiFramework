@@ -704,9 +704,12 @@ def gridsearch_regressor(names,pipes,X_train,X_test,y_train,y_test,scoring='neg_
               f.write(str(grid_search.best_params_) + '\n') 
         y_pred = grid_search.predict(X_test)
 
+        best_model = grid_search.best_estimator_
+        model_name = names[j]
+
         if save_best == True:
-          best_model = grid_search.best_estimator_
-          model_name = names[j]
+          #best_model = grid_search.best_estimator_
+          #model_name = names[j]
           model_name = model_name.replace(' ','-')
           best_name = './' + str(directory_path) + '/Best_' + model_name + '.pkl'
           yaml_name = 'Best_' + model_name + '.yaml'

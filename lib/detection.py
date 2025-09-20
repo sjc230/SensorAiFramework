@@ -277,9 +277,12 @@ def gridsearch_outlier(names,pipes,X,y,scoring='neg_mean_squared_error',plot_num
         else:
           plot_confusion_matrix(y,labels,classes,f"{names[j]} Confusion Matrix")
 
+        best_model = grid_search.best_estimator_
+        model_name = names[j]
+
         if save_best == True:
-          best_model = grid_search.best_estimator_
-          model_name = names[j]
+          #best_model = grid_search.best_estimator_
+          #model_name = names[j]
           model_name = model_name.replace(' ','-')
           best_name = './' + str(directory_path) + '/Best_' + model_name + '.pkl'
           yaml_name = 'Best_' + model_name + '.yaml'

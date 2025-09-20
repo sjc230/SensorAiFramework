@@ -3705,12 +3705,12 @@ def gridsearch_classifier(names,pipes,X_train,X_test,y_train,y_test,scoring='neg
         if np.any(noise)==True:
             y_pred = np.where(y_pred == 1, 0, y_pred)
             y_pred = np.where(y_pred == -1, 1, y_pred)
-        print(classification_report(y_test, y_pred))         
+        print(classification_report(y_test, y_pred, digits=6))         
         if log == True:
             with open(path_name + '/output.txt', 'a') as f:
-                f.write(classification_report(y_test, y_pred) + '\n')
+                f.write(classification_report(y_test, y_pred, digits=6) + '\n')
         if stream == True:
-           st.text(classification_report(y_test, y_pred))
+           st.text(classification_report(y_test, y_pred, digits=6))
            plot_confusion_matrix(y_test,y_pred,classes,f"{names[j]} Confusion Matrix", stream=True)
         else:
             plot_confusion_matrix(y_test,y_pred,classes,f"{names[j]} Confusion Matrix")
