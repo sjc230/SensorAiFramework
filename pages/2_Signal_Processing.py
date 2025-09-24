@@ -6,6 +6,7 @@ import sys
 from scipy.stats import kurtosis, skew
 from pathlib import Path
 import time
+import matplotlib.pyplot as plt
 
 # Get the path of the current file (file1.py)
 current_file_path = Path(__file__).resolve()
@@ -396,6 +397,8 @@ time_freq_tuple = ('time domain features', 'peaks & envelopes', 'power spectral 
 if dsp_box == 'time & frequency domain features':
     time_freq_box = st.sidebar.selectbox('**Select the features to extract.**', time_freq_tuple)
 
+any_checked = False
+
 if dsp_box == 'time & frequency domain features':
     if time_freq_box == 'time domain features':
       
@@ -493,6 +496,43 @@ if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'time & freq
             st.title("Feature Preview")
             st.dataframe(df.head(5))
             active_save_verification(extracted_signal)
+
+### Peak Detection Algorithms
+
+peak_tuple = ('peak detection', 'peak of peaks', 'envelope from peaks', 'average envelope', 'hilbert envelope & phase')
+
+if dsp_box == 'time & frequency domain features':
+    if time_freq_box == 'peaks & envelopes':
+        peak_box = st.sidebar.selectbox('**Select the peak extraction algorithm.**', peak_tuple)
+
+
+        
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'time & frequency domain features':
+    if time_freq_box == 'peaks & envelopes':
+        if peak_box == 'peak detection':
+            if st.sidebar.button("Get Peaks"):
+                filtered_signal = st.session_state["active_dataset"].copy()
+                pr_count = 0
+                peaks_list=[]
+                for row in filtered_signal:
+                    if pr_count == 0:
+                        show = True
+                    else:
+                        show = False
+                    peak =  get_peaks(row)
+                    peaks_list.append(peak)
+                    pr_count += 1
+
+                    peaks = np.array(peaks)
+                    if pr_count == 0:
+                        plt.plot(row, label="Original signal")
+                        plt.scatter(peaks,row[peaks],c="red", label="Peak of the signal")
+                        plt.xlabel("Time")
+                        plt.ylabel("Amplitude")
+                        plt.legend()
+                        st.pyplot(plt)
+
+                active_save_verification(peaks_array)
 
 ##########################################################
 # SIGNAL DECOMPOSITION

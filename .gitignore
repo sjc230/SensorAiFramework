@@ -24,3 +24,4 @@ data/demo_scg_data.npy
 data/demo_wave_data.npy
 data/mdpi_sensors/testbed_window_data_10.npy
 data/mdpi_sensors/testbed_window_1hz_5.npy
+lib/test.py
