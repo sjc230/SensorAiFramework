@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 import sys
+from sklearn.preprocessing import LabelEncoder
 from pathlib import Path
 
 # Get the path of the current file (file1.py)
@@ -22,6 +23,22 @@ st.sidebar.title("Data")
 sep_labels = False
 split = 0.00
 
+if not str(st.session_state["active_dataset"]) == "":
+    data = st.session_state["active_dataset"]
+    df = pd.DataFrame(data)
+
+    st.write("Active Dataset ...")
+
+    st.subheader("Data Preview")
+    st.write(df.head())
+
+    st.subheader("Data Summary") 
+    st.write(df.describe())
+
+    temp = data[:, :-1]
+        
+    fig = plot_single_row(temp)
+    st.pyplot(fig)  
 
 
 option = st.sidebar.selectbox('What data would you like to use?',
@@ -80,7 +97,9 @@ if option == '.csv or .npy file':
             if uploaded_labels is not None:
                 root, extension = os.path.splitext(uploaded_labels.name)
                 if extension.lower() == ".npy":
-                    labels = np.load(uploaded_labels)                
+                    labels = np.load(uploaded_labels)
+                    le = LabelEncoder()
+                    labels = le.fit_transform(labels) #labels.astype(float)                
                 else:
                     if header_check == False:
                         df = pd.read_csv(uploaded_labels,header=None)

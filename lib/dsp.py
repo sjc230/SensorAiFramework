@@ -3846,7 +3846,8 @@ class FCT:
 
         # pad with 0 to have the right length of signal
 
-        data = np.lib.pad(input_signal, (0, nearest_power_2 - size_data), 'constant', constant_values=0)
+        #data = np.lib.pad(input_signal, (0, nearest_power_2 - size_data), 'constant', constant_values=0)
+        data = np.pad(input_signal, (0, nearest_power_2 - size_data), 'constant', constant_values=0)
 
         # apply the fct to the adapted length signal
 
@@ -4028,8 +4029,11 @@ def fft_based(input_signal, filter_coefficients, boundary=0):
     half_size = num_coeffs // 2
 
     if boundary == 0:  # ZERO PADDING
-        input_signal = np.lib.pad(input_signal, (half_size, half_size), 'constant', constant_values=0)
-        filter_coefficients = np.lib.pad(filter_coefficients, (0, input_signal.size - num_coeffs), 'constant',
+        #input_signal = np.lib.pad(input_signal, (half_size, half_size), 'constant', constant_values=0)
+        input_signal = np.pad(input_signal, (half_size, half_size), 'constant', constant_values=0)
+        #filter_coefficients = np.lib.pad(filter_coefficients, (0, input_signal.size - num_coeffs), 'constant',
+        #                                 constant_values=0)
+        filter_coefficients = np.pad(filter_coefficients, (0, input_signal.size - num_coeffs), 'constant',
                                          constant_values=0)
         newx = ifft(fft(input_signal) * fft(filter_coefficients))
         return newx[num_coeffs - 1:-1]
@@ -4037,7 +4041,9 @@ def fft_based(input_signal, filter_coefficients, boundary=0):
     elif boundary == 1:  # symmetric
         input_signal = np.concatenate(
             [flipud(input_signal[:half_size]), input_signal, flipud(input_signal[half_size:])])
-        filter_coefficients = np.lib.pad(filter_coefficients, (0, input_signal.size - num_coeffs), 'constant',
+        #filter_coefficients = np.lib.pad(filter_coefficients, (0, input_signal.size - num_coeffs), 'constant',
+        #                                 constant_values=0)
+        filter_coefficients = np.pad(filter_coefficients, (0, input_signal.size - num_coeffs), 'constant',
                                          constant_values=0)
         newx = ifft(fft(input_signal) * fft(filter_coefficients))
         return newx[num_coeffs - 1:-1]
@@ -4072,7 +4078,8 @@ def build_fft(input_signal, filter_coefficients, threshold_windows=6, boundary=0
     # pad with 0 to have a size in a power of 2
     windows_size = int(windows_size)
 
-    zeropadding = np.lib.pad(filter_coefficients, (0, windows_size - num_coeffs), 'constant', constant_values=0)
+    #zeropadding = np.lib.pad(filter_coefficients, (0, windows_size - num_coeffs), 'constant', constant_values=0)
+    zeropadding = np.pad(filter_coefficients, (0, windows_size - num_coeffs), 'constant', constant_values=0)
 
     h_fft = fft(zeropadding)
 
@@ -4085,7 +4092,8 @@ def build_fft(input_signal, filter_coefficients, threshold_windows=6, boundary=0
 
         # window is half padded with since it's focused on the first half
         window = input_signal[current_pos:current_pos + windows_size - half_size]
-        zeropaddedwindow = np.lib.pad(window, (len(h_fft) - len(window), 0), 'constant', constant_values=0)
+        #zeropaddedwindow = np.lib.pad(window, (len(h_fft) - len(window), 0), 'constant', constant_values=0)
+        zeropaddedwindow = np.pad(window, (len(h_fft) - len(window), 0), 'constant', constant_values=0)
         x_fft = fft(zeropaddedwindow)
 
     elif boundary == 1:  # SYMMETRIC
@@ -4111,7 +4119,9 @@ def build_fft(input_signal, filter_coefficients, threshold_windows=6, boundary=0
     if windows_size - (signal_size - current_pos + half_size) < half_size:
 
         window = input_signal[current_pos - half_size:]
-        zeropaddedwindow = np.lib.pad(window, (0, int(windows_size - (signal_size - current_pos + half_size))),
+        #zeropaddedwindow = np.lib.pad(window, (0, int(windows_size - (signal_size - current_pos + half_size))),
+        #                              'constant', constant_values=0)
+        zeropaddedwindow = np.pad(window, (0, int(windows_size - (signal_size - current_pos + half_size))),
                                       'constant', constant_values=0)
         x_fft = fft(zeropaddedwindow)
         windowed_fft[current_pos:] = roll(ifft(x_fft * h_fft), half_size)[
@@ -4120,7 +4130,9 @@ def build_fft(input_signal, filter_coefficients, threshold_windows=6, boundary=0
     else:
 
         window = input_signal[current_pos - half_size:]
-        zeropaddedwindow = np.lib.pad(window, (0, int(windows_size - (signal_size - current_pos + half_size))),
+        #zeropaddedwindow = np.lib.pad(window, (0, int(windows_size - (signal_size - current_pos + half_size))),
+        #                              'constant', constant_values=0)
+        zeropaddedwindow = np.pad(window, (0, int(windows_size - (signal_size - current_pos + half_size))),
                                       'constant', constant_values=0)
         x_fft = fft(zeropaddedwindow)
         windowed_fft[current_pos:] = ifft(x_fft * h_fft)[

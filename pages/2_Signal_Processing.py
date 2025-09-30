@@ -391,7 +391,7 @@ if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'filtering':
 # TIME & FREQUENCY DOMAIN FEATURES
 ##########################################################
             
-time_freq_tuple = ('time domain features', 'peaks & envelopes', 'power spectral density', 'transforms', 'misc')
+time_freq_tuple = ('time domain features', 'peaks & envelopes', 'power spectral density') #, 'transforms', 'misc')
 
 #td_tuple = ('statistical moments', 'petrosian fractal dimension')
 if dsp_box == 'time & frequency domain features':
@@ -499,12 +499,13 @@ if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'time & freq
 
 ### Peak Detection Algorithms
 
-peak_tuple = ('peak detection', 'peak of peaks', 'envelope from peaks', 'average envelope', 'hilbert envelope & phase')
+peak_tuple = ('envelope from peaks', 'average envelope', 'hilbert envelope & phase') # 'peak detection',
+
+# Peak Detection
 
 if dsp_box == 'time & frequency domain features':
     if time_freq_box == 'peaks & envelopes':
         peak_box = st.sidebar.selectbox('**Select the peak extraction algorithm.**', peak_tuple)
-
 
         
 if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'time & frequency domain features':
@@ -513,44 +514,562 @@ if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'time & freq
             if st.sidebar.button("Get Peaks"):
                 filtered_signal = st.session_state["active_dataset"].copy()
                 pr_count = 0
-                peaks_list=[]
+                print("Data Shape is: ",filtered_signal.shape)
                 for row in filtered_signal:
+                    peak =  get_peaks(signal=row)                    
+
                     if pr_count == 0:
-                        show = True
+                        peaks = peak
+                        plt.plot(row, label="Original signal")
+                        plt.scatter(peak,row[peak],c="red", label="Peak of the signal")
+                        plt.xlabel("Time")
+                        plt.ylabel("Amplitude")
+                        plt.legend()
+                        st.pyplot(plt)
                     else:
-                        show = False
-                    peak =  get_peaks(row)
-                    peaks_list.append(peak)
+                        peaks = np.vstack((peaks,peak))
+
+                    if pr_count == 485 or pr_count == 486:
+                        print(row)
+                        print(peak)
+                        
                     pr_count += 1
 
-                    peaks = np.array(peaks)
+                active_save_verification(peaks)
+
+
+# Envelope from Peaks
+                       
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'time & frequency domain features':
+    if time_freq_box == 'peaks & envelopes':
+        if peak_box == 'envelope from peaks':
+            if st.sidebar.button("Get Envelope"):
+                filtered_signal = st.session_state["active_dataset"].copy()
+                pr_count = 0
+                envelope_list=[]
+                for row in filtered_signal:
+                    envelope =  envelope_from_peaks(signal=row)                    
+
                     if pr_count == 0:
-                        plt.plot(row, label="Original signal")
-                        plt.scatter(peaks,row[peaks],c="red", label="Peak of the signal")
+                        plt.plot(row,label="Original signal")
+                        plt.plot(envelope,c="red", label="Envelope of signal")
                         plt.xlabel("Time")
                         plt.ylabel("Amplitude")
                         plt.legend()
                         st.pyplot(plt)
 
-                active_save_verification(peaks_array)
+                    pr_count += 1
+
+                envelopes = np.array(envelope_list)
+                active_save_verification(envelopes)
+
+# Average Envelope
+
+if dsp_box == 'time & frequency domain features':
+    if time_freq_box == 'peaks & envelopes':
+        if peak_box == 'average envelope':
+
+            env_win = st.sidebar.number_input(label='window size',min_value=0,step=1,value=10, key="envelope_window_size")
+      
+
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'time & frequency domain features':
+    if time_freq_box == 'peaks & envelopes':
+        if peak_box == 'average envelope':
+            if st.sidebar.button("Get Average Envelope"):
+                filtered_signal = st.session_state["active_dataset"].copy()
+                pr_count = 0
+                avg_envelope_list=[]
+                for row in filtered_signal:
+                    avg_envelope =  average_envelope(signal=row, window_length=env_win)                  
+
+                    if pr_count == 0:
+                        plt.plot(row,label="Original signal")
+                        plt.plot(avg_envelope,c="red", label="Envelope of signal")
+                        plt.xlabel("Time")
+                        plt.ylabel("Amplitude")
+                        plt.legend()
+                        st.pyplot(plt)
+
+                    pr_count += 1
+
+                avg_envelopes = np.array(avg_envelope_list)
+                active_save_verification(avg_envelopes)
+
+# Envelope for the Hilbert Transform Old   
+
+# if dsp_box == 'time & frequency domain features':
+#     if time_freq_box == 'peaks & envelopes':
+#         if peak_box == 'hilbert envelope & phase':
+
+#             hil_win = st.sidebar.number_input(label='window size',min_value=2,step=1,value=20, key="hilbert_env_window_size")
+#             hil_lag = st.sidebar.number_input(label='lag',min_value=1,step=1,value=1, key="hilbert_env_lag")
+      
+
+# if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'time & frequency domain features':
+#     if time_freq_box == 'peaks & envelopes':
+#         if peak_box == 'hilbert envelope & phase':
+#             if st.sidebar.button("Get Hilbert Envelope"):
+#                 filtered_signal = st.session_state["active_dataset"].copy()
+#                 he_count = 0
+#                 he_envelope_list=[]
+#                 L = hil_win  # window size
+#                 d = hil_lag   # lag
+#                 for row in filtered_signal:
+#                     # Step 1: Create the trajectory matrix
+                    
+#                     X = np.array([row[i:i+L] for i in range(len(row) - L)])
+
+#                     # Step 2: Perform Singular Value Decomposition (SVD)
+#                     U, S, Vt = np.linalg.svd(X, full_matrices=False)
+
+#                     # Step 3: Reconstruct the signal by keeping the largest singular value
+#                     reconstructed_signal = U[:, 0] @ S[0]  # Using the first singular value for reconstruction
+
+#                     he_envelope_list.append(reconstructed_signal)
+
+#                     if he_count == 0:
+#                         # Step 4: Plot the original and reconstructed signal
+#                         plt.figure(figsize=(10, 6))
+#                         plt.plot(time[L:], row[L:], label="Original Signal")
+#                         plt.plot(time[L:], reconstructed_signal, label="Reconstructed Signal", linestyle='--')
+#                         plt.legend()
+#                         plt.xlabel('Time')
+#                         plt.ylabel('Amplitude')
+#                         plt.title('Singular Spectrum Transform - Signal Reconstruction')
+#                         plt.show()
+
+#                     he_count += 1
+
+#                 he_envelopes = np.array(he_envelope_list)
+#                 active_save_verification(he_envelopes)
+
+# Envelope for the Hilbert Transform
+
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'time & frequency domain features':
+    if time_freq_box == 'peaks & envelopes':
+        if peak_box == 'hilbert envelope & phase':
+            if st.sidebar.button("Get Hilbert Envelope"):
+                filtered_signal = st.session_state["active_dataset"].copy()
+                pr_count = 0
+                hilbert_envelope_list=[]
+                for row in filtered_signal:
+                    analytic =  analytic_signal(x=row)
+                    hilbert_envelope = hilbert_transform(x=analytic)                 
+
+                    if pr_count == 0:
+                        plt.plot(row,label="Original signal")
+                        plt.plot(hilbert_envelope,c="red", label="Envelope of signal")
+                        plt.xlabel("Time")
+                        plt.ylabel("Amplitude")
+                        plt.legend()
+                        st.pyplot(plt)
+
+                    pr_count += 1
+
+                hilbert_envelopes = np.array(hilbert_envelope_list)
+                active_save_verification(hilbert_envelopes)                
+
+
+# Power Spectral Density
+
+if dsp_box == 'time & frequency domain features':
+    if time_freq_box == 'power spectral density':
+
+        psd_sf = st.sidebar.number_input(label='sampling frequency',min_value=2,step=1,value=10, key="psd_sampling_frequency")
+      
+
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'time & frequency domain features':
+    if time_freq_box == 'power spectral density':
+
+        if st.sidebar.button("Get the PSD"):
+            filtered_signal = st.session_state["active_dataset"].copy()
+            pr_count = 0
+            psd_list=[]
+            for row in filtered_signal:
+                f,p =  psd(signal=row, fs=psd_sf)                  
+                psd_list.append(p)
+
+                if pr_count == 0:
+
+                    fig, axis = plt.subplots(2,1,figsize=(8,6))
+                    axis[0].set_title("Input signal of first row of data")
+                    axis[0].plot(row)
+                    axis[0].set_xlabel("Time")
+                    axis[0].set_ylabel("Amplitude")
+
+
+                    axis[1].set_title("PSD of input signal of first row of data")
+                    axis[1].plot(f,p)
+                    axis[1].set_xlabel("Frequency")
+                    axis[1].set_ylabel("Power")
+                    plt.tight_layout()
+                    st.pyplot(plt)
+
+                pr_count += 1
+
+            psds = np.array(psd_list)
+            active_save_verification(psds)
+
 
 ##########################################################
 # SIGNAL DECOMPOSITION
 ##########################################################
             
-decomp_tuple = ('')
+decomp_tuple = ('empirical mode decomposition', 'ensemble emd', 'complete eemd', 'variational mode', 
+                'singular spectrum analysis')#, 'principal component analysis', 'independent component analysis')
 
+
+# EMD
+
+if dsp_box == 'signal decomposition':
+    decomp_box = st.sidebar.selectbox('**Select the features to extract.**', decomp_tuple)
+        
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'signal decomposition':
+    if decomp_box == 'empirical mode decomposition':
+        if st.sidebar.button("Decompose signal with EMD"):
+            filtered_signal = st.session_state["active_dataset"].copy()
+            emd_count = 0
+            for row in filtered_signal:
+                if emd_count == 0:
+                    show = True
+                else:
+                    show = False
+
+                filtered_row = emd_decomposition(signal=row,show=show, stream=show)
+
+                if emd_count == 0:
+                    emd_array = filtered_row
+                else:
+                    np.vstack((emd_array,filtered_row))
+                emd_count += 1
+
+            active_save_verification(emd_array)
+
+# EEMD
+
+if dsp_box == 'signal decomposition':
+    if decomp_box == 'ensemble emd':
+        eemd_n = st.sidebar.number_input(label='noise width',step=0.01,format="%.02f",value=0.05, key="eemd_noise_width")
+        eemd_s = st.sidebar.number_input(label='ensemble size',min_value=2,step=1,value=100, key="eemd_ensemble_size")
+        
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'signal decomposition':
+    if decomp_box == 'ensemble emd':
+        if st.sidebar.button("Decompose signal with EEMD"):
+            filtered_signal = st.session_state["active_dataset"].copy()
+            emd_count = 0
+            for row in filtered_signal:
+                if emd_count == 0:
+                    show = True
+                else:
+                    show = False
+
+                filtered_row = eemd_decomposition(signal=row, noise_width=eemd_n, ensemble_size=eemd_s, show=show, stream=show)
+
+                if emd_count == 0:
+                    eemd_array = filtered_row
+                else:
+                    np.vstack((eemd_array,filtered_row))
+                emd_count += 1
+
+            active_save_verification(eemd_array)
+
+
+# CEEMD
+            
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'signal decomposition':
+    if decomp_box == 'complete eemd':
+        if st.sidebar.button("Decompose signal with CEEMD"):
+            filtered_signal = st.session_state["active_dataset"].copy()
+            emd_count = 0
+            for row in filtered_signal:
+                if emd_count == 0:
+                    show = True
+                else:
+                    show = False
+
+                filtered_row = ceemd_decomposition(signal=row, show=show, stream=show)
+
+                if emd_count == 0:
+                    ceemd_array = filtered_row
+                else:
+                    np.vstack((ceemd_array,filtered_row))
+                emd_count += 1
+
+            active_save_verification(ceemd_array)
+
+
+# VMD
+
+if dsp_box == 'signal decomposition':
+    if decomp_box == 'variational mode':
+        vmd_k = st.sidebar.number_input(label='K',min_value=1,step=1,value=5, key="vmd_k")
+        vmd_a = st.sidebar.number_input(label='alpha',step=0.01,format="%.02f",value=2000.00, key="vmd_alpha")
+        vmd_t = st.sidebar.number_input(label='tau',step=0.01,format="%.02f",value=0.00, key="vmd_tau")
+        vmd_d = st.sidebar.number_input(label='DC',min_value=0, max_value=1, step=1,value=1, key="vmd_dc")
+        
+        
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'signal decomposition':
+    if decomp_box == 'variational mode':
+        if st.sidebar.button("Decompose signal with VMD"):
+            filtered_signal = st.session_state["active_dataset"].copy()
+            emd_count = 0
+            for row in filtered_signal:
+                if emd_count == 0:
+                    show = True
+                else:
+                    show = False
+
+                filtered_row = vmd_decomposition(signal=row, K=vmd_k, alpha=vmd_a, tau=vmd_t, DC=vmd_d, show=show, stream=show)
+
+                if emd_count == 0:
+                    vmd_array = filtered_row                    
+                else:
+                    np.vstack((vmd_array,filtered_row))
+                emd_count += 1
+
+            active_save_verification(vmd_array)
+
+# Singular Spectrum Analysis
+
+if dsp_box == 'signal decomposition':
+    if decomp_box == 'singular spectrum analysis':
+        ssa_l = st.sidebar.number_input(label='window length',min_value=2,step=1,value=100, key="ssa_window_length")
+        
+        
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'signal decomposition':
+    if decomp_box == 'singular spectrum analysis':
+        if st.sidebar.button("Decompose signal with SSA"):
+            filtered_signal = st.session_state["active_dataset"].copy()
+            emd_count = 0
+            for row in filtered_signal:
+
+                ssa_signal = SSA(tseries=row, L=ssa_l)
+                ssa_signal.calc_wcorr()
+                wcorr_matrix = ssa_signal.Wcorr
+
+                if emd_count == 0:
+                    ssa_array = wcorr_matrix
+                    # Plot the within-correlation matrix
+                    ssa_signal.plot_wcorr()
+                    plt.title(r"W-Correlation for Components 0–" + str(ssa_l))
+                    st.pyplot(plt)
+                else:
+                    np.vstack((ssa_array,wcorr_matrix))
+                emd_count += 1
+
+            active_save_verification(ssa_array)            
+
+# PCA
+
+if dsp_box == 'signal decomposition':
+    if decomp_box == 'principal component analysis':
+        pca_n = st.sidebar.number_input(label='number of components',min_value=2,step=1,value=3, key="pca_n_components")
+        
+        
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'signal decomposition':
+    if decomp_box == 'principal component analysis':
+        if st.sidebar.button("Decompose signal with PCA"):
+            filtered_signal = st.session_state["active_dataset"].copy()
+            emd_count = 0
+            for row in filtered_signal:
+                print(row.shape," is the shape of a row")
+                filtered_signal = bss_pca(X=row, n_components=pca_n)
+                
+                #filtered_signal.T
+
+                if emd_count == 0:
+                    pca_array = filtered_row
+                    plot_decomposed_components(signal=row, components=filtered_row, title='PCA', stream=True)
+                else:
+                    np.vstack((pca_array,filtered_row))
+                emd_count += 1
+
+            active_save_verification(pca_array)
+
+
+# ICA
+
+if dsp_box == 'signal decomposition':
+    if decomp_box == 'independent component analysis':
+        ica_n = st.sidebar.number_input(label='number of components',min_value=2,step=1,value=3, key="ica_n_components")
+        
+        
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'signal decomposition':
+    if decomp_box == 'independent component analysis':
+        if st.sidebar.button("Decompose signal with ICA"):
+            filtered_signal = st.session_state["active_dataset"].copy()
+            emd_count = 0
+            for row in filtered_signal:
+
+                filtered_row = bss_ica(X=row, n_components=ica_n)
+
+                if emd_count == 0:
+                    ica_array = filtered_row
+                    plot_decomposed_components(signal=row, components=filtered_row, title='ICA', stream=True)
+                else:
+                    np.vstack((ica_array,filtered_row))
+                emd_count += 1
+
+            active_save_verification(ica_array)
 
 
 ##########################################################
 # TRANSFORMS
 ##########################################################
 
+transform_tuple = ('fast fourier', 'short time fourier', 'singular spectrum')
 
+if dsp_box == 'transforms':
+    transform_box = st.sidebar.selectbox('**Select a Transform.**', transform_tuple)
+
+# FFT
+
+if dsp_box == 'transforms':
+    if transform_box == 'fast fourier':
+        fft_f = st.sidebar.number_input(label='sampling rate',min_value=1,step=1,value=100,key='fft_sampling_rate')
+        
+        
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'transforms':
+    if transform_box == 'fast fourier':
+        if st.sidebar.button("Perform FFT"):
+            filtered_signal = st.session_state["active_dataset"].copy()
+            fft_count = 0
+            for row in filtered_signal:
+
+                freq, mag = my_fft(signal=row, fs=fft_f)
+                index = np.argsort(freq)
+                freq = freq[index]
+                mag = mag[index]
+
+                fft_sig = np.vstack((freq,mag))
+
+                signal_recovered = my_ifft(mag)
+
+                if fft_count == 0:
+                    fft_array = fft_sig
+                    fig, axis = plt.subplots(3,1,figsize=(8,9))
+                    axis[0].set_title("FFT result")
+                    axis[0].set_xlabel("Frequency")
+                    axis[0].set_ylabel("Magnitude")
+                    axis[0].plot(freq, np.abs(mag))
+
+                    axis[1].set_title("Original signal")
+                    axis[1].set_xlabel("Time")
+                    axis[1].set_ylabel("Amplitude")
+                    axis[1].plot(row)
+
+                    axis[2].set_title("Signal recovered from Spectrum")
+                    axis[2].plot(signal_recovered.real)
+                    axis[2].set_xlabel("Time")
+                    axis[2].set_ylabel("Amplitude")
+                    plt.tight_layout()
+                    st.pyplot(plt)                   
+                else:
+                    np.vstack((fft_array,fft_sig))
+                fft_count += 1
+
+            active_save_verification(fft_array)
+
+
+# STFT
+
+if dsp_box == 'transforms':
+    if transform_box == 'short time fourier':
+        stft_f = st.sidebar.number_input(label='sampling rate',min_value=1,step=1,value=100,key='stft_sampling_rate')
+        stft_n = st.sidebar.number_input(label='nperseg',min_value=1,step=1,value=256,key='stft_nperseg')
+        
+        
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'transforms':
+    if transform_box == 'short time fourier':
+        if st.sidebar.button("Perform STFT"):
+            filtered_signal = st.session_state["active_dataset"].copy()
+            fft_count = 0
+            for row in filtered_signal:
+                if fft_count == 0:
+                    show = True
+                else:
+                    show = False
+                
+                f, t, Z = my_stft(signal=row, fs=stft_f, nperseg=stft_n, plot=show, stream=show)                
+
+                if fft_count == 0:
+                    stft_array = Z                  
+                else:
+                    np.vstack((stft_array,Z))
+                fft_count += 1
+
+            active_save_verification(stft_array)
+
+# Singular Spectrum Transform (SST)
+
+if dsp_box == 'transforms':
+    if transform_box == 'singular spectrum':
+        sst_w = st.sidebar.number_input(label='window length',min_value=1,step=1,value=100,key='sst_window_length')
+        
+        
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'transforms':
+    if transform_box == 'singular spectrum':
+        if st.sidebar.button("Perform SST"):
+            filtered_signal = st.session_state["active_dataset"].copy()
+            fft_count = 0
+            #sst_scores = []
+            for row in filtered_signal:
+
+                scores = sst(signal=row, win_length=sst_w)
+
+                if fft_count == 0:
+                    sst_array = scores
+                    plt.figure(figsize=(8,6))
+                    plt.subplot(2,1,1)
+                    plt.title("Original signal")
+                    plt.xlabel("Time")
+                    plt.ylabel("Amplitude")
+                    plt.plot(row)
+
+                    plt.subplot(2,1,2)
+                    plt.title("Result of SST")
+                    plt.plot(scores)
+                    plt.xlabel("Time")
+                    plt.ylabel("Score of changing")
+                    plt.tight_layout()
+                    st.pyplot(plt)
+                else:
+                    np.vstack((sst_array,scores))
+
+                fft_count += 1
+
+            active_save_verification(sst_array)
 
 ##########################################################
 # WAVELET ANALYSIS
 ##########################################################
             
+wavelet_tuple = ('chirplet', 'wavelet', 'synchro-squeezing', 'wigner ville distribution')
 
+transform_tuple = ('fast fourier', 'short time fourier', 'singular spectrum')
 
+if dsp_box == 'wavelet analysis':
+    wave_box = st.sidebar.selectbox('**Select Wavelet Analysis.**', wavelet_tuple)
+
+# Chirplet     
+        
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'wavelet analysis':
+    if wave_box == 'chirplet':
+        if st.sidebar.button("Apply Chirplet Transform"):
+            filtered_signal = st.session_state["active_dataset"].copy()
+            fft_count = 0
+            for row in filtered_signal:
+                if fft_count == 0:
+                    show = True
+                else:
+                    show = False
+
+                ct_matrix = chirplet_transform(signal=row, show=show, stream=show)
+
+                if fft_count == 0:
+                    chirp_array = ct_matrix          
+                else:
+                    np.vstack((chirp_array,ct_matrix))
+                fft_count += 1
+
+            active_save_verification(chirp_array)
