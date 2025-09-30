@@ -4,6 +4,7 @@ import numpy as np
 import os
 import sys
 from scipy.stats import kurtosis, skew
+import pywt
 from pathlib import Path
 import time
 import matplotlib.pyplot as plt
@@ -1048,6 +1049,8 @@ wavelet_tuple = ('chirplet', 'wavelet', 'synchro-squeezing', 'wigner ville distr
 
 transform_tuple = ('fast fourier', 'short time fourier', 'singular spectrum')
 
+wavelet_list = pywt.wavelist(kind='continuous')
+
 if dsp_box == 'wavelet analysis':
     wave_box = st.sidebar.selectbox('**Select Wavelet Analysis.**', wavelet_tuple)
 
@@ -1073,3 +1076,87 @@ if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'wavelet ana
                 fft_count += 1
 
             active_save_verification(chirp_array)
+
+# Wavelet Transform  
+             
+if dsp_box == 'wavelet analysis':
+    if wave_box == 'wavelet':
+        wav_s = st.sidebar.text_input(label='scales: comma seperated list of floats',value='2,4,8,16', key="wavelet_scales")
+        wav_w = st.sidebar.selectbox("Choose a Wavelet:", wavelet_list)
+        wav_f = st.sidebar.number_input(label='sampling frequency',min_value=2,step=1,value=100,key='wavelet_sampling_frequency')
+
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'wavelet analysis':
+    if wave_box == 'wavelet':
+        if st.sidebar.button("Apply Wavelet Transform"):
+            scales_list = parse_text_entry(wav_s,'float')
+            filtered_signal = st.session_state["active_dataset"].copy()
+            fft_count = 0
+            for row in filtered_signal:
+                if fft_count == 0:
+                    show = True
+                else:
+                    show = False
+
+                coefficients, frequencies = my_cwt(signal=row, scales=scales_list, wavelet=wav_w, fs=wav_f, show=show, stream=show)
+
+                if fft_count == 0:
+                    wave_array = coefficients         
+                else:
+                    np.vstack((wave_array,coefficients))
+                fft_count += 1
+
+            active_save_verification(wave_array)
+
+# SynchroSqueezing Transform (SST)
+
+if dsp_box == 'wavelet analysis':
+    if wave_box == 'synchro-squeezing':
+        syn_f = st.sidebar.number_input(label='sampling frequency',min_value=2,step=1,value=100,key='synchro_squeeze_sampling_frequency')
+        syn_w = st.sidebar.text_input(label='window type',value='ham', key="synchro_squeeze_window_type")
+        syn_n = st.sidebar.number_input(label='nperseg',min_value=1,step=1,value=256,key='synchro_squeeze_nperseg')
+ 
+
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'wavelet analysis':
+    if wave_box == 'synchro-squeezing':
+        if st.sidebar.button("Apply SynchroSqueeze"):
+            filtered_signal = st.session_state["active_dataset"].copy()
+            fft_count = 0
+            for row in filtered_signal:
+                if fft_count == 0:
+                    show = True
+                else:
+                    show = False
+
+                Tx, Sx, ssq_freqs, Sfs= sst_stft(signal=row, window=syn_w, nperseg=syn_n, fs=syn_f, show=show, stream=show)
+
+                if fft_count == 0:
+                    sq_array = Tx         
+                else:
+                    np.vstack((sq_array,Tx))
+                fft_count += 1
+
+            active_save_verification(sq_array)
+
+
+# Wigner Ville Distribution (WVD)
+
+if not str(st.session_state["active_dataset"]) == "" and dsp_box == 'wavelet analysis':
+    if wave_box == 'wigner ville distribution':
+        if st.sidebar.button("Apply WVD"):
+            filtered_signal = st.session_state["active_dataset"].copy()
+            fft_count = 0
+            for row in filtered_signal:
+                if fft_count == 0:
+                    show = True
+                else:
+                    show = False
+
+                matrix, t, f = my_wvd(signal=row, show=show, stream=show)
+
+                if fft_count == 0:
+                    wvd_array = matrix         
+                else:
+                    np.vstack((wvd_array,matrix))
+                fft_count += 1
+
+            active_save_verification(wvd_array)            
